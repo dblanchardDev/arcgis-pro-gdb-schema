@@ -32,7 +32,7 @@ This tool is provided as a Python toolbox and is compatible with ArcGIS Pro 3.0 
 
 ### Use from Python
 
-1. Download the latest [release](/release).
+1. Download the latest [release](https://github.com/dblanchardDev/arcgis-pro-gdb-schema/releases).
 1. Extract the content of the zip file.
 1. Import the _gdb\_to\_xls_ file.
 1. Call the _document_gdb_ function with the following arguments:
