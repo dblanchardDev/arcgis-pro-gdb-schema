@@ -22,7 +22,7 @@ This tool is provided as a Python toolbox and is compatible with ArcGIS Pro 3.0 
 
 ### Use as a toolbox in ArcGIS Pro
 
-1. Download the latest [release](/release).
+1. Download the latest [release](https://github.com/dblanchardDev/arcgis-pro-gdb-schema/releases).
 1. Extract the content of the zip file.
 1. [Add an existing toolbox](https://pro.arcgis.com/en/pro-app/latest/help/projects/connect-to-a-toolbox.htm) in ArcGIS Pro, pointing to the _Geodatabase Schema Tools.pyt_ file that was in the zip file.
 1. Access the tools from the toolbox as you would with any other geoprocessing tool.
