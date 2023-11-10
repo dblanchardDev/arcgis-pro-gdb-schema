@@ -2,6 +2,13 @@
 
 ArcGIS Pro tools for working with the schema of ArcGIS geodatabases. Meant as a partial replacement of X-Ray tools.
 
+> **ArcGIS Pro – Generate Schema Report Tool**  
+> ArcGIS Pro now has a built-in tool which provides similar functionality: [Generate Schema Report](https://pro.arcgis.com/en/pro-app/latest/help/data/geodatabases/overview/schema-report.htm). This built-in tool is able to document all components of the geodatabase and provides multiple different output types.
+>
+> The custom tool provided here is still useful if:
+> * You need field descriptions from the metadata included in your schema report (the built-in tool does not provide this).
+> * You need a simpler report that only goes over fields, domains, and relationships.
+
 ## Tools
 
 ### Inspect Geodatabase Schema (gdb_to_xls.py)
