@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<table xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" id="15" name="Street_Types.codes" displayName="Street_Types.codes" ref="A12:C28" headerRowCount="1">
+	<autoFilter ref="A12:C28"/>
+	<tableColumns count="3">
+		<tableColumn id="1" name="Code"/>
+		<tableColumn id="2" name="Description"/>
+		<tableColumn id="3" name="Summary"/>
+	</tableColumns>
+	<tableStyleInfo name="TableStyleLight1" showFirstColumn="0" showLastColumn="0" showRowStripes="1" showColumnStripes="0"/>
+</table>

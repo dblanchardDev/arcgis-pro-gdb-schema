@@ -1,0 +1,135 @@
+{
+    "editor.detectIndentation": false,          // Controls overridding of editor.tabSize and editor
+                                                //     .insertSpaces by identation in current file.
+    "editor.formatOnSave": false,               // Whether to format the entire file when saving.
+    "editor.insertSpaces": true,                // Whether to insert spaces in the place of tabs.
+    "editor.tabSize": 4,                        // Number of spaces a tab key-press is equal to.
+
+    "files.associations": {                     // Associate file extensions to file type.
+        ".log": "plaintext",                        // Python log files
+        ".log.*": "plaintext",                      // Python rollover log files
+        "*.pyt": "python"                           // ArcGIS Python Toolboxes
+    },
+    "files.encoding": "utf8",                   // Default encoding for new and existing files.
+    "files.eol": "\n",                          // Default end of line character. Unix style provides
+                                                //    maximum compatibility.
+    "files.insertFinalNewline": false,          // Insert a final newline when file is saved.
+    "files.trimFinalNewlines": false,           // Trim all empty lines at end of file when saved.
+    "files.trimTrailingWhitespace": true,       // Trim trailing whitespace when saving a file.
+
+    "git.branchProtection": [                   // Branches in Git that require PR for changes.
+        "main",
+        "production"
+    ],
+
+    "json.sortOnSave.enable": false,            // Prevent re-ordering of JSON on save.
+
+    "[markdown]": {
+        "files.trimTrailingWhitespace": false   // Whitespace at eol are control chars in .md.
+    },
+
+    // Extension: Code Spell Checker
+    "cSpell.words": [
+        "abstr",
+        "approvaltests",
+        "arcgis",
+        "arcpy",
+        "attalias",
+        "attrdef",
+        "attrdomv",
+        "attrlabl",
+        "behaviour",
+        "biginteger",
+        "buidling",
+        "centreline",
+        "centrelines",
+        "classif",
+        "COUNTA",
+        "COUNTIF",
+        "COUNTIFS",
+        "cres",
+        "csdgm",
+        "datavalidation",
+        "dateonly",
+        "descrips",
+        "descript",
+        "descs",
+        "destin",
+        "Docsify",
+        "docstrings",
+        "dsid",
+        "eainfo",
+        "editability",
+        "edomain",
+        "edomv",
+        "edomvd",
+        "endregion",
+        "enttyp",
+        "enttypl",
+        "expl",
+        "expy",
+        "Featureclass",
+        "featuredatasets",
+        "fgdb",
+        "fgdc",
+        "gdbelement",
+        "gdbschematool",
+        "gdbschematools",
+        "geodatabase",
+        "geodatabases",
+        "geoprocessing",
+        "globalid",
+        "ISNUMBER",
+        "maxsplit",
+        "metadatas",
+        "multipatch",
+        "myschema",
+        "nonesense",
+        "openpyxl",
+        "polyline",
+        "Progressor",
+        "pylint",
+        "pytestmark",
+        "Roya",
+        "sheetname",
+        "sheetnames",
+        "SHEETSTATE",
+        "Shourouni",
+        "timeonly",
+        "timestampoffset",
+        "udom",
+        "VERYHIDDEN",
+        "wkid",
+        "xlfn",
+        "XLOOKUP"
+    ],
+
+    // Extension: Pylint
+    "pylint.args": [
+        // Warnings
+        "--disable=fixme", //W0511
+        "--disable=logging-fstring-interpolation", //W1203
+
+        // Convention
+        "--disable=missing-final-newline", //C0304
+
+        // Standard Checkers
+        "--max-args=8",
+        "--max-attributes=12",
+        "--max-line-length=120",
+        "--min-public-methods=1",
+
+        // Dynamic classes
+        "--generated-member==arcpy.da",
+    ],
+
+    // Extension: Python
+    "python.defaultInterpreterPath": "C:\\Program Files\\ArcGIS\\Pro\\bin\\Python\\envs\\arcgispro-py3\\python.exe",
+    "python.testing.pytestArgs": [
+        "tests",
+        // ↓↓ To be enabled only when running approval tests ↓↓
+        //"--approvaltests-use-reporter='PythonNative'",
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="#'_INFO_'!A9" TargetMode="External" Id="rId1"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="GDBSchemaTool_{date-time-0}_domains.xlsx#'Buidling - General'!A1" TargetMode="External" Id="rId2"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="GDBSchemaTool_{date-time-0}_domains.xlsx#'Building - Commercial'!A1" TargetMode="External" Id="rId3"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="GDBSchemaTool_{date-time-0}_domains.xlsx#'Building - Industrial'!A1" TargetMode="External" Id="rId4"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="GDBSchemaTool_{date-time-0}_domains.xlsx#'Building - Government'!A1" TargetMode="External" Id="rId5"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="GDBSchemaTool_{date-time-0}_domains.xlsx#'Office Hours'!A1" TargetMode="External" Id="rId6"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="GDBSchemaTool_{date-time-0}_domains.xlsx#'Office Hours'!A1" TargetMode="External" Id="rId7"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="GDBSchemaTool_{date-time-0}_relationships.xlsx#'Building_Inspections'!A1" TargetMode="External" Id="rId8"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/table" Target="/xl/tables/table5.xml" Id="rId9"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/table" Target="/xl/tables/table6.xml" Id="rId10"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/table" Target="/xl/tables/table7.xml" Id="rId11"/>
+</Relationships>

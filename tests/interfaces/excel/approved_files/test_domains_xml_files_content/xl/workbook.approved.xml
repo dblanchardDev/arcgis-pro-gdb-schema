@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+	<workbookPr/>
+	<workbookProtection/>
+	<bookViews>
+		<workbookView visibility="visible" minimized="0" showHorizontalScroll="1" showVerticalScroll="1" showSheetTabs="1" tabRatio="600" firstSheet="0" activeTab="1" autoFilterDateGrouping="1"/>
+	</bookViews>
+	<sheets>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="_dropdown_lookup_" sheetId="1" state="hidden" r:id="rId1"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="_INFO_" sheetId="2" state="visible" r:id="rId2"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="_template_" sheetId="3" state="visible" r:id="rId3"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="Buidling - General" sheetId="4" state="visible" r:id="rId4"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="Building - Commercial" sheetId="5" state="visible" r:id="rId5"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="Building - Government" sheetId="6" state="visible" r:id="rId6"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="Building - Industrial" sheetId="7" state="visible" r:id="rId7"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="Lake River Flow" sheetId="8" state="visible" r:id="rId8"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="Office Hours" sheetId="9" state="visible" r:id="rId9"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="Street Types" sheetId="10" state="visible" r:id="rId10"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="Tree Diameter" sheetId="11" state="visible" r:id="rId11"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="Tree Height" sheetId="12" state="visible" r:id="rId12"/>
+		<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="Valid Speed Limits" sheetId="13" state="visible" r:id="rId13"/>
+	</sheets>
+	<definedNames>
+		<definedName name="dropdowns.workspace_type">'_dropdown_lookup_'!$A$2:$A$3</definedName>
+		<definedName name="dropdowns.field_type">'_dropdown_lookup_'!$B$2:$B$11</definedName>
+		<definedName name="dropdowns.domain_type">'_dropdown_lookup_'!$C$2:$C$3</definedName>
+		<definedName name="dropdowns.split_policy">'_dropdown_lookup_'!$D$2:$D$4</definedName>
+		<definedName name="dropdowns.merge_policy">'_dropdown_lookup_'!$E$2:$E$4</definedName>
+	</definedNames>
+	<calcPr calcId="124519" fullCalcOnLoad="1"/>
+</workbook>

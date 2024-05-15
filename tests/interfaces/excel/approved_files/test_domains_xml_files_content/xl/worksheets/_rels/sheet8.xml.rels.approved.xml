@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="#'_INFO_'!A13" TargetMode="External" Id="rId1"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="GDBSchemaTool_{date-time-0}_relationships.xlsx#'Rivers_and_Lakes'!A1" TargetMode="External" Id="rId2"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/table" Target="/xl/tables/table12.xml" Id="rId3"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/table" Target="/xl/tables/table13.xml" Id="rId4"/>
+</Relationships>

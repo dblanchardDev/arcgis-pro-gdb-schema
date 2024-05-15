@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<table xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" id="14" name="Street_Centreline.fields" displayName="Street_Centreline.fields" ref="A20:K27" headerRowCount="1">
+	<autoFilter ref="A20:K27"/>
+	<tableColumns count="11">
+		<tableColumn id="1" name="Field Name"/>
+		<tableColumn id="2" name="Field Type"/>
+		<tableColumn id="3" name="Summary"/>
+		<tableColumn id="4" name="Alias Name"/>
+		<tableColumn id="5" name="Domain Name"/>
+		<tableColumn id="6" name="Default Value"/>
+		<tableColumn id="7" name="Is Nullable"/>
+		<tableColumn id="8" name="Length"/>
+		<tableColumn id="9" name="Precision"/>
+		<tableColumn id="10" name="Scale"/>
+		<tableColumn id="11" name="Order"/>
+	</tableColumns>
+	<tableStyleInfo name="TableStyleLight1" showFirstColumn="0" showLastColumn="0" showRowStripes="1" showColumnStripes="0"/>
+</table>

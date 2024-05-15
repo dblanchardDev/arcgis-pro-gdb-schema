@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="#'Buildings'!A1" TargetMode="External" Id="rId1"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="#'Inspections'!A1" TargetMode="External" Id="rId2"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="#'Lakes'!A1" TargetMode="External" Id="rId3"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="#'Rivers'!A1" TargetMode="External" Id="rId4"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="#'Street Centreline'!A1" TargetMode="External" Id="rId5"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="#'Trees'!A1" TargetMode="External" Id="rId6"/>
+	<Relationship Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/table" Target="/xl/tables/table1.xml" Id="rId7"/>
+</Relationships>

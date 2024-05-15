@@ -1,0 +1,164 @@
+<?xml version="1.0" ?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+	<sheetPr>
+		<outlinePr summaryBelow="1" summaryRight="1"/>
+		<pageSetUpPr/>
+	</sheetPr>
+	<dimension ref="A1:E11"/>
+	<sheetViews>
+		<sheetView workbookViewId="0">
+			<selection activeCell="A1" sqref="A1"/>
+		</sheetView>
+	</sheetViews>
+	<sheetFormatPr baseColWidth="8" defaultRowHeight="15"/>
+	<sheetData>
+		<row r="1">
+			<c r="A1" t="inlineStr">
+				<is>
+					<t>workspace type</t>
+				</is>
+			</c>
+			<c r="B1" t="inlineStr">
+				<is>
+					<t>field type</t>
+				</is>
+			</c>
+			<c r="C1" t="inlineStr">
+				<is>
+					<t>domain type</t>
+				</is>
+			</c>
+			<c r="D1" t="inlineStr">
+				<is>
+					<t>split policy</t>
+				</is>
+			</c>
+			<c r="E1" t="inlineStr">
+				<is>
+					<t>merge policy</t>
+				</is>
+			</c>
+		</row>
+		<row r="2">
+			<c r="A2" t="inlineStr">
+				<is>
+					<t>Local Database</t>
+				</is>
+			</c>
+			<c r="B2" t="inlineStr">
+				<is>
+					<t>Big Integer</t>
+				</is>
+			</c>
+			<c r="C2" t="inlineStr">
+				<is>
+					<t>Coded Value</t>
+				</is>
+			</c>
+			<c r="D2" t="inlineStr">
+				<is>
+					<t>Default Value</t>
+				</is>
+			</c>
+			<c r="E2" t="inlineStr">
+				<is>
+					<t>Default Value</t>
+				</is>
+			</c>
+		</row>
+		<row r="3">
+			<c r="A3" t="inlineStr">
+				<is>
+					<t>Remote Database</t>
+				</is>
+			</c>
+			<c r="B3" t="inlineStr">
+				<is>
+					<t>Date</t>
+				</is>
+			</c>
+			<c r="C3" t="inlineStr">
+				<is>
+					<t>Range</t>
+				</is>
+			</c>
+			<c r="D3" t="inlineStr">
+				<is>
+					<t>Duplicate</t>
+				</is>
+			</c>
+			<c r="E3" t="inlineStr">
+				<is>
+					<t>Sum Values</t>
+				</is>
+			</c>
+		</row>
+		<row r="4">
+			<c r="B4" t="inlineStr">
+				<is>
+					<t>Date Only</t>
+				</is>
+			</c>
+			<c r="D4" t="inlineStr">
+				<is>
+					<t>Geometry Ratio</t>
+				</is>
+			</c>
+			<c r="E4" t="inlineStr">
+				<is>
+					<t>Area Weighted</t>
+				</is>
+			</c>
+		</row>
+		<row r="5">
+			<c r="B5" t="inlineStr">
+				<is>
+					<t>Double</t>
+				</is>
+			</c>
+		</row>
+		<row r="6">
+			<c r="B6" t="inlineStr">
+				<is>
+					<t>Long Integer</t>
+				</is>
+			</c>
+		</row>
+		<row r="7">
+			<c r="B7" t="inlineStr">
+				<is>
+					<t>Float</t>
+				</is>
+			</c>
+		</row>
+		<row r="8">
+			<c r="B8" t="inlineStr">
+				<is>
+					<t>Short Integer</t>
+				</is>
+			</c>
+		</row>
+		<row r="9">
+			<c r="B9" t="inlineStr">
+				<is>
+					<t>Text</t>
+				</is>
+			</c>
+		</row>
+		<row r="10">
+			<c r="B10" t="inlineStr">
+				<is>
+					<t>Time Only</t>
+				</is>
+			</c>
+		</row>
+		<row r="11">
+			<c r="B11" t="inlineStr">
+				<is>
+					<t>Timestamp Offset</t>
+				</is>
+			</c>
+		</row>
+	</sheetData>
+	<pageMargins left="0.75" right="0.75" top="1" bottom="1" header="0.5" footer="0.5"/>
+</worksheet>

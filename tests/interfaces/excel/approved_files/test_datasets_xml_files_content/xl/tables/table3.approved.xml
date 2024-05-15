@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<table xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" id="3" name="_template_.subtypes" displayName="_template_.subtypes" ref="A76:F96" headerRowCount="1">
+	<autoFilter ref="A76:F96"/>
+	<tableColumns count="6">
+		<tableColumn id="1" name="Subtype Name"/>
+		<tableColumn id="2" name="Code"/>
+		<tableColumn id="3" name="Description"/>
+		<tableColumn id="4" name="Field Name"/>
+		<tableColumn id="5" name="Domain Name"/>
+		<tableColumn id="6" name="Default Value"/>
+	</tableColumns>
+	<tableStyleInfo name="TableStyleLight1" showFirstColumn="0" showLastColumn="0" showRowStripes="1" showColumnStripes="0"/>
+</table>

@@ -1,0 +1,689 @@
+<?xml version="1.0" ?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+	<sheetPr>
+		<outlinePr summaryBelow="1" summaryRight="1"/>
+		<pageSetUpPr/>
+	</sheetPr>
+	<dimension ref="A1:K46"/>
+	<sheetViews>
+		<sheetView workbookViewId="0">
+			<selection activeCell="A1" sqref="A1"/>
+		</sheetView>
+	</sheetViews>
+	<sheetFormatPr baseColWidth="8" defaultRowHeight="15"/>
+	<cols>
+		<col width="25" customWidth="1" min="1" max="1"/>
+		<col width="15" customWidth="1" min="2" max="2"/>
+		<col width="80" customWidth="1" min="3" max="3"/>
+		<col width="25" customWidth="1" min="4" max="4"/>
+		<col width="22" customWidth="1" min="5" max="5"/>
+		<col width="15" customWidth="1" min="6" max="6"/>
+		<col width="12" customWidth="1" min="7" max="7"/>
+		<col width="11" customWidth="1" min="8" max="8"/>
+		<col width="11" customWidth="1" min="9" max="9"/>
+		<col width="11" customWidth="1" min="10" max="10"/>
+		<col width="10" customWidth="1" min="11" max="11"/>
+	</cols>
+	<sheetData>
+		<row r="1">
+			<c r="A1" s="6" t="inlineStr">
+				<is>
+					<t>Go to Index</t>
+				</is>
+			</c>
+		</row>
+		<row r="3">
+			<c r="A3" s="2" t="inlineStr">
+				<is>
+					<t>Name</t>
+				</is>
+			</c>
+			<c r="B3" s="3" t="inlineStr"/>
+		</row>
+		<row r="4">
+			<c r="A4" s="2" t="inlineStr">
+				<is>
+					<t>Schema</t>
+				</is>
+			</c>
+			<c r="B4" s="3" t="inlineStr"/>
+		</row>
+		<row r="5">
+			<c r="A5" s="2" t="inlineStr">
+				<is>
+					<t>Feature Dataset</t>
+				</is>
+			</c>
+			<c r="B5" s="3" t="inlineStr"/>
+		</row>
+		<row r="6" ht="26.4" customHeight="1">
+			<c r="A6" s="2" t="inlineStr">
+				<is>
+					<t>Summary</t>
+				</is>
+			</c>
+			<c r="B6" s="4" t="inlineStr"/>
+		</row>
+		<row r="7">
+			<c r="A7" s="2" t="inlineStr">
+				<is>
+					<t>Relationship Type</t>
+				</is>
+			</c>
+			<c r="B7" s="3" t="inlineStr"/>
+		</row>
+		<row r="8">
+			<c r="A8" s="2" t="inlineStr">
+				<is>
+					<t>Origin Table</t>
+				</is>
+			</c>
+			<c r="B8" s="3" t="inlineStr"/>
+		</row>
+		<row r="9">
+			<c r="A9" s="2" t="inlineStr">
+				<is>
+					<t>Destination Table</t>
+				</is>
+			</c>
+			<c r="B9" s="3" t="inlineStr"/>
+		</row>
+		<row r="10">
+			<c r="A10" s="2" t="inlineStr">
+				<is>
+					<t>Forward Label</t>
+				</is>
+			</c>
+			<c r="B10" s="3" t="inlineStr"/>
+		</row>
+		<row r="11">
+			<c r="A11" s="2" t="inlineStr">
+				<is>
+					<t>Backward Label</t>
+				</is>
+			</c>
+			<c r="B11" s="3" t="inlineStr"/>
+		</row>
+		<row r="12">
+			<c r="A12" s="2" t="inlineStr">
+				<is>
+					<t>Origin Primary Key</t>
+				</is>
+			</c>
+			<c r="B12" s="3" t="inlineStr"/>
+		</row>
+		<row r="13">
+			<c r="A13" s="2" t="inlineStr">
+				<is>
+					<t>Origin Foreign Key</t>
+				</is>
+			</c>
+			<c r="B13" s="3" t="inlineStr"/>
+		</row>
+		<row r="14">
+			<c r="A14" s="2" t="inlineStr">
+				<is>
+					<t>Destination Primary Key</t>
+				</is>
+			</c>
+			<c r="B14" s="3" t="inlineStr"/>
+		</row>
+		<row r="15">
+			<c r="A15" s="2" t="inlineStr">
+				<is>
+					<t>Destination Foreign Key</t>
+				</is>
+			</c>
+			<c r="B15" s="3" t="inlineStr"/>
+		</row>
+		<row r="16">
+			<c r="A16" s="2" t="inlineStr">
+				<is>
+					<t>Notifications</t>
+				</is>
+			</c>
+			<c r="B16" s="3" t="inlineStr"/>
+		</row>
+		<row r="17">
+			<c r="A17" s="2" t="inlineStr">
+				<is>
+					<t>Cardinality</t>
+				</is>
+			</c>
+			<c r="B17" s="3" t="inlineStr"/>
+		</row>
+		<row r="18">
+			<c r="A18" s="2" t="inlineStr">
+				<is>
+					<t>Is Attributed</t>
+				</is>
+			</c>
+			<c r="B18" s="3" t="inlineStr"/>
+		</row>
+		<row r="19">
+			<c r="A19" s="2" t="inlineStr">
+				<is>
+					<t>64-bit OID</t>
+				</is>
+			</c>
+			<c r="B19" s="3" t="inlineStr"/>
+		</row>
+		<row r="20">
+			<c r="A20" s="2" t="inlineStr">
+				<is>
+					<t>Is Archived</t>
+				</is>
+			</c>
+			<c r="B20" s="3" t="inlineStr"/>
+		</row>
+		<row r="21">
+			<c r="A21" s="2" t="inlineStr">
+				<is>
+					<t>Is Versioned</t>
+				</is>
+			</c>
+			<c r="B21" s="3" t="inlineStr"/>
+		</row>
+		<row r="22">
+			<c r="A22" s="2" t="inlineStr">
+				<is>
+					<t>DSID</t>
+				</is>
+			</c>
+			<c r="B22" s="7" t="inlineStr"/>
+		</row>
+		<row r="23">
+			<c r="A23" s="5" t="inlineStr"/>
+		</row>
+		<row r="24">
+			<c r="A24" s="1" t="inlineStr">
+				<is>
+					<t>Fields</t>
+				</is>
+			</c>
+		</row>
+		<row r="25">
+			<c r="A25" s="3" t="inlineStr">
+				<is>
+					<t>Field Name</t>
+				</is>
+			</c>
+			<c r="B25" s="3" t="inlineStr">
+				<is>
+					<t>Field Type</t>
+				</is>
+			</c>
+			<c r="C25" s="3" t="inlineStr">
+				<is>
+					<t>Summary</t>
+				</is>
+			</c>
+			<c r="D25" s="3" t="inlineStr">
+				<is>
+					<t>Alias Name</t>
+				</is>
+			</c>
+			<c r="E25" s="3" t="inlineStr">
+				<is>
+					<t>Domain Name</t>
+				</is>
+			</c>
+			<c r="F25" s="3" t="inlineStr">
+				<is>
+					<t>Default Value</t>
+				</is>
+			</c>
+			<c r="G25" s="3" t="inlineStr">
+				<is>
+					<t>Is Nullable</t>
+				</is>
+			</c>
+			<c r="H25" s="3" t="inlineStr">
+				<is>
+					<t>Length</t>
+				</is>
+			</c>
+			<c r="I25" s="3" t="inlineStr">
+				<is>
+					<t>Precision</t>
+				</is>
+			</c>
+			<c r="J25" s="3" t="inlineStr">
+				<is>
+					<t>Scale</t>
+				</is>
+			</c>
+			<c r="K25" s="3" t="inlineStr">
+				<is>
+					<t>Order</t>
+				</is>
+			</c>
+		</row>
+		<row r="26">
+			<c r="A26" s="3" t="inlineStr"/>
+			<c r="B26" s="3" t="inlineStr"/>
+			<c r="C26" s="4" t="inlineStr"/>
+			<c r="D26" s="3" t="inlineStr"/>
+			<c r="E26" s="3" t="inlineStr"/>
+			<c r="F26" s="3" t="inlineStr"/>
+			<c r="G26" s="3" t="inlineStr"/>
+			<c r="H26" s="8" t="inlineStr"/>
+			<c r="I26" s="8" t="inlineStr"/>
+			<c r="J26" s="8" t="inlineStr"/>
+			<c r="K26" s="8" t="n">
+				<v>1</v>
+			</c>
+		</row>
+		<row r="27">
+			<c r="A27" s="3" t="inlineStr"/>
+			<c r="B27" s="3" t="inlineStr"/>
+			<c r="C27" s="4" t="inlineStr"/>
+			<c r="D27" s="3" t="inlineStr"/>
+			<c r="E27" s="3" t="inlineStr"/>
+			<c r="F27" s="3" t="inlineStr"/>
+			<c r="G27" s="3" t="inlineStr"/>
+			<c r="H27" s="8" t="inlineStr"/>
+			<c r="I27" s="8" t="inlineStr"/>
+			<c r="J27" s="8" t="inlineStr"/>
+			<c r="K27" s="8" t="n">
+				<v>2</v>
+			</c>
+		</row>
+		<row r="28">
+			<c r="A28" s="3" t="inlineStr"/>
+			<c r="B28" s="3" t="inlineStr"/>
+			<c r="C28" s="4" t="inlineStr"/>
+			<c r="D28" s="3" t="inlineStr"/>
+			<c r="E28" s="3" t="inlineStr"/>
+			<c r="F28" s="3" t="inlineStr"/>
+			<c r="G28" s="3" t="inlineStr"/>
+			<c r="H28" s="8" t="inlineStr"/>
+			<c r="I28" s="8" t="inlineStr"/>
+			<c r="J28" s="8" t="inlineStr"/>
+			<c r="K28" s="8" t="n">
+				<v>3</v>
+			</c>
+		</row>
+		<row r="29">
+			<c r="A29" s="3" t="inlineStr"/>
+			<c r="B29" s="3" t="inlineStr"/>
+			<c r="C29" s="4" t="inlineStr"/>
+			<c r="D29" s="3" t="inlineStr"/>
+			<c r="E29" s="3" t="inlineStr"/>
+			<c r="F29" s="3" t="inlineStr"/>
+			<c r="G29" s="3" t="inlineStr"/>
+			<c r="H29" s="8" t="inlineStr"/>
+			<c r="I29" s="8" t="inlineStr"/>
+			<c r="J29" s="8" t="inlineStr"/>
+			<c r="K29" s="8" t="n">
+				<v>4</v>
+			</c>
+		</row>
+		<row r="30">
+			<c r="A30" s="3" t="inlineStr"/>
+			<c r="B30" s="3" t="inlineStr"/>
+			<c r="C30" s="4" t="inlineStr"/>
+			<c r="D30" s="3" t="inlineStr"/>
+			<c r="E30" s="3" t="inlineStr"/>
+			<c r="F30" s="3" t="inlineStr"/>
+			<c r="G30" s="3" t="inlineStr"/>
+			<c r="H30" s="8" t="inlineStr"/>
+			<c r="I30" s="8" t="inlineStr"/>
+			<c r="J30" s="8" t="inlineStr"/>
+			<c r="K30" s="8" t="n">
+				<v>5</v>
+			</c>
+		</row>
+		<row r="31">
+			<c r="A31" s="3" t="inlineStr"/>
+			<c r="B31" s="3" t="inlineStr"/>
+			<c r="C31" s="4" t="inlineStr"/>
+			<c r="D31" s="3" t="inlineStr"/>
+			<c r="E31" s="3" t="inlineStr"/>
+			<c r="F31" s="3" t="inlineStr"/>
+			<c r="G31" s="3" t="inlineStr"/>
+			<c r="H31" s="8" t="inlineStr"/>
+			<c r="I31" s="8" t="inlineStr"/>
+			<c r="J31" s="8" t="inlineStr"/>
+			<c r="K31" s="8" t="n">
+				<v>6</v>
+			</c>
+		</row>
+		<row r="32">
+			<c r="A32" s="3" t="inlineStr"/>
+			<c r="B32" s="3" t="inlineStr"/>
+			<c r="C32" s="4" t="inlineStr"/>
+			<c r="D32" s="3" t="inlineStr"/>
+			<c r="E32" s="3" t="inlineStr"/>
+			<c r="F32" s="3" t="inlineStr"/>
+			<c r="G32" s="3" t="inlineStr"/>
+			<c r="H32" s="8" t="inlineStr"/>
+			<c r="I32" s="8" t="inlineStr"/>
+			<c r="J32" s="8" t="inlineStr"/>
+			<c r="K32" s="8" t="n">
+				<v>7</v>
+			</c>
+		</row>
+		<row r="33">
+			<c r="A33" s="3" t="inlineStr"/>
+			<c r="B33" s="3" t="inlineStr"/>
+			<c r="C33" s="4" t="inlineStr"/>
+			<c r="D33" s="3" t="inlineStr"/>
+			<c r="E33" s="3" t="inlineStr"/>
+			<c r="F33" s="3" t="inlineStr"/>
+			<c r="G33" s="3" t="inlineStr"/>
+			<c r="H33" s="8" t="inlineStr"/>
+			<c r="I33" s="8" t="inlineStr"/>
+			<c r="J33" s="8" t="inlineStr"/>
+			<c r="K33" s="8" t="n">
+				<v>8</v>
+			</c>
+		</row>
+		<row r="34">
+			<c r="A34" s="3" t="inlineStr"/>
+			<c r="B34" s="3" t="inlineStr"/>
+			<c r="C34" s="4" t="inlineStr"/>
+			<c r="D34" s="3" t="inlineStr"/>
+			<c r="E34" s="3" t="inlineStr"/>
+			<c r="F34" s="3" t="inlineStr"/>
+			<c r="G34" s="3" t="inlineStr"/>
+			<c r="H34" s="8" t="inlineStr"/>
+			<c r="I34" s="8" t="inlineStr"/>
+			<c r="J34" s="8" t="inlineStr"/>
+			<c r="K34" s="8" t="n">
+				<v>9</v>
+			</c>
+		</row>
+		<row r="35">
+			<c r="A35" s="3" t="inlineStr"/>
+			<c r="B35" s="3" t="inlineStr"/>
+			<c r="C35" s="4" t="inlineStr"/>
+			<c r="D35" s="3" t="inlineStr"/>
+			<c r="E35" s="3" t="inlineStr"/>
+			<c r="F35" s="3" t="inlineStr"/>
+			<c r="G35" s="3" t="inlineStr"/>
+			<c r="H35" s="8" t="inlineStr"/>
+			<c r="I35" s="8" t="inlineStr"/>
+			<c r="J35" s="8" t="inlineStr"/>
+			<c r="K35" s="8" t="n">
+				<v>10</v>
+			</c>
+		</row>
+		<row r="36">
+			<c r="A36" s="5" t="inlineStr"/>
+		</row>
+		<row r="37">
+			<c r="A37" s="1" t="inlineStr">
+				<is>
+					<t>Subtype</t>
+				</is>
+			</c>
+		</row>
+		<row r="38">
+			<c r="A38" s="2" t="inlineStr">
+				<is>
+					<t>Subtype Field Name</t>
+				</is>
+			</c>
+			<c r="B38" s="3" t="inlineStr"/>
+		</row>
+		<row r="39">
+			<c r="A39" s="5" t="inlineStr"/>
+		</row>
+		<row r="40">
+			<c r="A40" s="9" t="inlineStr">
+				<is>
+					<t>Subtype Details</t>
+				</is>
+			</c>
+		</row>
+		<row r="41">
+			<c r="A41" s="3" t="inlineStr">
+				<is>
+					<t>Subtype Name</t>
+				</is>
+			</c>
+			<c r="B41" s="3" t="inlineStr">
+				<is>
+					<t>Code</t>
+				</is>
+			</c>
+			<c r="C41" s="3" t="inlineStr">
+				<is>
+					<t>Description</t>
+				</is>
+			</c>
+			<c r="D41" s="3" t="inlineStr">
+				<is>
+					<t>Field Name</t>
+				</is>
+			</c>
+			<c r="E41" s="3" t="inlineStr">
+				<is>
+					<t>Domain Name</t>
+				</is>
+			</c>
+			<c r="F41" s="3" t="inlineStr">
+				<is>
+					<t>Default Value</t>
+				</is>
+			</c>
+		</row>
+		<row r="42">
+			<c r="A42" s="3" t="inlineStr"/>
+			<c r="B42" s="7" t="inlineStr"/>
+			<c r="C42" s="4" t="inlineStr"/>
+			<c r="D42" s="3" t="inlineStr"/>
+			<c r="E42" s="3" t="inlineStr"/>
+			<c r="F42" s="3" t="inlineStr"/>
+		</row>
+		<row r="43">
+			<c r="A43" s="3" t="inlineStr"/>
+			<c r="B43" s="7" t="inlineStr"/>
+			<c r="C43" s="4" t="inlineStr"/>
+			<c r="D43" s="3" t="inlineStr"/>
+			<c r="E43" s="3" t="inlineStr"/>
+			<c r="F43" s="3" t="inlineStr"/>
+		</row>
+		<row r="44">
+			<c r="A44" s="3" t="inlineStr"/>
+			<c r="B44" s="7" t="inlineStr"/>
+			<c r="C44" s="4" t="inlineStr"/>
+			<c r="D44" s="3" t="inlineStr"/>
+			<c r="E44" s="3" t="inlineStr"/>
+			<c r="F44" s="3" t="inlineStr"/>
+		</row>
+		<row r="45">
+			<c r="A45" s="3" t="inlineStr"/>
+			<c r="B45" s="7" t="inlineStr"/>
+			<c r="C45" s="4" t="inlineStr"/>
+			<c r="D45" s="3" t="inlineStr"/>
+			<c r="E45" s="3" t="inlineStr"/>
+			<c r="F45" s="3" t="inlineStr"/>
+		</row>
+		<row r="46">
+			<c r="A46" s="3" t="inlineStr"/>
+			<c r="B46" s="7" t="inlineStr"/>
+			<c r="C46" s="4" t="inlineStr"/>
+			<c r="D46" s="3" t="inlineStr"/>
+			<c r="E46" s="3" t="inlineStr"/>
+			<c r="F46" s="3" t="inlineStr"/>
+		</row>
+	</sheetData>
+	<mergeCells count="20">
+		<mergeCell ref="B3:C3"/>
+		<mergeCell ref="B4:C4"/>
+		<mergeCell ref="B5:C5"/>
+		<mergeCell ref="B6:C6"/>
+		<mergeCell ref="B7:C7"/>
+		<mergeCell ref="B8:C8"/>
+		<mergeCell ref="B9:C9"/>
+		<mergeCell ref="B10:C10"/>
+		<mergeCell ref="B11:C11"/>
+		<mergeCell ref="B12:C12"/>
+		<mergeCell ref="B13:C13"/>
+		<mergeCell ref="B14:C14"/>
+		<mergeCell ref="B15:C15"/>
+		<mergeCell ref="B16:C16"/>
+		<mergeCell ref="B17:C17"/>
+		<mergeCell ref="B18:C18"/>
+		<mergeCell ref="B19:C19"/>
+		<mergeCell ref="B20:C20"/>
+		<mergeCell ref="B21:C21"/>
+		<mergeCell ref="B22:C22"/>
+	</mergeCells>
+	<conditionalFormatting sqref="B3">
+		<cfRule type="expression" priority="1" dxfId="0">
+			<formula>LEN(B3) &lt; 3</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B7">
+		<cfRule type="expression" priority="2" dxfId="0">
+			<formula>ISBLANK(B7)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B8">
+		<cfRule type="expression" priority="3" dxfId="0">
+			<formula>ISBLANK(B8)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B9">
+		<cfRule type="expression" priority="4" dxfId="0">
+			<formula>ISBLANK(B9)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B10">
+		<cfRule type="expression" priority="5" dxfId="0">
+			<formula>ISBLANK(B10)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B11">
+		<cfRule type="expression" priority="6" dxfId="0">
+			<formula>ISBLANK(B11)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B12">
+		<cfRule type="expression" priority="7" dxfId="0">
+			<formula>ISBLANK(B12)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B13">
+		<cfRule type="expression" priority="8" dxfId="0">
+			<formula>ISBLANK(B13)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B14">
+		<cfRule type="expression" priority="9" dxfId="0">
+			<formula>AND(ISBLANK(B14), OR(B17 = &quot;Many to Many&quot;, B18 = &quot;yes&quot;))</formula>
+		</cfRule>
+		<cfRule type="expression" priority="10" dxfId="0">
+			<formula>AND(ISBLANK(B14) = FALSE, B17 &lt;&gt; &quot;Many to Many&quot;, B18 &lt;&gt; &quot;yes&quot;)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B15">
+		<cfRule type="expression" priority="11" dxfId="0">
+			<formula>AND(ISBLANK(B15), OR(B17 = &quot;Many to Many&quot;, B18 = &quot;yes&quot;))</formula>
+		</cfRule>
+		<cfRule type="expression" priority="12" dxfId="0">
+			<formula>AND(ISBLANK(B15) = FALSE, B17 &lt;&gt; &quot;Many to Many&quot;, B18 &lt;&gt; &quot;yes&quot;)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="A26:A35">
+		<cfRule type="expression" priority="13" dxfId="0">
+			<formula>AND(ISBLANK(A26), COUNTA(B26:J26)&gt;0)</formula>
+		</cfRule>
+		<cfRule type="duplicateValues" priority="14" dxfId="0"/>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B26:B35">
+		<cfRule type="expression" priority="15" dxfId="0">
+			<formula>AND(ISBLANK(B26), NOT(ISBLANK(A26)))</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="D26:D35">
+		<cfRule type="duplicateValues" priority="16" dxfId="0"/>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="H26:H35">
+		<cfRule type="expression" priority="17" dxfId="0">
+			<formula>=IF(OR(B26 = &quot;Text&quot;), ISBLANK(H26)=TRUE, ISBLANK(H26)=FALSE)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="I26:I35">
+		<cfRule type="expression" priority="18" dxfId="0">
+			<formula>=IF(OR(B26 = &quot;Big Integer&quot;, B26 = &quot;Long Integer&quot;, B26 = &quot;Short Integer&quot;, B26 = &quot;Double&quot;, B26 = &quot;Float&quot;), ISBLANK(I26)=TRUE, ISBLANK(I26)=FALSE)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="J26:J35">
+		<cfRule type="expression" priority="19" dxfId="0">
+			<formula>=IF(OR(B26 = &quot;Double&quot;, B26 = &quot;Float&quot;), ISBLANK(J26)=TRUE, ISBLANK(J26)=FALSE)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="A42:A46">
+		<cfRule type="expression" priority="20" dxfId="0">
+			<formula>AND(ISBLANK(A42), COUNTA(B42:F42)&gt;0)</formula>
+		</cfRule>
+		<cfRule type="expression" priority="21" dxfId="0">
+			<formula>NOT(_xlfn.XLOOKUP(A42, A$42:A$46, B$42:B$46)=B42)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B42:B46">
+		<cfRule type="expression" priority="22" dxfId="0">
+			<formula>AND(ISBLANK(B42), NOT(ISBLANK(A42)))</formula>
+		</cfRule>
+		<cfRule type="expression" priority="23" dxfId="0">
+			<formula>NOT(_xlfn.XLOOKUP(B42, B$42:B$46, A$42:A$46)=A42)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="D42:D46">
+		<cfRule type="expression" priority="24" dxfId="0">
+			<formula>AND(ISBLANK(D42),OR(NOT(ISBLANK(E42)),NOT(ISBLANK(F42))))</formula>
+		</cfRule>
+		<cfRule type="expression" priority="25" dxfId="0">
+			<formula>COUNTIFS(B$42:B$46, B42, D$42:D$46, D42) &gt; 1</formula>
+		</cfRule>
+		<cfRule type="expression" priority="27" dxfId="0">
+			<formula>AND(ISBLANK(D42) = FALSE, OR(COUNTIF(A$25:A$36, D42) = 0, D42 = A25))</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B38">
+		<cfRule type="expression" priority="26" dxfId="0">
+			<formula>OR(COUNTIF(A$25:A$36, B38) = 0, D42 = A25)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<dataValidations count="9">
+		<dataValidation sqref="B7" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Relationship Type" error="Choose a valid relationship type from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.relationship_type</formula1>
+		</dataValidation>
+		<dataValidation sqref="B16" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Notifications" error="Choose a valid notifications from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.notifications</formula1>
+		</dataValidation>
+		<dataValidation sqref="B17" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Cardinality" error="Choose a valid cardinality from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.cardinality</formula1>
+		</dataValidation>
+		<dataValidation sqref="B18" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Boolean" error="Choose a valid boolean from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.boolean</formula1>
+		</dataValidation>
+		<dataValidation sqref="B19" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Boolean" error="Choose a valid boolean from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.boolean</formula1>
+		</dataValidation>
+		<dataValidation sqref="B20" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Boolean" error="Choose a valid boolean from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.boolean</formula1>
+		</dataValidation>
+		<dataValidation sqref="B21" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Boolean" error="Choose a valid boolean from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.boolean</formula1>
+		</dataValidation>
+		<dataValidation sqref="B26:B35" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Field Type" error="Choose a valid field type from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.field_type</formula1>
+		</dataValidation>
+		<dataValidation sqref="G26:G35" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Boolean" error="Choose a valid boolean from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.boolean</formula1>
+		</dataValidation>
+	</dataValidations>
+	<hyperlinks>
+		<hyperlink xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ref="A1" r:id="rId1"/>
+	</hyperlinks>
+	<pageMargins left="0.75" right="0.75" top="1" bottom="1" header="0.5" footer="0.5"/>
+	<tableParts count="2">
+		<tablePart xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId2"/>
+		<tablePart xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId3"/>
+	</tableParts>
+</worksheet>

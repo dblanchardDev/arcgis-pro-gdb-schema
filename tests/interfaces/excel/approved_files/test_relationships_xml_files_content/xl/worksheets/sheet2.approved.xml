@@ -1,0 +1,115 @@
+<?xml version="1.0" ?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+	<sheetPr>
+		<outlinePr summaryBelow="1" summaryRight="1"/>
+		<pageSetUpPr/>
+	</sheetPr>
+	<dimension ref="A1:B10"/>
+	<sheetViews>
+		<sheetView workbookViewId="0">
+			<selection activeCell="A1" sqref="A1"/>
+		</sheetView>
+	</sheetViews>
+	<sheetFormatPr baseColWidth="8" defaultRowHeight="15"/>
+	<cols>
+		<col width="30" customWidth="1" min="1" max="1"/>
+		<col width="60" customWidth="1" min="2" max="2"/>
+	</cols>
+	<sheetData>
+		<row r="1">
+			<c r="A1" s="1" t="inlineStr">
+				<is>
+					<t>Source Information</t>
+				</is>
+			</c>
+		</row>
+		<row r="2">
+			<c r="A2" s="2" t="inlineStr">
+				<is>
+					<t>Database Name</t>
+				</is>
+			</c>
+			<c r="B2" s="3" t="inlineStr">
+				<is>
+					<t>GDBSchemaTool</t>
+				</is>
+			</c>
+		</row>
+		<row r="3">
+			<c r="A3" s="2" t="inlineStr">
+				<is>
+					<t>Workspace Type</t>
+				</is>
+			</c>
+			<c r="B3" s="3" t="inlineStr">
+				<is>
+					<t>Local Database</t>
+				</is>
+			</c>
+		</row>
+		<row r="4">
+			<c r="A4" s="2" t="inlineStr">
+				<is>
+					<t>Remote Server</t>
+				</is>
+			</c>
+			<c r="B4" s="3" t="inlineStr"/>
+		</row>
+		<row r="5" ht="26.4" customHeight="1">
+			<c r="A5" s="2" t="inlineStr">
+				<is>
+					<t>Summary</t>
+				</is>
+			</c>
+			<c r="B5" s="4" t="inlineStr">
+				<is>
+					<t>This is a geodatabase to test the GDB Schema Tools.</t>
+				</is>
+			</c>
+		</row>
+		<row r="6">
+			<c r="A6" s="5" t="inlineStr"/>
+		</row>
+		<row r="7">
+			<c r="A7" s="1" t="inlineStr">
+				<is>
+					<t>Relationship Class Index</t>
+				</is>
+			</c>
+		</row>
+		<row r="8">
+			<c r="A8" s="3" t="inlineStr">
+				<is>
+					<t>Name</t>
+				</is>
+			</c>
+		</row>
+		<row r="9">
+			<c r="A9" s="6" t="inlineStr">
+				<is>
+					<t>Building_Inspections</t>
+				</is>
+			</c>
+		</row>
+		<row r="10">
+			<c r="A10" s="6" t="inlineStr">
+				<is>
+					<t>Rivers_and_Lakes</t>
+				</is>
+			</c>
+		</row>
+	</sheetData>
+	<dataValidations count="1">
+		<dataValidation sqref="B3" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Workspace Type" error="Choose a valid workspace type from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.workspace_type</formula1>
+		</dataValidation>
+	</dataValidations>
+	<hyperlinks>
+		<hyperlink xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ref="A9" r:id="rId1"/>
+		<hyperlink xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ref="A10" r:id="rId2"/>
+	</hyperlinks>
+	<pageMargins left="0.75" right="0.75" top="1" bottom="1" header="0.5" footer="0.5"/>
+	<tableParts count="1">
+		<tablePart xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId3"/>
+	</tableParts>
+</worksheet>

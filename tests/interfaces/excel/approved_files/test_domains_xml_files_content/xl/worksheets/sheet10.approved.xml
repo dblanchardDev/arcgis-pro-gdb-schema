@@ -1,0 +1,422 @@
+<?xml version="1.0" ?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+	<sheetPr>
+		<outlinePr summaryBelow="1" summaryRight="1"/>
+		<pageSetUpPr/>
+	</sheetPr>
+	<dimension ref="A1:C32"/>
+	<sheetViews>
+		<sheetView workbookViewId="0">
+			<selection activeCell="A1" sqref="A1"/>
+		</sheetView>
+	</sheetViews>
+	<sheetFormatPr baseColWidth="8" defaultRowHeight="15"/>
+	<cols>
+		<col width="25" customWidth="1" min="1" max="1"/>
+		<col width="25" customWidth="1" min="2" max="2"/>
+		<col width="80" customWidth="1" min="3" max="3"/>
+	</cols>
+	<sheetData>
+		<row r="1">
+			<c r="A1" s="6" t="inlineStr">
+				<is>
+					<t>Go to Index</t>
+				</is>
+			</c>
+		</row>
+		<row r="3">
+			<c r="A3" s="2" t="inlineStr">
+				<is>
+					<t>Name</t>
+				</is>
+			</c>
+			<c r="B3" s="3" t="inlineStr">
+				<is>
+					<t>Street Types</t>
+				</is>
+			</c>
+		</row>
+		<row r="4">
+			<c r="A4" s="2" t="inlineStr">
+				<is>
+					<t>Schema</t>
+				</is>
+			</c>
+			<c r="B4" s="3" t="inlineStr"/>
+		</row>
+		<row r="5" ht="26.4" customHeight="1">
+			<c r="A5" s="2" t="inlineStr">
+				<is>
+					<t>Description</t>
+				</is>
+			</c>
+			<c r="B5" s="4" t="inlineStr">
+				<is>
+					<t>List of valid street types to choose from.</t>
+				</is>
+			</c>
+		</row>
+		<row r="6">
+			<c r="A6" s="2" t="inlineStr">
+				<is>
+					<t>Field Type</t>
+				</is>
+			</c>
+			<c r="B6" s="3" t="inlineStr">
+				<is>
+					<t>Text</t>
+				</is>
+			</c>
+		</row>
+		<row r="7">
+			<c r="A7" s="2" t="inlineStr">
+				<is>
+					<t>Domain Type</t>
+				</is>
+			</c>
+			<c r="B7" s="3" t="inlineStr">
+				<is>
+					<t>Coded Value</t>
+				</is>
+			</c>
+		</row>
+		<row r="8">
+			<c r="A8" s="2" t="inlineStr">
+				<is>
+					<t>Split Policy</t>
+				</is>
+			</c>
+			<c r="B8" s="3" t="inlineStr">
+				<is>
+					<t>Duplicate</t>
+				</is>
+			</c>
+		</row>
+		<row r="9">
+			<c r="A9" s="2" t="inlineStr">
+				<is>
+					<t>Merge Policy</t>
+				</is>
+			</c>
+			<c r="B9" s="3" t="inlineStr">
+				<is>
+					<t>Default Value</t>
+				</is>
+			</c>
+		</row>
+		<row r="10">
+			<c r="A10" s="5" t="inlineStr"/>
+		</row>
+		<row r="11">
+			<c r="A11" s="1" t="inlineStr">
+				<is>
+					<t>Coded Values</t>
+				</is>
+			</c>
+		</row>
+		<row r="12">
+			<c r="A12" s="3" t="inlineStr">
+				<is>
+					<t>Code</t>
+				</is>
+			</c>
+			<c r="B12" s="3" t="inlineStr">
+				<is>
+					<t>Description</t>
+				</is>
+			</c>
+			<c r="C12" s="3" t="inlineStr">
+				<is>
+					<t>Summary</t>
+				</is>
+			</c>
+		</row>
+		<row r="13">
+			<c r="A13" s="3" t="inlineStr">
+				<is>
+					<t>AVE</t>
+				</is>
+			</c>
+			<c r="B13" s="3" t="inlineStr">
+				<is>
+					<t>Avenue</t>
+				</is>
+			</c>
+			<c r="C13" s="4" t="inlineStr"/>
+		</row>
+		<row r="14">
+			<c r="A14" s="3" t="inlineStr">
+				<is>
+					<t>BLVD</t>
+				</is>
+			</c>
+			<c r="B14" s="3" t="inlineStr">
+				<is>
+					<t>Boulevard</t>
+				</is>
+			</c>
+			<c r="C14" s="4" t="inlineStr"/>
+		</row>
+		<row r="15">
+			<c r="A15" s="3" t="inlineStr">
+				<is>
+					<t>CIR</t>
+				</is>
+			</c>
+			<c r="B15" s="3" t="inlineStr">
+				<is>
+					<t>Circle</t>
+				</is>
+			</c>
+			<c r="C15" s="4" t="inlineStr"/>
+		</row>
+		<row r="16">
+			<c r="A16" s="3" t="inlineStr">
+				<is>
+					<t>CRES</t>
+				</is>
+			</c>
+			<c r="B16" s="3" t="inlineStr">
+				<is>
+					<t>Crescent</t>
+				</is>
+			</c>
+			<c r="C16" s="4" t="inlineStr"/>
+		</row>
+		<row r="17">
+			<c r="A17" s="3" t="inlineStr">
+				<is>
+					<t>DR</t>
+				</is>
+			</c>
+			<c r="B17" s="3" t="inlineStr">
+				<is>
+					<t>Drive</t>
+				</is>
+			</c>
+			<c r="C17" s="4" t="inlineStr"/>
+		</row>
+		<row r="18">
+			<c r="A18" s="3" t="inlineStr">
+				<is>
+					<t>EXPY</t>
+				</is>
+			</c>
+			<c r="B18" s="3" t="inlineStr">
+				<is>
+					<t>Expressway</t>
+				</is>
+			</c>
+			<c r="C18" s="4" t="inlineStr"/>
+		</row>
+		<row r="19">
+			<c r="A19" s="3" t="inlineStr">
+				<is>
+					<t>HWY</t>
+				</is>
+			</c>
+			<c r="B19" s="3" t="inlineStr">
+				<is>
+					<t>Highway</t>
+				</is>
+			</c>
+			<c r="C19" s="4" t="inlineStr"/>
+		</row>
+		<row r="20">
+			<c r="A20" s="3" t="inlineStr">
+				<is>
+					<t>LANE</t>
+				</is>
+			</c>
+			<c r="B20" s="3" t="inlineStr">
+				<is>
+					<t>Lane</t>
+				</is>
+			</c>
+			<c r="C20" s="4" t="inlineStr"/>
+		</row>
+		<row r="21">
+			<c r="A21" s="3" t="inlineStr">
+				<is>
+					<t>PKY</t>
+				</is>
+			</c>
+			<c r="B21" s="3" t="inlineStr">
+				<is>
+					<t>Parkway</t>
+				</is>
+			</c>
+			<c r="C21" s="4" t="inlineStr"/>
+		</row>
+		<row r="22">
+			<c r="A22" s="3" t="inlineStr">
+				<is>
+					<t>PL</t>
+				</is>
+			</c>
+			<c r="B22" s="3" t="inlineStr">
+				<is>
+					<t>Place</t>
+				</is>
+			</c>
+			<c r="C22" s="4" t="inlineStr"/>
+		</row>
+		<row r="23">
+			<c r="A23" s="3" t="inlineStr">
+				<is>
+					<t>PROM</t>
+				</is>
+			</c>
+			<c r="B23" s="3" t="inlineStr">
+				<is>
+					<t>Promenade</t>
+				</is>
+			</c>
+			<c r="C23" s="4" t="inlineStr"/>
+		</row>
+		<row r="24">
+			<c r="A24" s="3" t="inlineStr">
+				<is>
+					<t>RAMP</t>
+				</is>
+			</c>
+			<c r="B24" s="3" t="inlineStr">
+				<is>
+					<t>Ramp</t>
+				</is>
+			</c>
+			<c r="C24" s="4" t="inlineStr"/>
+		</row>
+		<row r="25">
+			<c r="A25" s="3" t="inlineStr">
+				<is>
+					<t>RD</t>
+				</is>
+			</c>
+			<c r="B25" s="3" t="inlineStr">
+				<is>
+					<t>Road</t>
+				</is>
+			</c>
+			<c r="C25" s="4" t="inlineStr"/>
+		</row>
+		<row r="26">
+			<c r="A26" s="3" t="inlineStr">
+				<is>
+					<t>RTE</t>
+				</is>
+			</c>
+			<c r="B26" s="3" t="inlineStr">
+				<is>
+					<t>Route</t>
+				</is>
+			</c>
+			<c r="C26" s="4" t="inlineStr"/>
+		</row>
+		<row r="27">
+			<c r="A27" s="3" t="inlineStr">
+				<is>
+					<t>ST</t>
+				</is>
+			</c>
+			<c r="B27" s="3" t="inlineStr">
+				<is>
+					<t>Street</t>
+				</is>
+			</c>
+			<c r="C27" s="4" t="inlineStr"/>
+		</row>
+		<row r="28">
+			<c r="A28" s="3" t="inlineStr">
+				<is>
+					<t>WAY</t>
+				</is>
+			</c>
+			<c r="B28" s="3" t="inlineStr">
+				<is>
+					<t>Way</t>
+				</is>
+			</c>
+			<c r="C28" s="4" t="inlineStr"/>
+		</row>
+		<row r="29">
+			<c r="A29" s="5" t="inlineStr"/>
+		</row>
+		<row r="30">
+			<c r="A30" s="1" t="inlineStr">
+				<is>
+					<t>Domain Users</t>
+				</is>
+			</c>
+		</row>
+		<row r="31">
+			<c r="A31" s="3" t="inlineStr">
+				<is>
+					<t>Name</t>
+				</is>
+			</c>
+		</row>
+		<row r="32">
+			<c r="A32" s="6" t="inlineStr">
+				<is>
+					<t>StreetCentreline</t>
+				</is>
+			</c>
+		</row>
+	</sheetData>
+	<mergeCells count="3">
+		<mergeCell ref="B3:C3"/>
+		<mergeCell ref="B4:C4"/>
+		<mergeCell ref="B5:C5"/>
+	</mergeCells>
+	<conditionalFormatting sqref="B3">
+		<cfRule type="expression" priority="1" dxfId="0">
+			<formula>LEN(B3) &lt; 3</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B6">
+		<cfRule type="expression" priority="2" dxfId="0">
+			<formula>ISBLANK(B6)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B7">
+		<cfRule type="expression" priority="3" dxfId="0">
+			<formula>ISBLANK(B7)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="A13:A28">
+		<cfRule type="expression" priority="4" dxfId="0">
+			<formula>AND(ISBLANK(A13), NOT(AND(ISBLANK(B13), ISBLANK(C13))))</formula>
+		</cfRule>
+		<cfRule type="duplicateValues" priority="5" dxfId="0"/>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B13:B28">
+		<cfRule type="expression" priority="6" dxfId="0">
+			<formula>AND(ISBLANK(B13), NOT(ISBLANK(A13)))</formula>
+		</cfRule>
+		<cfRule type="duplicateValues" priority="7" dxfId="0"/>
+	</conditionalFormatting>
+	<dataValidations count="4">
+		<dataValidation sqref="B6" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Field Type" error="Choose a valid field type from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.field_type</formula1>
+		</dataValidation>
+		<dataValidation sqref="B7" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Domain Type" error="Choose a valid domain type from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.domain_type</formula1>
+		</dataValidation>
+		<dataValidation sqref="B8" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Split Policy" error="Choose a valid split policy from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.split_policy</formula1>
+		</dataValidation>
+		<dataValidation sqref="B9" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Merge Policy" error="Choose a valid merge policy from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.merge_policy</formula1>
+		</dataValidation>
+	</dataValidations>
+	<hyperlinks>
+		<hyperlink xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ref="A1" r:id="rId1"/>
+		<hyperlink xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ref="A32" r:id="rId2"/>
+	</hyperlinks>
+	<pageMargins left="0.75" right="0.75" top="1" bottom="1" header="0.5" footer="0.5"/>
+	<tableParts count="2">
+		<tablePart xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId3"/>
+		<tablePart xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId4"/>
+	</tableParts>
+</worksheet>

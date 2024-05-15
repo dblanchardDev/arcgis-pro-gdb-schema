@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "bierner.markdown-mermaid", // Markdown Preview Mermaid Support
+        "DavidAnson.vscode-markdownlint", // markdownlint
+        "ms-python.pylint", // Pylint
+        "ms-python.python", // Python
+        "ms-python.vscode-pylance", // Pylance
+        "njpwerner.autodocstring", // autoDocstring - Python Docstring Generator
+        "streetsidesoftware.code-spell-checker", // Code Spell Checker
+    ]
+}

@@ -1,0 +1,253 @@
+<?xml version="1.0" ?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+	<sheetPr>
+		<outlinePr summaryBelow="1" summaryRight="1"/>
+		<pageSetUpPr/>
+	</sheetPr>
+	<dimension ref="A1:C19"/>
+	<sheetViews>
+		<sheetView workbookViewId="0">
+			<selection activeCell="A1" sqref="A1"/>
+		</sheetView>
+	</sheetViews>
+	<sheetFormatPr baseColWidth="8" defaultRowHeight="15"/>
+	<cols>
+		<col width="25" customWidth="1" min="1" max="1"/>
+		<col width="25" customWidth="1" min="2" max="2"/>
+		<col width="80" customWidth="1" min="3" max="3"/>
+	</cols>
+	<sheetData>
+		<row r="1">
+			<c r="A1" s="6" t="inlineStr">
+				<is>
+					<t>Go to Index</t>
+				</is>
+			</c>
+		</row>
+		<row r="3">
+			<c r="A3" s="2" t="inlineStr">
+				<is>
+					<t>Name</t>
+				</is>
+			</c>
+			<c r="B3" s="3" t="inlineStr">
+				<is>
+					<t>Buidling - General</t>
+				</is>
+			</c>
+		</row>
+		<row r="4">
+			<c r="A4" s="2" t="inlineStr">
+				<is>
+					<t>Schema</t>
+				</is>
+			</c>
+			<c r="B4" s="3" t="inlineStr"/>
+		</row>
+		<row r="5" ht="26.4" customHeight="1">
+			<c r="A5" s="2" t="inlineStr">
+				<is>
+					<t>Description</t>
+				</is>
+			</c>
+			<c r="B5" s="4" t="inlineStr">
+				<is>
+					<t>General Types of Buildings</t>
+				</is>
+			</c>
+		</row>
+		<row r="6">
+			<c r="A6" s="2" t="inlineStr">
+				<is>
+					<t>Field Type</t>
+				</is>
+			</c>
+			<c r="B6" s="3" t="inlineStr">
+				<is>
+					<t>Text</t>
+				</is>
+			</c>
+		</row>
+		<row r="7">
+			<c r="A7" s="2" t="inlineStr">
+				<is>
+					<t>Domain Type</t>
+				</is>
+			</c>
+			<c r="B7" s="3" t="inlineStr">
+				<is>
+					<t>Coded Value</t>
+				</is>
+			</c>
+		</row>
+		<row r="8">
+			<c r="A8" s="2" t="inlineStr">
+				<is>
+					<t>Split Policy</t>
+				</is>
+			</c>
+			<c r="B8" s="3" t="inlineStr">
+				<is>
+					<t>Default Value</t>
+				</is>
+			</c>
+		</row>
+		<row r="9">
+			<c r="A9" s="2" t="inlineStr">
+				<is>
+					<t>Merge Policy</t>
+				</is>
+			</c>
+			<c r="B9" s="3" t="inlineStr">
+				<is>
+					<t>Default Value</t>
+				</is>
+			</c>
+		</row>
+		<row r="10">
+			<c r="A10" s="5" t="inlineStr"/>
+		</row>
+		<row r="11">
+			<c r="A11" s="1" t="inlineStr">
+				<is>
+					<t>Coded Values</t>
+				</is>
+			</c>
+		</row>
+		<row r="12">
+			<c r="A12" s="3" t="inlineStr">
+				<is>
+					<t>Code</t>
+				</is>
+			</c>
+			<c r="B12" s="3" t="inlineStr">
+				<is>
+					<t>Description</t>
+				</is>
+			</c>
+			<c r="C12" s="3" t="inlineStr">
+				<is>
+					<t>Summary</t>
+				</is>
+			</c>
+		</row>
+		<row r="13">
+			<c r="A13" s="3" t="inlineStr">
+				<is>
+					<t>OTH</t>
+				</is>
+			</c>
+			<c r="B13" s="3" t="inlineStr">
+				<is>
+					<t>Other</t>
+				</is>
+			</c>
+			<c r="C13" s="4" t="inlineStr"/>
+		</row>
+		<row r="14">
+			<c r="A14" s="3" t="inlineStr">
+				<is>
+					<t>MTU</t>
+				</is>
+			</c>
+			<c r="B14" s="3" t="inlineStr">
+				<is>
+					<t>Multi-Use</t>
+				</is>
+			</c>
+			<c r="C14" s="4" t="inlineStr"/>
+		</row>
+		<row r="15">
+			<c r="A15" s="3" t="inlineStr">
+				<is>
+					<t>REZ</t>
+				</is>
+			</c>
+			<c r="B15" s="3" t="inlineStr">
+				<is>
+					<t>Residential</t>
+				</is>
+			</c>
+			<c r="C15" s="4" t="inlineStr"/>
+		</row>
+		<row r="16">
+			<c r="A16" s="5" t="inlineStr"/>
+		</row>
+		<row r="17">
+			<c r="A17" s="1" t="inlineStr">
+				<is>
+					<t>Domain Users</t>
+				</is>
+			</c>
+		</row>
+		<row r="18">
+			<c r="A18" s="3" t="inlineStr">
+				<is>
+					<t>Name</t>
+				</is>
+			</c>
+		</row>
+		<row r="19">
+			<c r="A19" s="6" t="inlineStr">
+				<is>
+					<t>Buildings</t>
+				</is>
+			</c>
+		</row>
+	</sheetData>
+	<mergeCells count="3">
+		<mergeCell ref="B3:C3"/>
+		<mergeCell ref="B4:C4"/>
+		<mergeCell ref="B5:C5"/>
+	</mergeCells>
+	<conditionalFormatting sqref="B3">
+		<cfRule type="expression" priority="1" dxfId="0">
+			<formula>LEN(B3) &lt; 3</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B6">
+		<cfRule type="expression" priority="2" dxfId="0">
+			<formula>ISBLANK(B6)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B7">
+		<cfRule type="expression" priority="3" dxfId="0">
+			<formula>ISBLANK(B7)</formula>
+		</cfRule>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="A13:A15">
+		<cfRule type="expression" priority="4" dxfId="0">
+			<formula>AND(ISBLANK(A13), NOT(AND(ISBLANK(B13), ISBLANK(C13))))</formula>
+		</cfRule>
+		<cfRule type="duplicateValues" priority="5" dxfId="0"/>
+	</conditionalFormatting>
+	<conditionalFormatting sqref="B13:B15">
+		<cfRule type="expression" priority="6" dxfId="0">
+			<formula>AND(ISBLANK(B13), NOT(ISBLANK(A13)))</formula>
+		</cfRule>
+		<cfRule type="duplicateValues" priority="7" dxfId="0"/>
+	</conditionalFormatting>
+	<dataValidations count="4">
+		<dataValidation sqref="B6" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Field Type" error="Choose a valid field type from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.field_type</formula1>
+		</dataValidation>
+		<dataValidation sqref="B7" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Domain Type" error="Choose a valid domain type from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.domain_type</formula1>
+		</dataValidation>
+		<dataValidation sqref="B8" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Split Policy" error="Choose a valid split policy from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.split_policy</formula1>
+		</dataValidation>
+		<dataValidation sqref="B9" showErrorMessage="1" showInputMessage="0" allowBlank="1" errorTitle="Invalid Merge Policy" error="Choose a valid merge policy from the dropdown." type="list" errorStyle="stop">
+			<formula1>=dropdowns.merge_policy</formula1>
+		</dataValidation>
+	</dataValidations>
+	<hyperlinks>
+		<hyperlink xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ref="A1" r:id="rId1"/>
+		<hyperlink xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ref="A19" r:id="rId2"/>
+	</hyperlinks>
+	<pageMargins left="0.75" right="0.75" top="1" bottom="1" header="0.5" footer="0.5"/>
+	<tableParts count="2">
+		<tablePart xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId3"/>
+		<tablePart xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:id="rId4"/>
+	</tableParts>
+</worksheet>
