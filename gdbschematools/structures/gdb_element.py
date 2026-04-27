@@ -20,8 +20,7 @@ class GDBElement:
     """
 
     # Regular expression which validate the name
-    VALID_NAME_REGEX = "^[A-z0-9][A-z0-9 ;_.-]{1,97}[A-z0-9]$"
-
+    VALID_NAME_REGEX = "^(?:[A-Za-z]|[A-Za-z][A-Za-z0-9 ;_.-]{0,97}[A-Za-z0-9])$"
 
     # Instance Properties
     _name:str = None

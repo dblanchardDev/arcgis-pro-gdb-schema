@@ -32,136 +32,162 @@ def convert_date_values(field_type:str, value:any) -> any:
 
     return value
 
-def write_full_geodatabase(path_to_gdb:str, gdb_struct:"Geodatabase"):
+def write_full_geodatabase(path_to_gdb:str, gdb_struct:"Geodatabase", skip_existings:bool=False):
     """Write the full geodatabase structure to a file or enterprise geodatabase from an existing geodatabase structure.
 
     Args:
         path_to_gdb (str): Path to the file or enterprise geodatabase. Should be empty.
         gdb_struct (Geodatabase): Geodatabase structure instance from which the gdb is to be populated.
+        skip_existings (bool, optional): Whether to skip creating existing features including domain, featureclass,
+            table, relationshipclass. Default to False.
     """
 
-    arcpy.SetProgressor("default", "Updating Geodatabase Metadata.")
-
     if gdb_struct.meta_summary is not None:
+        arcpy.SetProgressor("default", "Updating Geodatabase Metadata.")
         gdb_metadata.update_metadata(path_to_gdb, gdb_struct.meta_summary)
 
+    gdb_desc = arcpy.Describe(path_to_gdb)
     # Create domains, featuredatasets and datasets in geodatabase
-    arcpy.SetProgressor("default", "Creating domains in geodatabase.")
-    create_domains(path_to_gdb, gdb_struct)
+    create_domains(path_to_gdb, gdb_struct, gdb_desc, skip_existings)
+    create_featuredatasets(path_to_gdb, gdb_struct, gdb_desc, skip_existings)
+    create_datasets(path_to_gdb, gdb_struct, gdb_desc, skip_existings)
 
-    arcpy.SetProgressor("default", "Creating feature datasets in geodatabase.")
-    create_featuredatasets(path_to_gdb, gdb_struct)
-
-    arcpy.SetProgressor("default", "Creating datasets in geodatabase.")
-    create_datasets(path_to_gdb, gdb_struct)
-
-def create_domains(path_to_gdb:str, gdb_struct:"Geodatabase"):
+def create_domains(path_to_gdb:str, gdb_struct:"Geodatabase", gdb_desc, skip_existings:bool=False):
     """Read all domains from Geodatabase structure and write them to a geodatabase.
 
     Args:
         path_to_gdb (str): Path to the file or enterprise geodatabase.
         gdb_struct (Geodatabase): Geodatabase structure from which domains will be read.
+        gdb_desc (arcpy describe): Description of the geodatabase.
+        skip_existings (bool, optional): Whether to skip creating domains or not. Default to False.
     """
     domains : list["Domains"] = gdb_struct.domains #Sequence of domains, behaves like a sequence.
+    existing_domains = [domain.name for domain in arcpy.da.ListDomains(path_to_gdb)]
+    # find the login user or schema name for enterprise gdb
+    is_enterprise = gdb_desc.workspaceType == "RemoteDatabase"
+    if is_enterprise:
+        schema_name = gdb_desc.connectionProperties.user
     for domain in domains:
         try:
-            domain_name = domain.name
-            domain_description = domain.description
-            field_type = domain.field_type
-            domain_type = domain.domain_type
-            split_policy = domain.split_policy
-            merge_policy = domain.merge_policy
+            if is_enterprise and domain.schema is not None and domain.schema != schema_name:
+                continue
+            if skip_existings is False or domain.name not in existing_domains:
+                domain_name = domain.name
+                domain_description = domain.description
+                field_type = domain.field_type
+                domain_type = domain.domain_type
+                split_policy = domain.split_policy
+                merge_policy = domain.merge_policy
+                arcpy.SetProgressor("default", f"Creating {domain.name} domain in geodatabase.")
+                arcpy.management.CreateDomain(path_to_gdb, domain_name, domain_description, field_type, domain_type,
+                                            split_policy, merge_policy)
 
-            arcpy.management.CreateDomain(path_to_gdb, domain_name, domain_description, field_type, domain_type,
-                                        split_policy, merge_policy)
+                if domain_type == "CODED":
+                    for code , props in domain.codes.items():
+                        code = convert_date_values(domain.field_type, code)
+                        arcpy.management.AddCodedValueToDomain(path_to_gdb, domain_name, code, props.description)
 
-            if domain_type == "CODED":
-                for code , props in domain.codes.items():
-                    code = convert_date_values(domain.field_type, code)
-                    arcpy.management.AddCodedValueToDomain(path_to_gdb, domain_name, code, props.description)
-
-            elif domain_type == "RANGE":
-                min_value = convert_date_values(domain.field_type, domain.minimum)
-                max_value = convert_date_values(domain.field_type, domain.maximum)
-                arcpy.management.SetValueForRangeDomain(path_to_gdb, domain_name, min_value, max_value)
-                if domain.field_type in ["DATE", "DATEONLY", "TIMEONLY"]:
+                elif domain_type == "RANGE":
+                    min_value = convert_date_values(domain.field_type, domain.minimum)
+                    max_value = convert_date_values(domain.field_type, domain.maximum)
                     arcpy.management.SetValueForRangeDomain(path_to_gdb, domain_name, min_value, max_value)
+                    if domain.field_type in ["DATE", "DATEONLY", "TIMEONLY"]:
+                        arcpy.management.SetValueForRangeDomain(path_to_gdb, domain_name, min_value, max_value)
         except Exception as exc:
             #pylint: disable-next=broad-exception-raised
             raise Exception(f"Failure while creating {domain.name} domain.") from exc
 
-def create_featuredatasets(path_to_gdb:str, gdb_struct:"Geodatabase"):
+def create_featuredatasets(path_to_gdb:str, gdb_struct:"Geodatabase", gdb_desc, skip_existings:bool=False):
     """Create feature datasets that match the feature datasets described in the ingested geodatabase structure.
 
     Args:
         path_to_gdb (str): Path to the file or enterprise geodatabase.
         gdb_struct (Geodatabase): Geodatabase structure from which feature datasets will be read.
+        gdb_desc (arcpy describe): Description of the geodatabase.
+        skip_existings (bool, optional): Whether to skip creating feature dataset or not. Default to False.
     """
     feature_datasets : list["FeatureDataset"] = gdb_struct.feature_datasets
+    # find the login user or schema name for enterprise gdb
+    is_enterprise = gdb_desc.workspaceType == "RemoteDatabase"
+    if is_enterprise:
+        schema_name = gdb_desc.connectionProperties.user
 
     for feature_dataset in feature_datasets:
         spatial_reference = None
+        if is_enterprise and feature_dataset.schema and feature_dataset.schema != schema_name:
+            continue
+
+        path_to_fds = os.path.join(path_to_gdb, feature_dataset.name)
         try:
-            if feature_dataset.datasets is not None:
-                for dataset in feature_dataset.datasets:
-                    if dataset.dataset_type == "FeatureClass":
-                        spatial_reference = dataset.spatial_ref
-                        break
-            arcpy.management.CreateFeatureDataset(path_to_gdb, feature_dataset.name, spatial_reference)
-            # Assign the Metadata summary to the feature dataset
-            if feature_dataset.meta_summary is not None:
-                path_to_fds = os.path.join(path_to_gdb, feature_dataset.name)
-                gdb_metadata.update_metadata(path_to_fds, feature_dataset.meta_summary)
+            if skip_existings is False or not arcpy.Exists(path_to_fds):
+                if feature_dataset.datasets is not None:
+                    for dataset in feature_dataset.datasets:
+                        if dataset.dataset_type == "FeatureClass":
+                            spatial_reference = dataset.spatial_ref
+                            break
+                arcpy.SetProgressor("default", f"Creating {feature_dataset.name} feature dataset in geodatabase.")
+                arcpy.management.CreateFeatureDataset(path_to_gdb, feature_dataset.name, spatial_reference)
+                # Assign the Metadata summary to the feature dataset
+                if feature_dataset.meta_summary is not None:
+                    gdb_metadata.update_metadata(path_to_fds, feature_dataset.meta_summary)
         except Exception as exc:
             #pylint: disable-next=broad-exception-raised
             raise Exception(f"Failure while creating {feature_dataset.name} feature dataset.") from exc
 
-def create_datasets(path_to_gdb:str, gdb_struct:"Geodatabase"):
+def create_datasets(path_to_gdb:str, gdb_struct:"Geodatabase", gdb_desc, skip_existings:bool=False):
     """Create datasets that match the datasets described in the ingested geodatabase structure.
 
     Args:
         path_to_gdb (str): Path to the file or enterprise geodatabase.
         gdb_struct (Geodatabase): Geodatabase structure from which datasets will be read.
+        gdb_desc (arcpy describe): Description of the geodatabase.
+        skip_existings (bool, optional): Whether to skip creating datasets or not. Default to False.
     """
-    datasets : list["Dataset"] = gdb_struct.datasets
-
+    is_enterprise = gdb_desc.workspaceType == "RemoteDatabase"
+    if is_enterprise:
+        schema_name = gdb_desc.connectionProperties.user
     # Create tables and Feature classes
-    arcpy.SetProgressor("default", "Creating datasets in geodatabase.")
-    is_enterprise = arcpy.Describe(path_to_gdb).workspaceType == "RemoteDatabase"
+    tables_and_feature_classes = gdb_struct.datasets.tables_and_feature_classes
 
-    for dataset in datasets:
-        out_path = os.path.join(path_to_gdb, dataset.feature_dataset.name) if dataset.feature_dataset \
-            else path_to_gdb
-        path_to_dataset = os.path.join(out_path, dataset.name)
-        # Create dataset
-        if dataset.dataset_type == "FeatureClass":
-            create_feature_class (out_path, dataset)
-        elif dataset.dataset_type == "Table":
-            create_table(out_path, dataset)
+    for dataset in tables_and_feature_classes:
+        if is_enterprise and dataset.schema and dataset.schema != schema_name:
+            continue
+        out_path = os.path.join(path_to_gdb, dataset.feature_dataset.name) if dataset.feature_dataset else path_to_gdb
+        if skip_existings is False or not arcpy.Exists(os.path.join(out_path, dataset.name)):
+            # Create dataset
+            if dataset.dataset_type == "FeatureClass":
+                create_feature_class (out_path, dataset)
+            elif dataset.dataset_type == "Table":
+                create_table(out_path, dataset)
 
-        # Enable Archiving if it's an enterprise geodatabases and archiving is enabled for a dataset.
-        if is_enterprise and dataset.is_archived:
-            arcpy.EnableArchiving_management(path_to_dataset)
-        elif not is_enterprise and dataset.is_archived:
-            warnings.warn("Archiving is only supported on enterprise GDB.File GDB do not support archiving.")
-        # Warning if dataset versioning is enabled
-        if dataset.is_versioned:
-            warnings.warn("The GDB Schema tool does not support enabling editor tracking.")
+            # Enable Archiving if it's an enterprise geodatabases and archiving is enabled for a dataset.
+            if is_enterprise and dataset.is_archived:
+                arcpy.EnableArchiving_management(os.path.join(out_path, dataset.name))
+            elif not is_enterprise and dataset.is_archived:
+                warnings.warn("Archiving is only supported on enterprise GDB.File GDB do not support archiving.")
+            # Warning if dataset versioning is enabled
+            if dataset.is_versioned:
+                warnings.warn("The GDB Schema tool does not support enabling editor tracking.")
 
     # Create relationship classes once tables and feature classes created
-    arcpy.SetProgressor("default", "Creating relationship classes in geodatabase.")
-    for dataset in datasets.relationship_classes:
-        out_path = os.path.join(path_to_gdb, dataset.feature_dataset.name) if dataset.feature_dataset else path_to_gdb
-        create_relationship_class (out_path, dataset)
-        # Enable Archiving if it is not already enabled.
-        if is_enterprise and dataset.is_archived:
-            arcpy.EnableArchiving_management(path_to_dataset)
-        elif not is_enterprise and dataset.is_archived:
-            warnings.warn("Archiving is only supported on enterprise GDB.File GDB do not support archiving.")
+    relationship_classes : list["Relationship"] = gdb_struct.datasets.relationship_classes
 
-        # Warning if dataset versioning is enabled
-        if dataset.is_versioned:
-            warnings.warn("The GDB Schema tool does not support enabling editor tracking.")
+    for rel in relationship_classes:
+        if is_enterprise and rel.schema is not None and rel.schema != schema_name:
+            continue
+        out_path = os.path.join(path_to_gdb, rel.feature_dataset.name) if rel.feature_dataset else path_to_gdb
+        if skip_existings is False or not arcpy.Exists(os.path.join(out_path, rel.name)):
+            create_relationship_class (out_path, rel)
+
+            # Enable Archiving if it is not already enabled.
+            if is_enterprise and rel.is_archived:
+                arcpy.EnableArchiving_management(os.path.join(out_path, rel.name))
+            elif not is_enterprise and rel.is_archived:
+                warnings.warn("Archiving is only supported on enterprise GDB. File GDB do not support archiving.")
+
+            # Warning if dataset versioning is enabled
+            if rel.is_versioned:
+                warnings.warn("The GDB Schema tool does not support enabling editor tracking.")
 
 def create_feature_class(out_path:str, dataset:"FeatureClass"):
     """Create feature class in the geodatabase that match the geodatabase structure.
@@ -171,6 +197,7 @@ def create_feature_class(out_path:str, dataset:"FeatureClass"):
         dataset (FeatureClass): A new feature class to be created.
     """
     try:
+        arcpy.SetProgressor("default", f"Creating {dataset.name} feature class in geodatabase.")
         name = dataset.name
         geometry_type = dataset.geometry_type
         has_m = "ENABLED" if dataset.has_m else "DISABLED"
@@ -208,6 +235,7 @@ def create_table(out_path:str, dataset:"Table"):
     """
     oid_type="64_BIT" if dataset.oid_is_64 else "32_BIT"
     try:
+        arcpy.SetProgressor("default", f"Creating {dataset.name} table in geodatabase.")
         arcpy.management.CreateTable(out_path, dataset.name, template=None, out_alias=dataset.alias, oid_type=oid_type)
 
         # Assign the Metadata summary to the table
@@ -232,6 +260,7 @@ def create_relationship_class (out_path:str, dataset:"Relationship"):
         dataset (Relationship): The new relationship class to be created.
     """
     try:
+        arcpy.SetProgressor("default", f"Creating {dataset.name} relationship class in geodatabase.")
         d = dataset
         origin_table = os.path.join(out_path, d.origin.table.name)
         destination_table = os.path.join(out_path, d.destination.table.name)
@@ -273,14 +302,17 @@ def add_field(out_path:str, field:"Field"):
         field (Field): A new field to be added to a dataset.
     """
     try:
+        field_name = field.name
         if field.field_type == "OBJECTID":
             field_name = arcpy.ListFields(out_path, field_type="OID")[0].name
             arcpy.management.AlterField(out_path, field_name, new_field_alias=field.alias)
         elif field.field_type == "SHAPE":
             field_name = arcpy.ListFields(out_path, field_type="GEOMETRY")[0].name
             arcpy.management.AlterField(out_path, field_name, new_field_alias=field.alias)
+        elif field.field_type == "GLOBALID":
+            arcpy.management.AddGlobalIDs(out_path)
+            field_name = arcpy.ListFields(out_path, field_type="GlobalID")[0].name
         else:
-            field_name = field.name
             if field.domain is not None and field.domain.domain_type == "CODED":
                 for code, props in field.domain.codes.items():
                     if props.meta_summary is not None:
@@ -292,7 +324,7 @@ def add_field(out_path:str, field:"Field"):
                                     field.length, field.alias, field.nullable, field.required, domain)
             # Assign default value to a field
             if field.default is not None:
-                arcpy.management.AssignDefaultToField(out_path, field.name, field.default)
+                arcpy.management.AssignDefaultToField(out_path, field.name, str(field.default))
 
         # Update field metadata
         if field.meta_summary is not None:

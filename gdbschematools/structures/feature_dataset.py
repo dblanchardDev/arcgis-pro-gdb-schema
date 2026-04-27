@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Union
 from . import validation
 from .accessors.dataset_accessor import ReadOnlyDatasetAccessor
 from .gdb_element import GDBElementWithParent
+from . import utility
 
 if TYPE_CHECKING:
     from .feature_class import FeatureClass
@@ -30,7 +31,7 @@ class FeatureDataset(GDBElementWithParent):
     """
 
     # Regular expression which validate the name
-    VALID_NAME_REGEX = "^[A-z][A-z0-9_]{1,97}[A-z0-9]$"
+    VALID_NAME_REGEX = "^(?:[A-Za-z]|[A-Za-z][A-Za-z0-9_]{0,97}[A-Za-z0-9])$"
 
     _schema:str = None
     _datasets:ReadOnlyDatasetAccessor = None
@@ -83,3 +84,17 @@ class FeatureDataset(GDBElementWithParent):
             raise TypeError("Feature dataset members must be an instance of Dataset.")
 
         self._datasets._append(dataset) #pylint: disable=protected-access
+
+    def diff(self, other_featuredataset:"FeatureDataset") -> list:
+        """It compares name, meta_summary and schema of two feature datasets.
+
+        Args:
+            other_featuredatasets (FeatureDataset): The other feature datasets to compare with.
+
+        Returns:
+            list: a list of differences between two feature datasets.
+        """
+        properties = ["name", "meta_summary", "schema"]
+        diff_results = utility.diff(self, other_featuredataset, "feature dataset", properties)
+
+        return diff_results

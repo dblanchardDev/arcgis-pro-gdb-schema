@@ -77,7 +77,7 @@ class GDBWriter:
             base_name (str): Base name by which the element is uniquely known.
             alias (str, optional): Human readable name by which this element is known. Defaults to None.
         """
-        label = base_name or alias
+        label = alias or base_name
 
         # Derive a name for the sheet, ensuring no duplicates
         block_name = re.sub(r"\s+", "-", label).lower()

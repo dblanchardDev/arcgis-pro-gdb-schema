@@ -255,5 +255,5 @@ class DomainUsersWriter(TableWriter):
             md_info = self.reference_md_element("relationships", element_name)
         else:
             md_info = self.reference_md_element("datasets", element_name)
-        domain_user_block = f'''\n- {md_info}\n'''
+        domain_user_block = f'''\n- {md_info}'''
         self.markdown += domain_user_block

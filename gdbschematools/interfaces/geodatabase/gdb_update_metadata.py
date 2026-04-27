@@ -68,19 +68,22 @@ def fds_update_metadata(gdb_struct:"Geodatabase", gdb_desc):
     """#pylint: disable=line-too-long
     feature_datasets : list["FeatureDataset"] = gdb_struct.feature_datasets
     feat_dts_desc = []
+    is_enterprise = gdb_desc.workspaceType == "RemoteDatabase"
 
     for child_desc in gdb_desc.children:
         if child_desc.dataType == "FeatureDataset":
             feat_dts_desc.append(child_desc)
 
     for feature_dataset in feature_datasets:
-        fds_desc = next((desc for desc in feat_dts_desc if desc.name == feature_dataset.name), None)
+        feature_dataset_name = f"{gdb_desc.connectionProperties.database}.{feature_dataset.schema}.{feature_dataset.name}" if is_enterprise else feature_dataset.name
+
+        fds_desc = next((desc for desc in feat_dts_desc if desc.name == feature_dataset_name), None)
         if fds_desc:
             fds_desc_meta_summary = gdb_metadata.get_dataset_summary(fds_desc)
             if feature_dataset.meta_summary != fds_desc_meta_summary:
                 gdb_metadata.update_metadata(fds_desc.catalogPath, feature_dataset.meta_summary)
         else:
-            warnings.warn(f"{feature_dataset.name} feature_dataset doesn't exist in {gdb_desc.name}.")
+            warnings.warn(f"{feature_dataset_name} feature_dataset doesn't exist in {gdb_desc.name}.")
 
 def ds_update_metadata(gdb_struct:"Geodatabase", gdb_desc):
     """Update existing datasets with the metadata from another entity.
@@ -91,6 +94,7 @@ def ds_update_metadata(gdb_struct:"Geodatabase", gdb_desc):
     """#pylint: disable=line-too-long
     datasets : list["Dataset"] = gdb_struct.datasets
     dts_descs = []
+    is_enterprise = gdb_desc.workspaceType == "RemoteDatabase"
 
     for child_desc in gdb_desc.children:
         if child_desc.dataType == "FeatureDataset":
@@ -100,7 +104,8 @@ def ds_update_metadata(gdb_struct:"Geodatabase", gdb_desc):
             dts_descs.append(child_desc)
 
     for dataset in datasets:
-        dt_desc = next((desc for desc in dts_descs if desc.name == dataset.name), None)
+        dataset_name = f"{gdb_desc.connectionProperties.database}.{dataset.schema}.{dataset.name}" if is_enterprise else dataset.name
+        dt_desc = next((desc for desc in dts_descs if desc.name == dataset_name), None)
         if dt_desc:
             dt_desc_meta_summary = gdb_metadata.get_dataset_summary(dt_desc)
             if dataset.meta_summary != dt_desc_meta_summary:
@@ -110,7 +115,7 @@ def ds_update_metadata(gdb_struct:"Geodatabase", gdb_desc):
             field_update_metadata(dataset, dt_desc)
             subtype_update_metadata(dataset, dt_desc)
         else:
-            warnings.warn(f"{dataset.name} dataset doesn't exist in {gdb_desc.name}.")
+            warnings.warn(f"{dataset_name} dataset doesn't exist in {gdb_desc.name}.")
 
 def field_update_metadata(dataset:"Dataset", dataset_desc):
     """Update existing datasets with the metadata from another entity.

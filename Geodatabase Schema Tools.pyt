@@ -23,7 +23,7 @@ class Toolbox:
         self.alias = "GeodatabaseSchemaTools"
 
         # List of tool classes associated with this toolbox
-        self.tools = [GDBToXLS, XLSToGDB, GDBToMD, XLSToMD, UpdateMetadata]
+        self.tools = [GDBToXLS, XLSToGDB, GDBToMD, XLSToMD, UpdateMetadata, CompareGDB, CompareExcels, CompareGDBToExcel]
 
 
 class GDBToXLS:
@@ -459,3 +459,283 @@ class UpdateMetadata:
                 arcpy.AddWarning(f"{w.message}")
 
         arcpy.AddMessage("The metadata of Geodatabase and its objects updated successfully.")
+
+
+class CompareGDB:
+    """Define the tool (tool name is the name of the class)."""
+
+    def __init__(self):
+        self.label = "Compare two Geodatabases"
+        self.description = "Compare the schema of two geodatabase and output the differences as a Text file."
+        self.category = "Compare"
+
+
+    def getParameterInfo(self):
+        """Define the tool parameters."""
+
+        origin_gdb_path = arcpy.Parameter(
+            displayName="Origin Geodatabase",
+            name="origin_gdb_path",
+            datatype="DEWorkspace",
+            parameterType="Required",
+            direction="Input",
+        )
+        origin_gdb_path.filter.list = ["Local Database", "Remote Database"]
+
+        other_gdb_path = arcpy.Parameter(
+            displayName="Other Geodatabase",
+            name="other_gdb_path",
+            datatype="DEWorkspace",
+            parameterType="Required",
+            direction="Input",
+        )
+        other_gdb_path.filter.list = ["Local Database", "Remote Database"]
+
+        output_directory = arcpy.Parameter(
+            displayName="Output Directory",
+            name="output_directory",
+            datatype="DEFolder",
+            parameterType="Required",
+            direction="Input"
+        )
+
+        output_text_file = arcpy.Parameter(
+            displayName="Output Text file",
+            name="output_text_file",
+            datatype="DEFile",
+            parameterType="Derived",
+            direction="Output"
+        )
+
+        return [origin_gdb_path, other_gdb_path, output_directory, output_text_file]
+
+
+    def execute(self, parameters, messages):
+        """Run the tool, completing operations and returning results."""
+        del messages
+
+        # Read parameters
+        origin_gdb_path = parameters[0].valueAsText
+        other_gdb_path = parameters[1].valueAsText
+        output_directory = parameters[2].valueAsText
+        text_file_index = 3
+
+        # Execute conversion
+        origin_gdb_structure = GeodatabaseInterface.read(origin_gdb_path)
+        other_gdb_structure = GeodatabaseInterface.read(other_gdb_path)
+        diff_path = GeodatabaseInterface.compare(origin_gdb_structure, other_gdb_structure,
+                                                output_dir=output_directory)
+
+        # Set output parameters
+        parameters[text_file_index].value = diff_path
+
+        # Set output parameters
+
+        arcpy.AddMessage("Completed successfully, see Parameters tab for links to the resulting markdown files.")
+
+
+class CompareExcels:
+    """Define the tool (tool name is the name of the class)."""
+    def __init__(self):
+        self.label = "Compare two Excel Schemas"
+        self.description = "Compare the schema of two Excel files and output the differences as a Text file."
+        self.category = "Compare"
+
+
+    def getParameterInfo(self):
+        """Define the tool parameters."""
+
+        origin_datasets_spreadsheet = arcpy.Parameter(
+            displayName="Origin Datasets Workbook",
+            name="origin_datasets_spreadsheet",
+            datatype="DEFile",
+            parameterType="Required",
+            direction="Input",
+        )
+        origin_datasets_spreadsheet.filter.list = ["xlsx"]
+
+        origin_domains_spreadsheet = arcpy.Parameter(
+            displayName="Origin Domains Workbook",
+            name="origin_domains_spreadsheet",
+            datatype="DEFile",
+            parameterType="Required",
+            direction="Input",
+        )
+        origin_domains_spreadsheet.filter.list = ["xlsx"]
+
+        origin_relationships_spreadsheet = arcpy.Parameter(
+            displayName="Origin Relationships Workbook",
+            name="origin_relationships_spreadsheet",
+            datatype="DEFile",
+            parameterType="Required",
+            direction="Input",
+        )
+        origin_relationships_spreadsheet.filter.list = ["xlsx"]
+
+        other_datasets_spreadsheet = arcpy.Parameter(
+            displayName="Other Datasets Workbook",
+            name="other_datasets_spreadsheet",
+            datatype="DEFile",
+            parameterType="Required",
+            direction="Input",
+        )
+        other_datasets_spreadsheet.filter.list = ["xlsx"]
+
+        other_domains_spreadsheet = arcpy.Parameter(
+            displayName="Other Domains Workbook",
+            name="other_domains_spreadsheet",
+            datatype="DEFile",
+            parameterType="Required",
+            direction="Input",
+        )
+        other_domains_spreadsheet.filter.list = ["xlsx"]
+
+        other_relationships_spreadsheet = arcpy.Parameter(
+            displayName="Other Relationships Workbook",
+            name="other_relationships_spreadsheet",
+            datatype="DEFile",
+            parameterType="Required",
+            direction="Input",
+        )
+        other_relationships_spreadsheet.filter.list = ["xlsx"]
+
+
+        output_directory = arcpy.Parameter(
+            displayName="Output Directory",
+            name="output_directory",
+            datatype="DEFolder",
+            parameterType="Required",
+            direction="Input"
+        )
+
+        output_text_file = arcpy.Parameter(
+            displayName="Output Text file",
+            name="output_text_file",
+            datatype="DEFile",
+            parameterType="Derived",
+            direction="Output"
+        )
+
+        return [origin_datasets_spreadsheet, origin_domains_spreadsheet, origin_relationships_spreadsheet, other_datasets_spreadsheet, other_domains_spreadsheet, other_relationships_spreadsheet, output_directory, output_text_file]
+
+
+    def execute(self, parameters, messages):
+        """Run the tool, completing operations and returning results."""
+        del messages
+
+        # Read parameters
+        origin_datasets_spreadsheet = parameters[0].valueAsText
+        origin_domains_spreadsheet = parameters[1].valueAsText
+        origin_relationships_spreadsheet = parameters[2].valueAsText
+        other_datasets_spreadsheet = parameters[3].valueAsText
+        other_domains_spreadsheet = parameters[4].valueAsText
+        other_relationships_spreadsheet = parameters[5].valueAsText
+        output_directory = parameters[6].valueAsText
+        text_file_index = 7
+
+        # Execute conversion
+        origin_gdb_structure = ExcelInterface.read(origin_datasets_spreadsheet, origin_domains_spreadsheet, origin_relationships_spreadsheet)
+        other_gdb_structure = ExcelInterface.read(other_datasets_spreadsheet, other_domains_spreadsheet, other_relationships_spreadsheet)
+        diff_path = GeodatabaseInterface.compare(origin_gdb_structure, other_gdb_structure,
+                                                output_dir=output_directory)
+
+        # Set output parameters
+        parameters[text_file_index].value = diff_path
+
+        # Set output parameters
+
+        arcpy.AddMessage("Completed successfully, see Parameters tab for links to the resulting markdown files.")
+
+
+class CompareGDBToExcel:
+    """Define the tool (tool name is the name of the class)."""
+    def __init__(self):
+        self.label = "Compare Geodatabase to Excel Schema"
+        self.description = "Compare the schema of a geodatabase and an Excel file and output the differences as a Text file."
+        self.category = "Compare"
+
+
+    def getParameterInfo(self):
+        """Define the tool parameters."""
+
+        origin_gdb_path = arcpy.Parameter(
+            displayName="Origin Geodatabase",
+            name="origin_gdb_path",
+            datatype="DEWorkspace",
+            parameterType="Required",
+            direction="Input",
+        )
+        origin_gdb_path.filter.list = ["Local Database", "Remote Database"]
+
+
+        other_datasets_spreadsheet = arcpy.Parameter(
+            displayName="Other Datasets Workbook",
+            name="other_datasets_spreadsheet",
+            datatype="DEFile",
+            parameterType="Required",
+            direction="Input",
+        )
+        other_datasets_spreadsheet.filter.list = ["xlsx"]
+
+        other_domains_spreadsheet = arcpy.Parameter(
+            displayName="Other Domains Workbook",
+            name="other_domains_spreadsheet",
+            datatype="DEFile",
+            parameterType="Required",
+            direction="Input",
+        )
+        other_domains_spreadsheet.filter.list = ["xlsx"]
+
+        other_relationships_spreadsheet = arcpy.Parameter(
+            displayName="Other Relationships Workbook",
+            name="other_relationships_spreadsheet",
+            datatype="DEFile",
+            parameterType="Required",
+            direction="Input",
+        )
+        other_relationships_spreadsheet.filter.list = ["xlsx"]
+
+
+        output_directory = arcpy.Parameter(
+            displayName="Output Directory",
+            name="output_directory",
+            datatype="DEFolder",
+            parameterType="Required",
+            direction="Input"
+        )
+
+        output_text_file = arcpy.Parameter(
+            displayName="Output Text file",
+            name="output_text_file",
+            datatype="DEFile",
+            parameterType="Derived",
+            direction="Output"
+        )
+
+        return [origin_gdb_path, other_datasets_spreadsheet, other_domains_spreadsheet, other_relationships_spreadsheet, output_directory, output_text_file]
+
+
+    def execute(self, parameters, messages):
+        """Run the tool, completing operations and returning results."""
+        del messages
+
+        # Read parameters
+        origin_gdb_path = parameters[0].valueAsText
+        other_datasets_spreadsheet = parameters[1].valueAsText
+        other_domains_spreadsheet = parameters[2].valueAsText
+        other_relationships_spreadsheet = parameters[3].valueAsText
+        output_directory = parameters[4].valueAsText
+        text_file_index = 5
+
+        # Execute conversion
+        origin_gdb_structure = GeodatabaseInterface.read(origin_gdb_path)
+        other_gdb_structure = ExcelInterface.read(other_datasets_spreadsheet, other_domains_spreadsheet, other_relationships_spreadsheet)
+        diff_path = GeodatabaseInterface.compare(origin_gdb_structure, other_gdb_structure,
+                                                output_dir=output_directory)
+
+        # Set output parameters
+        parameters[text_file_index].value = diff_path
+
+        # Set output parameters
+
+        arcpy.AddMessage("Completed successfully, see Parameters tab for links to the resulting markdown files.")

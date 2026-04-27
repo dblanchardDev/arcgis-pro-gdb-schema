@@ -51,6 +51,8 @@ class RelationshipsWriter(DatasetsWriter):
             is_versioned (str, optional): Whether versioning is enabled. Defaults to None
         """ #pylint: disable=line-too-long
 
+        origin_table_label = re.sub(r"\s+","-",origin_table_name).lower()
+        destination_table_label = re.sub(r"\s+","-",destination_table_name).lower()
         relationship_block = f'''\n---\n
         ## {relationship_name}
 
@@ -59,8 +61,8 @@ class RelationshipsWriter(DatasetsWriter):
         - **Feature Dataset**: {feature_dataset_name}
         - **Summary**: {summary}
         - **Relationship Type**: {relationship_type}
-        - **Origin Table**: [{origin_table_name}](./{self.get_cross_markdown_name("datasets")}#{origin_table_name.lower()})
-        - **Destination Table**: [{destination_table_name}](./{self.get_cross_markdown_name("datasets")}#{destination_table_name.lower()})
+        - **Origin Table**: [{origin_table_name}](./{self.get_cross_markdown_name("datasets")}#{origin_table_label})
+        - **Destination Table**: [{destination_table_name}](./{self.get_cross_markdown_name("datasets")}#{destination_table_label})
         - **Forward Label**: {forward_label}
         - **Backward Label**: {backward_label}
         - **Origin Primary Key**: {origin_primary_key}

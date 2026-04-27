@@ -7,9 +7,9 @@ Author: David Blanchard
 import warnings
 from typing import TYPE_CHECKING, Union
 
-from . import validation
+from . import validation, utility
 from .accessors.field_accessor import FieldAccessor
-from .accessors.subtype_accessor import SubtypeCodeAccessor
+from .accessors.subtype_accessor import SubtypeCodeAccessor, SubtypeProperties
 from .gdb_element import GDBElementWithParent
 
 if TYPE_CHECKING:
@@ -73,6 +73,37 @@ class Subtype():
         """Dictionary like accessor for the subtype codes."""
         return self._codes
 
+    def diff(self, other_subtype:"Subtype") -> list:
+        """Compares the default value and codes of two subtypes
+
+        Args:
+            other_subtype (Subtype): Other subtype to compare with
+
+        Returns:
+            list: a list of differences between two subtypes
+        """
+        diff_results = []
+
+        if self.default != other_subtype.default:
+            diff_results.append(f"The default value of {self.field.name} subtype field is {self.default} in {self.dataset.name} dataset in the origin GDB and {other_subtype.default} in the other GDB.")
+
+        origin_codes = {code for code in self.codes.keys()}
+        other_codes = {code for code in other_subtype.codes.keys()}
+
+        codes_missing_in_origin = other_codes.difference(origin_codes)
+        if codes_missing_in_origin:
+            diff_results.append(f"The following subtype codes are in {other_subtype.dataset.name} dataset in the other GDB but not in the origin GDB: {', '.join(codes_missing_in_origin)}.")
+
+        codes_missing_in_other = origin_codes.difference(other_codes)
+        if codes_missing_in_other:
+            diff_results.append(f"The following subtype codes are in {self.dataset.name} dataset in the origin GDB but not in the other GDB: {', '.join(codes_missing_in_other)}.")
+
+        for code in origin_codes.intersection(other_codes):
+            origin_subtype_prop:SubtypeProperties= self.codes[code]
+            code_diff_results = origin_subtype_prop.diff(other_subtype.codes[code])
+            if code_diff_results:
+                diff_results.extend(code_diff_results)
+        return diff_results
 
 #pylint: disable-next=too-many-instance-attributes
 class Dataset(GDBElementWithParent):
@@ -94,7 +125,7 @@ class Dataset(GDBElementWithParent):
     """ #pylint: disable=line-too-long
 
     # Regular expression which validate the name
-    VALID_NAME_REGEX = "^[A-z][A-z0-9_]{1,97}[A-z0-9]$"
+    VALID_NAME_REGEX = "^(?:[A-Za-z]|[A-Za-z][A-Za-z0-9_]{0,97}[A-Za-z0-9])$"
 
     # Dataset types that are supported by this class
     DATASET_TYPES = (
@@ -253,3 +284,57 @@ class Dataset(GDBElementWithParent):
 
         self._subtype = Subtype(dataset=self, field=field)
         return self._subtype
+
+    def diff(self, other_dataset: "Dataset") -> list:
+        """compares the properties of two datasets and add the differences to a list.
+
+        Args:
+            other_dataset (Dataset): The other dataset to compare with
+
+        Returns:
+            list: a list of differences between two datasets
+        """
+        properties = ["name", "schema", "dataset_type", "meta_summary", "is_archived", "is_versioned", "oid_is_64"]
+        diff_results = utility.diff(self, other_dataset, "dataset", properties)
+
+        if self.feature_dataset is not None and other_dataset.feature_dataset is not None:
+            if self.feature_dataset.name != other_dataset.feature_dataset.name:
+                diff_results.append(f"feature_dataset.name of {self.name} dataset in origin gdb is different than the other gdb.")
+            if self.feature_dataset.schema != other_dataset.feature_dataset.schema:
+                diff_results.append(f"feature_dataset.schema of {self.name} dataset in origin gdb is different than the other gdb.")
+        elif self.feature_dataset is None and other_dataset.feature_dataset is not None:
+            diff_results.append(f"{self.name} dataset has no feature_dataset in the origin gdb and has {other_dataset.feature_dataset.name} feature_dataset in the other gdb.")
+        elif self.feature_dataset is not None and other_dataset.feature_dataset is None:
+            diff_results.append(f"{self.name} dataset has no feature_dataset in the other gdb and has {self.feature_dataset.name} feature_dataset in the origin gdb.")
+
+
+        # Compare the fields and their properties
+        if self.dataset_type != "RelationshipClass" :
+            origin_field_names = {field.name for field in self.fields}
+            other_field_names = {field.name for field in other_dataset.fields}
+
+            field_missing_in_origin = other_field_names.difference(origin_field_names)
+            if field_missing_in_origin:
+                diff_results.append(f"The following fields are in {other_dataset.name} dataset in the other GDB but not in the origin GDB: {', '.join(field_missing_in_origin)}.")
+
+            field_missing_in_other = origin_field_names.difference(other_field_names)
+            if field_missing_in_other:
+                diff_results.append(f"The following fields are in {self.name} dataset in the origin GDB but not in the other GDB: {', '.join(field_missing_in_other)}.")
+
+            for field_name in origin_field_names.intersection(other_field_names):
+                origin_field:"Field" = self.fields[field_name]
+                other_field:"Field" = other_dataset.fields[field_name]
+                field_diff_results = origin_field.diff(other_field)
+                diff_results.extend(field_diff_results)
+
+        if self.subtype and other_dataset.subtype:
+            origin_subtype:"Subtype" = self.subtype
+            other_subtype:"Subtype" = other_dataset.subtype
+            subtype_diff_results = origin_subtype.diff(other_subtype)
+            diff_results.extend(subtype_diff_results)
+        elif self.subtype is None and other_dataset.subtype is not None:
+            diff_results.append(f"{self.name} dataset has no subtype in the origin gdb, but has {other_dataset.subtype.field.name} subtype in the other gdb.")
+        elif self.subtype is not None and other_dataset.subtype is None:
+            diff_results.append(f"{self.name} dataset has no subtype in the other gdb, but has {other_dataset.subtype.field.name} subtype in the other gdb.")
+
+        return diff_results

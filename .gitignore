@@ -1,8 +1,73 @@
-.pytest_cache
+# Specify which files and directories should be ignored by Git,
+# preventing them from being tracked or uploaded to the repository.
+
+# spell-checker: ignore ehthumbs arpx atbx jspm
+
+# General
+/build
+/dist
+/bin
+ehthumbs.db
+Thumbs.db
+
+# Compiled Files
+*.class
+*.com
+*.dll
+*.exe
+*.o
+*.so
+
+# Certificates
+*.der
+*.key
+*.pem
+
+# Packaged Files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+!tests/interfaces/data/*.zip
+
+# ArcGIS Formats
+*.gdb/
+*.aih
+*.ain
+*.arpx
+*.atbx
+*.atbx
+*.cpg
+*.dbf
+*.fbn
+*.fbx
+*.ixs
+*.mpk
+*.mxd
+*.mxs
+*.prj
+*.sbn
+*.sbx
+*.shp
+*.shx
+*.tbx
+
+# Python
 __pycache__/
-*.py[cod]
-.env
-.venv
+.env/
+.pytest_cache/
+.venv/
 env/
 venv/
-~$*
+*.py[cod]
+*$py.class
+
+# Web Development
+/bower_components
+jspm_packages/
+node_modules/
+web_modules/

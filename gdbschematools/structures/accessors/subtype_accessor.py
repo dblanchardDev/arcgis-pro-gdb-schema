@@ -6,7 +6,7 @@ Author: David Blanchard
 
 from typing import TYPE_CHECKING
 
-from .. import validation
+from .. import validation, utility
 from .base import Accessor, DictAccessor
 
 if TYPE_CHECKING:
@@ -85,6 +85,30 @@ class SubtypeFieldProperties:
                 raise ValueError("Default value not valid in the domain.")
 
             self._default = converted
+
+    def diff(self, other_subtype_field:"SubtypeFieldProperties") -> list:
+        """compares name, default, domain name and domain schema of two Subtype Fields
+
+        Args:
+            other_subtype_field (SubtypeFieldProperties): Other Subtype Field to compare with
+
+        Returns:
+            list: a list of differences between two Subtype Fields
+        """
+        properties = ["name", "default"]
+        diff_results = utility.diff(self, other_subtype_field, f"subtype field of {self.field.dataset.name} dataset", properties)
+
+        if self.domain is not None and other_subtype_field.domain is not None:
+            if self.domain.name != other_subtype_field.domain.name:
+                diff_results.append(f"The domain name of {self.name} subtype field of {self.field.dataset.name} dataset is {self.domain.name} in the origin gdb and {other_subtype_field.domain.name} in the other gdb")
+            if self.domain.schema != other_subtype_field.domain.schema:
+                diff_results.append(f"The domain schema of {self.name} subtype field of {self.field.dataset.name} dataset is {self.domain.schema} in the origin gdb and {other_subtype_field.domain.schema} in the other gdb")
+        elif self.domain is None and other_subtype_field.domain is not None:
+            diff_results.append(f"{self.name} subtype field has no domain in {self.field.dataset.name} dataset in the origin gdb and {other_subtype_field.domain.name} domain in the other gdb.")
+        elif self.domain is not None and other_subtype_field.domain is None:
+            diff_results.append(f"{self.name} subtype field has no domain in {other_subtype_field.field.dataset.name} dataset in the other gdb and has {self.domain.name} domain in the origin gdb.")
+
+        return diff_results
 
 
 #pylint: disable=too-few-public-methods
@@ -171,6 +195,37 @@ class SubtypeProperties():
     def field_props(self) -> SubtypeFieldPropertiesAccessor:
         """Sequence like list of fields and their subtype properties."""
         return self._fields_props
+
+    def diff(self, other_code:"SubtypeProperties") -> list:
+        """Compares meta_summary, description and fields's properties of two Subtypes
+
+        Args:
+            other_code (SubtypeProperties): _description_
+
+        Returns:
+            list: A list of differences between two Subtypes
+        """
+        properties = ["meta_summary", "description"]
+        diff_results = utility.diff(self, other_code, f"subtype code of {self} subtype", properties)
+
+        origin_subtype_fields_name = {field.name for field in self.field_props}
+        other_subtype_fields_name = {field.name for field in other_code.field_props}
+
+        subtype_fields_missing_in_origin = other_subtype_fields_name.difference(origin_subtype_fields_name)
+        if subtype_fields_missing_in_origin:
+            diff_results.append(f"The following subtype fields are in the other GDB but not in the origin GDB: {', '.join(subtype_fields_missing_in_origin)}.")
+
+        subtype_fields_missing_in_other = origin_subtype_fields_name.difference(other_subtype_fields_name)
+        if subtype_fields_missing_in_other:
+            diff_results.append(f"The following subtype fields are in the origin GDB but not in the other GDB: {', '.join(subtype_fields_missing_in_other)}.")
+
+        for field in origin_subtype_fields_name.intersection(other_subtype_fields_name):
+            origin_field:"SubtypeFieldProperties" = self.field_props[field]
+            other_field:"SubtypeFieldProperties" = other_code.field_props[field]
+            fields_diff_result = origin_field.diff(other_field)
+            diff_results.extend(fields_diff_result)
+
+        return diff_results
 
 
 class SubtypeCodeAccessor(DictAccessor):

@@ -425,7 +425,8 @@ def parse_dataset_subtypes(dataset:"Datasets", dataset_desc):
                     if default_val is not None or domain_desc is not None:
                         subfield_props = code_props.field_props[field_name]
                         subfield_props.default = default_val
-                        subfield_props.domain = dataset.geodatabase.domains[domain_desc.name]
+                        if domain_desc is not None:
+                            subfield_props.domain = dataset.geodatabase.domains[domain_desc.name]
         except Exception as exc:
             #pylint: disable-next=broad-exception-raised
             raise Exception(f"Failure while reading {dataset_desc.name}.{code} subtype.") from exc

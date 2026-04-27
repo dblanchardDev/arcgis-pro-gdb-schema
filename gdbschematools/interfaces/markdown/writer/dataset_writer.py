@@ -46,7 +46,7 @@ class DatasetsWriter(GDBWriter):
         """ #pylint: disable=line-too-long
 
         dataset_block = f'''\n---\n
-            ## {dataset_name}
+            ## {alias or dataset_name}
 
             - **Name**: {dataset_name}
             - **Schema**: {schema}

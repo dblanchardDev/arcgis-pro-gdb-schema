@@ -6,7 +6,7 @@ Author: David Blanchard
 
 from typing import TYPE_CHECKING, Union
 
-from . import validation
+from . import validation, utility
 from .gdb_element import GDBElement
 
 if TYPE_CHECKING:
@@ -42,7 +42,7 @@ class Field(GDBElement):
     """
 
     # Regular expression which validate the name
-    VALID_NAME_REGEX = "^[A-z][A-z0-9_]{1,97}[A-z0-9]$"
+    VALID_NAME_REGEX = "^(?:[A-Za-z]|[A-Za-z][A-Za-z0-9_]{0,97}[A-Za-z0-9])$"
 
     # Valid field types for fields
     FIELD_TYPES = (
@@ -257,3 +257,26 @@ class Field(GDBElement):
     def meta_summary(self, value:str):
         validation.string_or_none(value, label="dataset's metadata summary")
         self._meta_summary = value
+
+    def diff(self, other_field:"Field") -> list:
+        """compares the properties of two fields and add the differences to a list.
+
+        Args:
+            other_field (Field): Other field to compare with
+
+        Returns:
+            list: a list of differences
+        """
+
+        properties = ["name", "field_type", "precision", "scale", "length", "alias", "nullable", "required", "default", "meta_summary"]
+        diff_results = utility.diff(self, other_field, f"field in {self.dataset.name} dataset", properties)
+
+        if self.domain is not None and other_field.domain is not None:
+            if self.domain.name != other_field.domain.name:
+                diff_results.append(f"The domain name of {self.name} field in {self.dataset.name} dataset in the origin gdb is different than the other gdb.")
+        elif self.domain is None and other_field.domain is not None:
+            diff_results.append(f"{self.name} field in {self.dataset.name} dataset has no domain in the origin gdb, but it has {other_field.domain.name} domain in the other gdb.")
+        elif self.domain is not None and other_field.domain is None:
+            diff_results.append(f"{other_field.name} field in {other_field.dataset.name} dataset has no domain in the other gdb, but it has {self.domain.name} domain in the origin gdb.")
+
+        return diff_results

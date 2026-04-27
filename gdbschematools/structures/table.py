@@ -75,3 +75,18 @@ class Table(Dataset):
         if not validation.is_structure_instance(relationship_class, "Relationship"):
             raise TypeError("Table's relationship class must be an instance of Relationship class.")
         self._relationship_classes._append(relationship_class) #pylint: disable=protected-access
+
+    def diff(self, other_dataset:"Table") -> list:
+        """checks alias match between two tables and add the difference to a list.
+
+        Args:
+            other_dataset (Table): other table to compare with
+
+        Returns:
+            list: a list of difference between two tables
+        """
+        diff_results =super().diff(other_dataset)
+        if self.alias != other_dataset.alias:
+            diff_results.append(f"The alias of {self.name} table in the origin gdb is different than {other_dataset.name} table in the other gdb.")
+
+        return diff_results

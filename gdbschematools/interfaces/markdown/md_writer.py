@@ -221,8 +221,9 @@ def _populate_domains_md(writer:DomainsWriter, gdb:"Geodatabase"):
 
                 with writer.domain_user_adder(domain.name) as user_writer:
                     for dataset in all_datasets:
-                        user_writer.add_entry(element_name=dataset.name, element_type=dataset.dataset_type)
-                    writer.markdown_str += user_writer.markdown
+                        element_name = getattr(dataset, 'alias', dataset.name)
+                        user_writer.add_entry(element_name=element_name, element_type=dataset.dataset_type)
+                    writer.markdown_str += user_writer.markdown + '\n'
             except Exception as exc:
                 #pylint: disable-next=broad-exception-raised
                 raise Exception(f"Failure while writing markdown for {domain.name} domain.") from exc
@@ -247,8 +248,8 @@ def _populate_relationships_md(writer:RelationshipsWriter, gdb:"Geodatabase"):
                     feature_dataset_name=rel.feature_dataset.name if rel.feature_dataset else '',
                     summary=rel.meta_summary or '',
                     relationship_type=st2md.relationship_types[rel.relationship_type],
-                    origin_table_name=rel.origin.table.name,
-                    destination_table_name=rel.destination.table.name,
+                    origin_table_name= rel.origin.table.alias or rel.origin.table.name,
+                    destination_table_name=rel.destination.table.alias or rel.destination.table.name,
                     forward_label=rel.forward_label,
                     backward_label=rel.backward_label,
                     origin_primary_key=rel.origin.primary_key,
@@ -279,7 +280,8 @@ def _populate_fields(writer:"DatasetsWriter", ds:"Datasets"):
         writer (DatasetsWriter): The dataset Writer for the feature class, table, or relationship class.
         ds (Datasets): Structure for the feature class, table, or relationship class.
     """
-    with writer.field_adder(ds.name) as field_writer:
+    base_name = getattr(ds, 'alias',ds.name)
+    with writer.field_adder(base_name) as field_writer:
         field:"Field" = None
         for field in ds.fields:
             try:

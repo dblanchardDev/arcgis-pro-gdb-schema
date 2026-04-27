@@ -6,7 +6,7 @@ Author: David Blanchard
 
 from typing import TYPE_CHECKING, Union
 
-from . import validation
+from . import validation, utility
 from .dataset import Dataset
 
 if TYPE_CHECKING:
@@ -91,6 +91,27 @@ class RelationshipMember():
         matches = [f for f in table.fields if f.name == key]
         if len(matches) == 0:
             raise ValueError(f"Key {key} is not a field in the relationship class member table.")
+
+    def diff(self, other_relationship_member:"RelationshipMember", relationship_name:str ) -> list:
+        """Compares primary_key, foreign_key, table.name and table.schema of two relationship members.
+
+        Args:
+            other_relationship_member (RelationshipMember): Other relationship member to compare with
+            relationship_name (str): The name of relationship
+        Returns:
+            list: a list of differences
+        """
+        diff_results = []
+        if self.primary_key != other_relationship_member.primary_key:
+            diff_results.append(f"primary_key of {self.table.name} table is {self.primary_key} in {relationship_name} relationship in the origin gdb and {other_relationship_member.primary_key} in the other gdb.")
+        if self.foreign_key != other_relationship_member.foreign_key:
+            diff_results.append(f"foreign_key of {self.table.name} table is {self.foreign_key} in {relationship_name} relationship in the origin gdb and {other_relationship_member.foreign_key} in the other gdb.")
+        if self.table.name != other_relationship_member.table.name:
+            diff_results.append(f"name of table is {self.table.name} in {relationship_name} relationship in the origin gdb and {other_relationship_member.table.name} in the other gdb.")
+        if self.table.schema != other_relationship_member.table.schema:
+            diff_results.append(f"schema of {self.table.name} table is {self.table.schema} in {relationship_name} relationship in the origin gdb and {other_relationship_member.table.schema} in the other gdb.")
+
+        return diff_results
 
 
 #pylint: disable-next=too-many-instance-attributes
@@ -316,3 +337,38 @@ class Relationship(Dataset):
             raise AttributeError("Fields are not available in a non-attributed relationship class.")
 
         return self._fields
+
+    def diff(self, other_relationship:"Relationship") -> list:
+        """compares the properties of two relationship classes and add the differences to a list.
+
+        Args:
+            other_relationship (Relationship): other relationship to compare with
+
+        Returns:
+            list: a list of differences between two relationship classes
+        """
+        diff_results =super().diff(other_relationship)
+        properties = ["name","forward_label", "backward_label", "cardinality", "notification", "relationship_type", "attributed"]
+        relationship_diff_results = utility.diff(self, other_relationship, "relationship class", properties)
+        diff_results.extend(relationship_diff_results)
+
+        if self.attributed and other_relationship.attributed:
+            origin_field_names = {field.name for field in self.fields}
+            other_field_names = {field.name for field in other_relationship.fields}
+
+            field_missing_in_origin = other_field_names.difference(origin_field_names)
+            if field_missing_in_origin:
+                diff_results.append(f"The following fields are in {other_relationship.name} dataset in the other GDB but not in the origin GDB: {', '.join(field_missing_in_origin)}.")
+
+            field_missing_in_other = origin_field_names.difference(other_field_names)
+            if field_missing_in_other:
+                diff_results.append(f"The following fields are in {self.name} dataset in the origin GDB but not in the other GDB: {', '.join(field_missing_in_other)}.")
+
+
+        origin_diff_results = self.origin.diff(other_relationship.origin, self.name)
+        diff_results.extend(origin_diff_results)
+
+        destination_diff_results = self.destination.diff(other_relationship.destination, self.name)
+        diff_results.extend(destination_diff_results)
+
+        return diff_results

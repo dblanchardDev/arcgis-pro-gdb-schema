@@ -1,13 +1,16 @@
 """
 Read complex metadata from geodatabases, datasets, and fields.
 
-Author: David Blanchard
+Author:
+    David Blanchard
+    Roya Shourouni
 """
 
 import os
 import re
-import xml.etree.ElementTree as ET
 from typing import Union
+import xml.etree.ElementTree as ET
+import defusedxml
 import arcpy
 
 # Cache previously fetched items
@@ -187,7 +190,7 @@ def _get_xml(desc:object, xml_format:str) -> ET.ElementTree:
         else:
             ap_meta.saveAsXML(path, "EXACT_COPY")
 
-        cache[path] = ET.parse(path)
+        cache[path] = defusedxml.ElementTree.parse(path)
         os.remove(path)
 
     return cache[path]
@@ -334,7 +337,7 @@ def read_metadata_xml(path_to_dataset:str) -> ET.Element:
     # get the dataset's metadata xml
     md = arcpy.metadata.Metadata(path_to_dataset)
     xml = md.xml
-    root = ET.fromstring(xml)
+    root = defusedxml.ElementTree.fromstring(xml)
     return root
 
 def write_metadata_xml(path_to_dataset:str, root:ET.Element):

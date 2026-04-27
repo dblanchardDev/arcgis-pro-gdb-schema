@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Union
 
 from arcpy import SpatialReference
 
-from . import validation
+from . import validation, utility
 from .table import Table
 
 if TYPE_CHECKING:
@@ -117,3 +117,18 @@ class FeatureClass(Table):
     @has_z.setter
     def has_z(self, value:bool):
         self._has_z = validation.boolean(value, "has-z")
+
+    def diff(self, other_dataset:"FeatureClass") -> list:
+        """compares the properties of two feature classes.
+
+        Args:
+            other_dataset (FeatureClass): Other feature class to compare with
+
+        Returns:
+            list: a list of differences between two feature classes.
+        """
+        diff_results = super().diff(other_dataset)
+        properties = ["geometry_type", "spatial_ref", "has_m", "has_z"]
+        feature_class_diff_results = utility.diff(self, other_dataset, "feature class",properties)
+        diff_results.extend(feature_class_diff_results)
+        return diff_results
