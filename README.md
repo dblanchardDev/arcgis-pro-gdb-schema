@@ -103,6 +103,10 @@ This will update the metadata and description for:
 
 If an object defined in the spreadsheets does not exist in the geodatabase, it will be skipped with a warning.
 
+### Compare Tools
+
+Several comparison tools, including _Compare GDB_, _Compare Excels_, and _Compare GDB To Excel_ allow one to compare different sources to detect differences. All differences will be output as messages by the geoprocessing tool.
+
 ---
 
 ## How to use
