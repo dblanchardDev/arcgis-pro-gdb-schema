@@ -242,13 +242,13 @@ def update_field_metadata(path_to_dataset:str, field_name:str, field_meta_summar
     root = read_metadata_xml(path_to_dataset)
 
     # Create eainfo element
-    eainfo = ET.SubElement(root, "eainfo") if not root.find(".//eainfo") else root.find(".//eainfo")
+    eainfo = ET.SubElement(root, "eainfo") if root.find(".//eainfo") is None else root.find(".//eainfo")
 
     # Create eainfo/detailed element
-    detailed = ET.SubElement(eainfo, "detailed") if not eainfo.find("detailed") else eainfo.find("detailed")
+    detailed = ET.SubElement(eainfo, "detailed") if eainfo.find("detailed") is None else eainfo.find("detailed")
 
     # Create eainfo/detailed/enttyp element
-    if not detailed.find("enttyp"):
+    if detailed.find("enttyp") is None:
         enttyp = ET.SubElement(detailed, "enttyp")
         enttypl = ET.SubElement(enttyp, "enttypl")
         enttypl.text = "Fields"
