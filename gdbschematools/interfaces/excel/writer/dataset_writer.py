@@ -23,13 +23,12 @@ class DatasetsWriter(GDBWriterWithFields):
           scratch) are visible.
     """
 
-    element_type:str = "dataset"
-    _dropdown_dataset_type:cellar.CellDropdown = None
-    _dropdown_geometry_type:cellar.CellDropdown = None
-    _dropdown_horizontal_sr:cellar.CellDropdown = None
-    _dropdown_boolean:cellar.CellDropdown = None
-    _column_widths:list[int] = [25, 15, 80, 25, 22, 15, 12, 11, 11, 11, 10]
-
+    element_type: str = "dataset"
+    _dropdown_dataset_type: cellar.CellDropdown = None
+    _dropdown_geometry_type: cellar.CellDropdown = None
+    _dropdown_horizontal_sr: cellar.CellDropdown = None
+    _dropdown_boolean: cellar.CellDropdown = None
+    _column_widths: list[int] = [25, 15, 80, 25, 22, 15, 12, 11, 11, 11, 10]
 
     def _prepare_dropdowns(self):
         """Create the dropdowns for re-use throughout the workbook."""
@@ -40,7 +39,7 @@ class DatasetsWriter(GDBWriterWithFields):
                 "Feature Class",
                 "Table",
             ],
-            label="dataset type"
+            label="dataset type",
         )
 
         self._dropdown_geometry_type = cellar.CellDropdown(
@@ -57,11 +56,10 @@ class DatasetsWriter(GDBWriterWithFields):
             ],
             label="spatial reference",
             user_fill_in=True,
-            message="A user-defined value has been entered for the spatial reference. The format is the numeric WKID followed by an optional text label.", #pylint: disable=line-too-long
+            message="A user-defined value has been entered for the spatial reference. The format is the numeric WKID followed by an optional text label.",  # pylint: disable=line-too-long
         )
 
         self._dropdown_boolean = cellar.get_dropdown_boolean(self.workbook)
-
 
     def _create_template(self, visible: bool = False):
         super()._create_template(visible)
@@ -75,8 +73,9 @@ class DatasetsWriter(GDBWriterWithFields):
                 del idx
                 field_writer.add_entry(None)
 
-        subtype_writer = self.subtype_adder(self.TEMPLATE_TITLE, None,
-                                            fields_table_coordinates=field_writer.coordinates)
+        subtype_writer = self.subtype_adder(
+            self.TEMPLATE_TITLE, None, fields_table_coordinates=field_writer.coordinates
+        )
         with subtype_writer:
             for idx in range(20):
                 del idx
@@ -88,13 +87,27 @@ class DatasetsWriter(GDBWriterWithFields):
                 del idx
                 relationship_writer.add_entry(None)
 
-
-    #pylint: disable=too-many-locals,too-many-arguments
-    def populate_base_info(self, dataset_name:str, schema:str=None, alias:str=None, feature_dataset_name:str=None,
-                           summary:str=None, dataset_type:str=None, oid_is_64:str=None, is_archived:str=None,
-                           is_versioned:str=None, dsid:str=None, geometry_type:str=None,
-                           horizontal_spatial_ref:str=None, vertical_spatial_ref:str=None, has_m:str=None,
-                           has_z:str=None):
+    # pylint: disable=too-many-locals,too-many-arguments
+    def populate_base_info(
+        self,
+        dataset_name: str,
+        schema: str = None,
+        alias: str = None,
+        feature_dataset_name: str = None,
+        summary: str = None,
+        description: str = None,
+        tags: str = None,
+        dataset_type: str = None,
+        oid_is_64: str = None,
+        is_archived: str = None,
+        is_versioned: str = None,
+        dsid: str = None,
+        geometry_type: str = None,
+        horizontal_spatial_ref: str = None,
+        vertical_spatial_ref: str = None,
+        has_m: str = None,
+        has_z: str = None,
+    ):
         """Populate the base information about the dataset.
 
         Args:
@@ -103,6 +116,8 @@ class DatasetsWriter(GDBWriterWithFields):
             alias (str, optional): Alternate name. Defaults to None.
             feature_dataset_name (str, optional): Name of the feature dataset in which the dataset participates. Defaults to None.
             summary (str, optional): Metadata summary description. Defaults to None.
+            description (str, optional): Metadata longer description. Defaults to None.
+            tags (list, optional): Metadata tags. Defaults to None.
             dataset_type (str, optional): Type of dataset (e.g. Feature Class, Table). Defaults to None.
             oid_is_64 (str, optional): Whether dataset used 64-bit object IDs. Defaults to None.
             is_archived (str, optional): Whether archival is enabled. Defaults to None.
@@ -113,7 +128,7 @@ class DatasetsWriter(GDBWriterWithFields):
             vertical_spatial_ref (str, optional): Description of the vertical spatial reference. Only applies to feature classes. Defaults to None.
             has_m (str, optional): Whether m-values are enabled. Defaults to None.
             has_z (str, optional): Whether vertical values are enabled. Defaults to None.
-        """ #pylint: disable=line-too-long
+        """  # pylint: disable=line-too-long
 
         cw = self.cw_lookup[dataset_name]
 
@@ -122,48 +137,72 @@ class DatasetsWriter(GDBWriterWithFields):
             dataset_name = None
             force_feature_class_attributes = True
 
-        coordinates = cw.write_block(value_block=[
-            [
-                #empty row
-            ], [
-                "Name",
-                (dataset_name, cellar.CELL_RULE_TEXT_MIN_3),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Schema",
-                schema,
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Alias",
-                alias,
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Feature Dataset",
-                feature_dataset_name,
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Summary",
-                (summary, cellar.CELL_OPTS_WRAP),
-                cellar.MERGE_CELL_WITH_LEFT,
+        coordinates = cw.write_block(
+            value_block=[
+                [
+                    # empty row
+                ],
+                [
+                    "Name",
+                    (dataset_name, cellar.CELL_RULE_TEXT_MIN_3),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Schema",
+                    schema,
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Alias",
+                    alias,
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Feature Dataset",
+                    feature_dataset_name,
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Summary",
+                    (summary, cellar.CELL_OPTS_WRAP),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Description",
+                    (description, cellar.CELL_OPTS_WRAP),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Tags",
+                    (tags, cellar.CELL_OPTS_WRAP),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
             ],
-        ], default_cell_options=[
-            cellar.CELL_OPTS_KEY,
-            cellar.CELL_OPTS_TEXT,
-        ])
+            default_cell_options=[
+                cellar.CELL_OPTS_KEY,
+                cellar.CELL_OPTS_TEXT,
+            ],
+        )
 
-        row_with_summary = coordinates[1][0]
+        base_row = coordinates[0][0]
+        row_with_summary = base_row + 5
+        row_with_description = base_row + 6
         cw.increase_basic_height(row_with_summary, factor=2)
+        cw.increase_basic_height(row_with_description, factor=2)
 
-        coordinates = cw.write_block(value_block=[
-            [
-                "Dataset Type",
-                (dataset_type, cellar.CELL_RULE_NOT_BLANK, self._dropdown_dataset_type),
-                cellar.MERGE_CELL_WITH_LEFT,
+        coordinates = cw.write_block(
+            value_block=[
+                [
+                    "Dataset Type",
+                    (dataset_type, cellar.CELL_RULE_NOT_BLANK, self._dropdown_dataset_type),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
             ],
-        ], default_cell_options=[
-            cellar.CELL_OPTS_KEY,
-            cellar.CELL_OPTS_TEXT,
-        ])
+            default_cell_options=[
+                cellar.CELL_OPTS_KEY,
+                cellar.CELL_OPTS_TEXT,
+            ],
+        )
 
         if geometry_type or force_feature_class_attributes:
 
@@ -176,59 +215,75 @@ class DatasetsWriter(GDBWriterWithFields):
                 formula="AND(ISBLANK(OFFSET(<coordinate>, 1, 0)) = FALSE, ISBLANK(<coordinate>))"
             )
 
-            cw.write_block(value_block=[
+            cw.write_block(
+                value_block=[
+                    [
+                        "Geometry Type",
+                        (geometry_type, cellar.CELL_RULE_NOT_BLANK, self._dropdown_geometry_type),
+                        cellar.MERGE_CELL_WITH_LEFT,
+                    ],
+                    [
+                        "Horizontal Spatial Ref.",
+                        (
+                            horizontal_spatial_ref,
+                            spatial_ref_valid,
+                            rule_hsr_not_empty_if_vcs,
+                            self._dropdown_horizontal_sr,
+                        ),
+                        cellar.MERGE_CELL_WITH_LEFT,
+                    ],
+                    [
+                        "Vertical Spatial Ref.",
+                        (vertical_spatial_ref, spatial_ref_valid),
+                        cellar.MERGE_CELL_WITH_LEFT,
+                    ],
+                    [
+                        "Has M-Values",
+                        (has_m, self._dropdown_boolean),
+                        cellar.MERGE_CELL_WITH_LEFT,
+                    ],
+                    [
+                        "Has Z-Values",
+                        (has_z, self._dropdown_boolean),
+                        cellar.MERGE_CELL_WITH_LEFT,
+                    ],
+                ],
+                default_cell_options=[
+                    cellar.CELL_OPTS_KEY,
+                    cellar.CELL_OPTS_TEXT,
+                ],
+            )
+
+        cw.write_block(
+            value_block=[
                 [
-                    "Geometry Type",
-                    (geometry_type, cellar.CELL_RULE_NOT_BLANK, self._dropdown_geometry_type),
-                    cellar.MERGE_CELL_WITH_LEFT,
-                ], [
-                    "Horizontal Spatial Ref.",
-                    (horizontal_spatial_ref, spatial_ref_valid, rule_hsr_not_empty_if_vcs,
-                     self._dropdown_horizontal_sr),
-                    cellar.MERGE_CELL_WITH_LEFT,
-                ], [
-                    "Vertical Spatial Ref.",
-                    (vertical_spatial_ref, spatial_ref_valid),
-                    cellar.MERGE_CELL_WITH_LEFT,
-                ], [
-                    "Has M-Values",
-                    (has_m, self._dropdown_boolean),
-                    cellar.MERGE_CELL_WITH_LEFT,
-                ], [
-                    "Has Z-Values",
-                    (has_z, self._dropdown_boolean),
+                    "64-bit OID",
+                    (oid_is_64, self._dropdown_boolean),
                     cellar.MERGE_CELL_WITH_LEFT,
                 ],
-            ], default_cell_options=[
+                [
+                    "Is Archived",
+                    (is_archived, self._dropdown_boolean),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Is Versioned",
+                    (is_versioned, self._dropdown_boolean),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "DSID",
+                    (dsid, cellar.CELL_OPTS_INTEGER_LEFT),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+            ],
+            default_cell_options=[
                 cellar.CELL_OPTS_KEY,
                 cellar.CELL_OPTS_TEXT,
-            ])
-
-        cw.write_block(value_block=[
-            [
-                "64-bit OID",
-                (oid_is_64, self._dropdown_boolean),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Is Archived",
-                (is_archived, self._dropdown_boolean),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Is Versioned",
-                (is_versioned, self._dropdown_boolean),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "DSID",
-                (dsid, cellar.CELL_OPTS_INTEGER_LEFT),
-                cellar.MERGE_CELL_WITH_LEFT,
             ],
-        ], default_cell_options=[
-            cellar.CELL_OPTS_KEY,
-            cellar.CELL_OPTS_TEXT,
-        ])
+        )
 
-
-    def in_relationships_adder(self, base_name:str) -> InRelationshipsWriter:
+    def in_relationships_adder(self, base_name: str) -> InRelationshipsWriter:
         """Returns an instance of InRelationshipsWriter initialized for a particular dataset.
 
         Args:

@@ -24,14 +24,24 @@ Datasets = Union[FeatureClass, Table, Relationship]
 
 class _TableAccessor(SubAccessor):
 
-    def __init__(self, geodatabase:"Geodatabase", accessor:AccessorWithGDB) -> None:
+    def __init__(self, geodatabase: "Geodatabase", accessor: AccessorWithGDB) -> None:
         super().__init__(geodatabase, accessor, "Table")
 
-
-    #pylint: disable-next=too-many-arguments
-    def new(self, name:str, alias:str=None, schema:Union[str, None]=None, is_archived:bool=False,
-                  is_versioned:bool=False, oid_is_64:bool=None, dsid:int=None, meta_summary:str=None,
-                  feature_dataset:"FeatureDataset"=None) -> Table:
+    # pylint: disable-next=too-many-arguments
+    def new(
+        self,
+        name: str,
+        alias: str = None,
+        schema: Union[str, None] = None,
+        is_archived: bool = False,
+        is_versioned: bool = False,
+        oid_is_64: bool = None,
+        dsid: int = None,
+        meta_summary: str = None,
+        meta_description: str = None,
+        meta_tags: str = None,
+        feature_dataset: "FeatureDataset" = None,
+    ) -> Table:
         """Create a table in the geodatabase.
 
         Args:
@@ -43,20 +53,34 @@ class _TableAccessor(SubAccessor):
             oid_is_64 (bool, optional): Whether the OBJECTID field is a 64-bit integer. Defaults to None.
             dsid (int, optional): Dataset's identifier in enterprise geodatabases. Defaults to None.
             meta_summary (str, optional): Metadata summary for the geodatabase. Defaults to None.
+            meta_tags (str, optional): Comma-separated list of tags to assign to the dataset. Defaults to None.
+            meta_description (str, optional): Description of the dataset. Defaults to None.
             feature_dataset (FeatureDataset, optional): Feature dataset that contains this table. Defaults to None.
+
 
         Returns:
             Table: The newly created table.
-        """ #pylint: disable=line-too-long
+        """  # pylint: disable=line-too-long
 
         if name in self._accessor:
             raise ValueError(f"A dataset with the '{name}' name already exists.")
 
-        table = Table(name, alias, schema, is_archived, is_versioned, oid_is_64, dsid, meta_summary,
-                      feature_dataset)
+        table = Table(
+            name,
+            alias,
+            schema,
+            is_archived,
+            is_versioned,
+            oid_is_64,
+            dsid,
+            meta_summary,
+            meta_description,
+            meta_tags,
+            feature_dataset,
+        )
 
         if self._geodatabase:
-            table._register_geodatabase(self._geodatabase) #pylint: disable=protected-access
+            table._register_geodatabase(self._geodatabase)  # pylint: disable=protected-access
 
         self._append(table)
         return table
@@ -64,15 +88,28 @@ class _TableAccessor(SubAccessor):
 
 class _FeatureClassAccessor(SubAccessor):
 
-    def __init__(self, geodatabase:"Geodatabase", accessor:AccessorWithGDB) -> None:
+    def __init__(self, geodatabase: "Geodatabase", accessor: AccessorWithGDB) -> None:
         super().__init__(geodatabase, accessor, "FeatureClass")
 
-
-    #pylint: disable-next=too-many-arguments
-    def new(self, name:str, geometry_type:str, spatial_ref:"SpatialReference"=None, has_m:bool=False,
-                          has_z:bool=False, alias:str=None, schema:Union[str, None]=None, is_archived:bool=False,
-                          is_versioned:bool=False, oid_is_64:bool=None, dsid:int=None, meta_summary:str=None,
-                          feature_dataset:"FeatureDataset"=None) -> FeatureClass:
+    # pylint: disable-next=too-many-arguments
+    def new(
+        self,
+        name: str,
+        geometry_type: str,
+        spatial_ref: "SpatialReference" = None,
+        has_m: bool = False,
+        has_z: bool = False,
+        alias: str = None,
+        schema: Union[str, None] = None,
+        is_archived: bool = False,
+        is_versioned: bool = False,
+        oid_is_64: bool = None,
+        dsid: int = None,
+        meta_summary: str = None,
+        meta_description: str = None,
+        meta_tags: str = None,
+        feature_dataset: "FeatureDataset" = None,
+    ) -> FeatureClass:
         """Create a feature class in the geodatabase.
 
         Args:
@@ -88,20 +125,37 @@ class _FeatureClassAccessor(SubAccessor):
             oid_is_64 (bool, optional): Whether the OBJECTID field is a 64-bit integer. Defaults to None.
             dsid (int, optional): Dataset's identifier in enterprise geodatabases. Defaults to None.
             meta_summary (str, optional): Metadata summary for the geodatabase. Defaults to None.
+            meta_description (str, optional): Description of the dataset. Defaults to None.
+            meta_tags (list, optional): List of tags to assign to the dataset. Defaults to None.
             feature_dataset (FeatureDataset, optional): Feature dataset that contains this feature class. Defaults to None.
 
         Returns:
             FeatureClass: The newly created feature class.
-        """ #pylint: disable=line-too-long
+        """  # pylint: disable=line-too-long
 
         if name in self._accessor:
             raise ValueError(f"A dataset with the '{name}' name already exists.")
 
-        feat_cl = FeatureClass(name, geometry_type, spatial_ref, has_m, has_z, alias, schema, is_archived,
-                               is_versioned, oid_is_64, dsid, meta_summary, feature_dataset)
+        feat_cl = FeatureClass(
+            name,
+            geometry_type,
+            spatial_ref,
+            has_m,
+            has_z,
+            alias,
+            schema,
+            is_archived,
+            is_versioned,
+            oid_is_64,
+            dsid,
+            meta_summary,
+            meta_description,
+            meta_tags,
+            feature_dataset,
+        )
 
         if self._geodatabase:
-            feat_cl._register_geodatabase(self._geodatabase) #pylint: disable=protected-access
+            feat_cl._register_geodatabase(self._geodatabase)  # pylint: disable=protected-access
 
         self._append(feat_cl)
         return feat_cl
@@ -109,17 +163,35 @@ class _FeatureClassAccessor(SubAccessor):
 
 class _RelationshipClassAccessor(SubAccessor):
 
-    def __init__(self, geodatabase:"Geodatabase", accessor:AccessorWithGDB) -> None:
+    def __init__(self, geodatabase: "Geodatabase", accessor: AccessorWithGDB) -> None:
         super().__init__(geodatabase, accessor, "RelationshipClass")
 
-
-    #pylint: disable-next=too-many-arguments,too-many-locals
-    def new(self, name:str, origin_table:"Table", destination_table:str, relationship_type:str, forward_label:str,
-            backward_label:str, notification:str, cardinality:str, attributed:str, origin_primary_key:str,
-            origin_foreign_key:str, destination_primary_key:Union[str, None]=None,
-            destination_foreign_key:Union[str, None]=None, schema:Union[str, None]=None, is_archived:str=False,
-            is_versioned:bool=False, oid_is_64:bool=None, dsid:int=None, meta_summary:str=None,
-            feature_dataset:"FeatureDataset"=None) -> Relationship:
+    # pylint: disable-next=too-many-arguments,too-many-locals
+    def new(
+        self,
+        name: str,
+        origin_table: "Table",
+        destination_table: str,
+        relationship_type: str,
+        forward_label: str,
+        backward_label: str,
+        notification: str,
+        cardinality: str,
+        attributed: str,
+        origin_primary_key: str,
+        origin_foreign_key: str,
+        destination_primary_key: Union[str, None] = None,
+        destination_foreign_key: Union[str, None] = None,
+        schema: Union[str, None] = None,
+        is_archived: str = False,
+        is_versioned: bool = False,
+        oid_is_64: bool = None,
+        dsid: int = None,
+        meta_summary: str = None,
+        meta_description: str = None,
+        meta_tags: str = None,
+        feature_dataset: "FeatureDataset" = None,
+    ) -> Relationship:
         """Create a new relationship class linking two tables together.
 
         Args:
@@ -142,22 +214,44 @@ class _RelationshipClassAccessor(SubAccessor):
             oid_is_64 (bool, optional): Whether the OBJECTID field is a 64-bit integer. Defaults to None.
             dsid (int, optional): Dataset's identifier in enterprise geodatabases. Defaults to None.
             meta_summary (str, optional): Metadata summary for the geodatabase. Defaults to None.
+            meta_tags (str, optional): Comma-separated list of tags to assign to the dataset. Defaults to None.
+            meta_description (str, optional): Description of the dataset. Defaults to None.
             feature_dataset (FeatureDataset, optional): Feature dataset that contains this relationship class. Defaults to None.
 
         Returns:
             Relationship: The newly created relationship class.
-        """ #pylint: disable=line-too-long
+        """  # pylint: disable=line-too-long
 
         if name in self._accessor:
             raise ValueError(f"A dataset with the '{name}' name already exists.")
 
-        rel_cl = Relationship(name, origin_table, destination_table, relationship_type, forward_label, backward_label,
-                              notification, cardinality, attributed, origin_primary_key, origin_foreign_key,
-                              destination_primary_key, destination_foreign_key, schema, is_archived, is_versioned,
-                              oid_is_64, dsid, meta_summary, feature_dataset)
+        rel_cl = Relationship(
+            name,
+            origin_table,
+            destination_table,
+            relationship_type,
+            forward_label,
+            backward_label,
+            notification,
+            cardinality,
+            attributed,
+            origin_primary_key,
+            origin_foreign_key,
+            destination_primary_key,
+            destination_foreign_key,
+            schema,
+            is_archived,
+            is_versioned,
+            oid_is_64,
+            dsid,
+            meta_summary,
+            meta_description,
+            meta_tags,
+            feature_dataset,
+        )
 
         if self._geodatabase:
-            rel_cl._register_geodatabase(self._geodatabase) #pylint: disable=protected-access
+            rel_cl._register_geodatabase(self._geodatabase)  # pylint: disable=protected-access
 
         self._append(rel_cl)
         return rel_cl
@@ -166,40 +260,36 @@ class _RelationshipClassAccessor(SubAccessor):
 class ReadOnlyDatasetAccessor(AccessorWithGDB):
     """Sequence of datasets (tables, feature classes, and relationship classes), behaves like a sequence.
 
-        Args:
-            geodatabase (Geodatabase): Reference to the geodatabase object that will own the datasets.
-        """
+    Args:
+        geodatabase (Geodatabase): Reference to the geodatabase object that will own the datasets.
+    """
 
-    _tables:_TableAccessor = None
-    _feature_classes:_FeatureClassAccessor = None
-    _relationship_classes:_RelationshipClassAccessor = None
+    _tables: _TableAccessor = None
+    _feature_classes: _FeatureClassAccessor = None
+    _relationship_classes: _RelationshipClassAccessor = None
 
-
-    def __init__(self, geodatabase:"Geodatabase") -> None:
+    def __init__(self, geodatabase: "Geodatabase") -> None:
         super().__init__(geodatabase)
         self._tables = SubAccessor(accessor=self, geodatabase=geodatabase, dataset_type="Table")
         self._feature_classes = SubAccessor(accessor=self, geodatabase=geodatabase, dataset_type="FeatureClass")
-        self._relationship_classes = SubAccessor(accessor=self, geodatabase=geodatabase,
-                                                 dataset_type="RelationshipClass")
-
+        self._relationship_classes = SubAccessor(
+            accessor=self, geodatabase=geodatabase, dataset_type="RelationshipClass"
+        )
 
     @property
     def tables(self) -> SubAccessor:
         """Filtered iterable of datasets of the table type."""
         return self._tables
 
-
     @property
     def feature_classes(self) -> SubAccessor:
         """Filtered iterable of datasets of the feature class type."""
         return self._feature_classes
 
-
     @property
     def relationship_classes(self) -> SubAccessor:
         """Filtered iterable of datasets of the relationship class type."""
         return self._relationship_classes
-
 
     @property
     def tables_and_feature_classes(self) -> list[Datasets]:
@@ -208,13 +298,12 @@ class ReadOnlyDatasetAccessor(AccessorWithGDB):
         combined.sort()
         return combined
 
-
     def walk(self) -> Iterator[tuple["FeatureDataset", tuple["FeatureClass"], tuple["Table"], tuple["Relationship"]]]:
         """Walk through all the datasets, grouped by their participation in feature datasets.
 
         Returns:
             IteratorIterator[tuple["FeatureDataset", tuple("FeatureClass"), tuple("Table"), tuple("Relationship")]]: The feature dataset (or none for datasets not participating in one), followed by a sequence of feature classes, a sequence of tables, and a sequence of relationships.
-        """ #pylint: disable=line-too-long
+        """  # pylint: disable=line-too-long
 
         all_feat_dts = []
         top_level_feat_cls = []
@@ -250,14 +339,13 @@ class DatasetAccessor(ReadOnlyDatasetAccessor):
 
     Args:
         geodatabase (Geodatabase): Reference to the geodatabase object that will own the datasets.
-    """ #pylint: disable=line-too-long
+    """  # pylint: disable=line-too-long
 
-    _tables:_TableAccessor = None
-    _feature_classes:_FeatureClassAccessor = None
-    _relationship_classes:_RelationshipClassAccessor = None
+    _tables: _TableAccessor = None
+    _feature_classes: _FeatureClassAccessor = None
+    _relationship_classes: _RelationshipClassAccessor = None
 
-
-    def __init__(self, geodatabase:"Geodatabase") -> None:
+    def __init__(self, geodatabase: "Geodatabase") -> None:
         super().__init__(geodatabase)
         self._tables = _TableAccessor(accessor=self, geodatabase=geodatabase)
         self._feature_classes = _FeatureClassAccessor(accessor=self, geodatabase=geodatabase)

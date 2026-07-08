@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from .table import Table
 
 
-class RelationshipMember():
+class RelationshipMember:
     """A table that is a member of a relationship class, either as an origin or destination table.
 
     Args:
@@ -25,60 +25,53 @@ class RelationshipMember():
     """
 
     # Instance Properties
-    _table:"Table" = None
-    _primary_key:str = None
-    _foreign_key:str = None
+    _table: "Table" = None
+    _primary_key: str = None
+    _foreign_key: str = None
 
-
-    def __init__(self, table:"Table", primary_key:str, foreign_key:str) -> None:
+    def __init__(self, table: "Table", primary_key: str, foreign_key: str) -> None:
         self.table = table
         self.primary_key = primary_key
         self.foreign_key = foreign_key
 
-
     def __repr__(self) -> str:
         return f"<structures.RelationshipMember table='{self.table.name}'>"
-
 
     @property
     def table(self) -> "Table":
         """Table that is a member of this relationship."""
         return self._table
 
-
     @table.setter
-    def table(self, value:"Table"):
+    def table(self, value: "Table"):
         if not validation.is_structure_instance(value, "Table"):
             raise TypeError("Relationship Class members must be an instance of Table.")
         self._table = value
-
 
     @property
     def primary_key(self) -> str:
         """Relationship member's primary key field name."""
         return self._primary_key
 
-
     @primary_key.setter
-    def primary_key(self, value:str):
-        self._primary_key = validation.string_or_none(value, f"primary key {value}", min_len=3,
-                                                      max_len=100, allow_numbers=False)
-
+    def primary_key(self, value: str):
+        self._primary_key = validation.string_or_none(
+            value, f"primary key {value}", min_len=3, max_len=100, allow_numbers=False
+        )
 
     @property
     def foreign_key(self) -> str:
         """Relationship member's foreign key field name."""
         return self._foreign_key
 
-
     @foreign_key.setter
-    def foreign_key(self, value:str):
-        self._foreign_key = validation.string_or_none(value, f"foreign key {value}", min_len=3,
-                                              max_len=100, allow_numbers=False)
-
+    def foreign_key(self, value: str):
+        self._foreign_key = validation.string_or_none(
+            value, f"foreign key {value}", min_len=3, max_len=100, allow_numbers=False
+        )
 
     @staticmethod
-    def confirm_key_in_table(table:"Table", key:str):
+    def confirm_key_in_table(table: "Table", key: str):
         """Confirm that a key is a member of a table. If not, raises an exception.
 
         Args:
@@ -92,7 +85,7 @@ class RelationshipMember():
         if len(matches) == 0:
             raise ValueError(f"Key {key} is not a field in the relationship class member table.")
 
-    def diff(self, other_relationship_member:"RelationshipMember", relationship_name:str ) -> list:
+    def diff(self, other_relationship_member: "RelationshipMember", relationship_name: str) -> list:
         """Compares primary_key, foreign_key, table.name and table.schema of two relationship members.
 
         Args:
@@ -103,18 +96,26 @@ class RelationshipMember():
         """
         diff_results = []
         if self.primary_key != other_relationship_member.primary_key:
-            diff_results.append(f"primary_key of {self.table.name} table is {self.primary_key} in {relationship_name} relationship in the origin gdb and {other_relationship_member.primary_key} in the other gdb.")
+            diff_results.append(
+                f"primary_key of {self.table.name} table is {self.primary_key} in {relationship_name} relationship in the origin gdb and {other_relationship_member.primary_key} in the other gdb."
+            )
         if self.foreign_key != other_relationship_member.foreign_key:
-            diff_results.append(f"foreign_key of {self.table.name} table is {self.foreign_key} in {relationship_name} relationship in the origin gdb and {other_relationship_member.foreign_key} in the other gdb.")
+            diff_results.append(
+                f"foreign_key of {self.table.name} table is {self.foreign_key} in {relationship_name} relationship in the origin gdb and {other_relationship_member.foreign_key} in the other gdb."
+            )
         if self.table.name != other_relationship_member.table.name:
-            diff_results.append(f"name of table is {self.table.name} in {relationship_name} relationship in the origin gdb and {other_relationship_member.table.name} in the other gdb.")
+            diff_results.append(
+                f"name of table is {self.table.name} in {relationship_name} relationship in the origin gdb and {other_relationship_member.table.name} in the other gdb."
+            )
         if self.table.schema != other_relationship_member.table.schema:
-            diff_results.append(f"schema of {self.table.name} table is {self.table.schema} in {relationship_name} relationship in the origin gdb and {other_relationship_member.table.schema} in the other gdb.")
+            diff_results.append(
+                f"schema of {self.table.name} table is {self.table.schema} in {relationship_name} relationship in the origin gdb and {other_relationship_member.table.schema} in the other gdb."
+            )
 
         return diff_results
 
 
-#pylint: disable-next=too-many-instance-attributes
+# pylint: disable-next=too-many-instance-attributes
 class Relationship(Dataset):
     """Structure for a geodatabase relationship class linking two tables together.
 
@@ -138,6 +139,8 @@ class Relationship(Dataset):
         oid_is_64 (bool, optional): Whether the OBJECTID field is a 64-bit integer. Defaults to None.
         dsid (int, optional): Dataset's identifier in enterprise geodatabases. Defaults to None.
         meta_summary (str, optional): Metadata summary for the geodatabase. Defaults to None.
+        meta_description (str, optional): Metadata description for the geodatabase. Defaults to None.
+        meta_tags (str, optional): Metadata tags for the geodatabase. Defaults to None.
         feature_dataset (FeatureDataset, optional): Feature dataset that contains this relationship class. Defaults to None.
 
     Attributes:
@@ -145,14 +148,13 @@ class Relationship(Dataset):
         NOTIFICATIONS (tuple[str]): Values that are valid for notification.
         CARDINALITIES (tuple[str]): Values that are valid for cardinality.
         FIELD_TYPES (tuple[str]): Field types that are valid in an attributed field class.
-    """ #pylint: disable=line-too-long
+    """  # pylint: disable=line-too-long
 
     # Valid relationship types
     RELATIONSHIP_TYPES = (
         "SIMPLE",
         "COMPOSITE",
     )
-
 
     # Valid notification values
     NOTIFICATIONS = (
@@ -162,7 +164,6 @@ class Relationship(Dataset):
         "BOTH",
     )
 
-
     # Valid cardinality values
     CARDINALITIES = (
         "ONE_TO_ONE",
@@ -170,36 +171,61 @@ class Relationship(Dataset):
         "MANY_TO_MANY",
     )
 
-
     # Field types that are valid in an attributed field class.
-    FIELD_TYPE_EXCLUSIONS = (
-        "SHAPE",
-    )
-
+    FIELD_TYPE_EXCLUSIONS = ("SHAPE",)
 
     # Instance Properties
-    _origin:RelationshipMember = None
-    _destination:RelationshipMember = None
-    _forward_label:str = None
-    _backward_label:str = None
-    _cardinality:str = None
-    _notification:str = None
-    _relationship_type:str = None
-    _attributed:bool = None
+    _origin: RelationshipMember = None
+    _destination: RelationshipMember = None
+    _forward_label: str = None
+    _backward_label: str = None
+    _cardinality: str = None
+    _notification: str = None
+    _relationship_type: str = None
+    _attributed: bool = None
 
-
-    #pylint: disable-next=too-many-arguments,too-many-locals
-    def __init__(self, name:str, origin_table:"Table", destination_table:str, relationship_type:str, forward_label:str,
-                 backward_label:str, notification:str, cardinality:str, attributed:str, origin_primary_key:str,
-                 origin_foreign_key:str, destination_primary_key:Union[str, None]=None,
-                 destination_foreign_key:Union[str, None]=None, schema:Union[str, None]=None, is_archived:str=False,
-                 is_versioned:bool=False, oid_is_64:bool=None, dsid:int=None, meta_summary:str=None,
-                 feature_dataset:"FeatureDataset"=None) -> None:
+    # pylint: disable-next=too-many-arguments,too-many-locals
+    def __init__(
+        self,
+        name: str,
+        origin_table: "Table",
+        destination_table: str,
+        relationship_type: str,
+        forward_label: str,
+        backward_label: str,
+        notification: str,
+        cardinality: str,
+        attributed: str,
+        origin_primary_key: str,
+        origin_foreign_key: str,
+        destination_primary_key: Union[str, None] = None,
+        destination_foreign_key: Union[str, None] = None,
+        schema: Union[str, None] = None,
+        is_archived: str = False,
+        is_versioned: bool = False,
+        oid_is_64: bool = None,
+        dsid: int = None,
+        meta_summary: str = None,
+        meta_description: str = None,
+        meta_tags: str = None,
+        feature_dataset: "FeatureDataset" = None,
+    ) -> None:
 
         if self.dataset_type is None:
             self.dataset_type = "RelationshipClass"
 
-        super().__init__(name, schema, is_archived, is_versioned, oid_is_64, dsid, meta_summary, feature_dataset)
+        super().__init__(
+            name,
+            schema,
+            is_archived,
+            is_versioned,
+            oid_is_64,
+            dsid,
+            meta_summary,
+            meta_description,
+            meta_tags,
+            feature_dataset,
+        )
 
         # Members & key checks
         if origin_primary_key is None or origin_foreign_key is None:
@@ -228,62 +254,54 @@ class Relationship(Dataset):
         self.relationship_type = relationship_type
         self.attributed = attributed
 
-
     @property
     def _foreign_keys_defined(self) -> bool:
         """Whether foreign keys are defined for both the origin and destination tables."""
         return self.origin.foreign_key is not None and self.destination.foreign_key is not None
-
 
     @property
     def origin(self) -> RelationshipMember:
         """Originating relationship member table or feature class."""
         return self._origin
 
-
     @property
     def destination(self) -> RelationshipMember:
         """Destination relationship member table or feature class."""
         return self._destination
-
 
     @property
     def forward_label(self) -> str:
         """Label used to identify origin to destination."""
         return self._forward_label
 
-
     @forward_label.setter
-    def forward_label(self, value:str):
+    def forward_label(self, value: str):
         self._forward_label = validation.string(value, "relationship class forward label", min_len=1, max_len=100)
-
 
     @property
     def backward_label(self) -> str:
         """Label used to identify destination to origin."""
         return self._backward_label
 
-
     @backward_label.setter
-    def backward_label(self, value:str):
+    def backward_label(self, value: str):
         self._backward_label = validation.string(value, "relationship class backward label", min_len=1, max_len=100)
-
 
     @property
     def cardinality(self) -> str:
         """Number of unique values in destination relative to origin. Valid values in Relationship.CARDINALITIES."""
         return self._cardinality
 
-
     @cardinality.setter
-    def cardinality(self, value:str):
+    def cardinality(self, value: str):
         validation.string(value, "relationship class cardinality", enum=Relationship.CARDINALITIES, allow_numbers=False)
 
         if value == "MANY_TO_MANY" and not self._foreign_keys_defined:
-            raise ValueError("Cardinality of relationship class can only be set to MANY_TO_MANY if foreign keys defined.")
+            raise ValueError(
+                "Cardinality of relationship class can only be set to MANY_TO_MANY if foreign keys defined."
+            )
 
         self._cardinality = value
-
 
     @property
     def notification(self) -> str:
@@ -291,12 +309,11 @@ class Relationship(Dataset):
         Relationship.NOTIFICATIONS."""
         return self._notification
 
-
     @notification.setter
-    def notification(self, value:str):
-        self._notification = validation.string(value, "relationship class notification type",
-                                               enum=Relationship.NOTIFICATIONS)
-
+    def notification(self, value: str):
+        self._notification = validation.string(
+            value, "relationship class notification type", enum=Relationship.NOTIFICATIONS
+        )
 
     @property
     def relationship_type(self) -> str:
@@ -304,21 +321,19 @@ class Relationship(Dataset):
         origin record). Valid values in Relationship.RELATIONSHIP_TYPES."""
         return self._relationship_type
 
-
     @relationship_type.setter
-    def relationship_type(self, value:str):
-        self._relationship_type = validation.string(value, "relationship class type",
-                                                    enum=Relationship.RELATIONSHIP_TYPES)
-
+    def relationship_type(self, value: str):
+        self._relationship_type = validation.string(
+            value, "relationship class type", enum=Relationship.RELATIONSHIP_TYPES
+        )
 
     @property
     def attributed(self) -> bool:
         """Whether the relationship class has attributes other than the keys."""
         return self._attributed
 
-
     @attributed.setter
-    def attributed(self, value:bool):
+    def attributed(self, value: bool):
         validation.boolean(value, "relationship class attributed", coerce=False)
 
         if value and not self._foreign_keys_defined:
@@ -329,7 +344,6 @@ class Relationship(Dataset):
 
         self._attributed = value
 
-
     @property
     def fields(self) -> "FieldAccessor":
         """Sequence like accessor for fields contained with the dataset."""
@@ -338,7 +352,7 @@ class Relationship(Dataset):
 
         return self._fields
 
-    def diff(self, other_relationship:"Relationship") -> list:
+    def diff(self, other_relationship: "Relationship") -> list:
         """compares the properties of two relationship classes and add the differences to a list.
 
         Args:
@@ -347,8 +361,16 @@ class Relationship(Dataset):
         Returns:
             list: a list of differences between two relationship classes
         """
-        diff_results =super().diff(other_relationship)
-        properties = ["name","forward_label", "backward_label", "cardinality", "notification", "relationship_type", "attributed"]
+        diff_results = super().diff(other_relationship)
+        properties = [
+            "name",
+            "forward_label",
+            "backward_label",
+            "cardinality",
+            "notification",
+            "relationship_type",
+            "attributed",
+        ]
         relationship_diff_results = utility.diff(self, other_relationship, "relationship class", properties)
         diff_results.extend(relationship_diff_results)
 
@@ -358,12 +380,15 @@ class Relationship(Dataset):
 
             field_missing_in_origin = other_field_names.difference(origin_field_names)
             if field_missing_in_origin:
-                diff_results.append(f"The following fields are in {other_relationship.name} dataset in the other GDB but not in the origin GDB: {', '.join(field_missing_in_origin)}.")
+                diff_results.append(
+                    f"The following fields are in {other_relationship.name} dataset in the other GDB but not in the origin GDB: {', '.join(field_missing_in_origin)}."
+                )
 
             field_missing_in_other = origin_field_names.difference(other_field_names)
             if field_missing_in_other:
-                diff_results.append(f"The following fields are in {self.name} dataset in the origin GDB but not in the other GDB: {', '.join(field_missing_in_other)}.")
-
+                diff_results.append(
+                    f"The following fields are in {self.name} dataset in the origin GDB but not in the other GDB: {', '.join(field_missing_in_other)}."
+                )
 
         origin_diff_results = self.origin.diff(other_relationship.origin, self.name)
         diff_results.extend(origin_diff_results)

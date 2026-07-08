@@ -35,7 +35,7 @@ def _is_archived(dts_desc) -> bool:
     return is_archived
 
 
-def _get_key(keys:tuple[str, str], role:str) -> str:
+def _get_key(keys: tuple[str, str], role: str) -> str:
     """Get the relationship key that matches the role.
 
     Args:
@@ -55,7 +55,7 @@ def _get_key(keys:tuple[str, str], role:str) -> str:
     return name
 
 
-def _split_dataset_name(geodatabase:"Geodatabase", dataset_desc) -> tuple[str, Union[str, None]]:
+def _split_dataset_name(geodatabase: "Geodatabase", dataset_desc) -> tuple[str, Union[str, None]]:
     """Split a dataset name into its schema and dataset name components, dropping the database name.
 
     Args:
@@ -76,7 +76,7 @@ def _split_dataset_name(geodatabase:"Geodatabase", dataset_desc) -> tuple[str, U
     return (name, schema)
 
 
-def parse_full_geodatabase(source:str) -> None:
+def parse_full_geodatabase(source: str) -> None:
     """Parse the entire geodatabase into a Geodatabase structure.
 
     Args:
@@ -118,7 +118,7 @@ def parse_geodatabase(gdb_desc) -> "Geodatabase":
     )
 
 
-def parse_domains(geodatabase:"Geodatabase", gdb_desc):
+def parse_domains(geodatabase: "Geodatabase", gdb_desc):
     """Read all domains in a geodatabase and them to Geodatabase structure.
 
     Args:
@@ -130,7 +130,7 @@ def parse_domains(geodatabase:"Geodatabase", gdb_desc):
 
     for dm_desc in domains_desc:
         try:
-            domain:"Domains" = geodatabase.domains.new(
+            domain: "Domains" = geodatabase.domains.new(
                 name=dm_desc.name,
                 description=dm_desc.description,
                 field_type=ap2st.domain_field_types[dm_desc.type],
@@ -145,11 +145,11 @@ def parse_domains(geodatabase:"Geodatabase", gdb_desc):
                 for code, value in dm_desc.codedValues.items():
                     domain.codes.new(code, value)
         except Exception as exc:
-            #pylint: disable-next=broad-exception-raised
+            # pylint: disable-next=broad-exception-raised
             raise Exception(f"Failure while reading domain {dm_desc.name}.") from exc
 
 
-def walk_gdb(geodatabase:"Geodatabase", gdb_desc):
+def walk_gdb(geodatabase: "Geodatabase", gdb_desc):
     """Walk through all feature datasets and datasets in the geodatabase and add them to the geodatabase structure.
 
     Args:
@@ -168,7 +168,7 @@ def walk_gdb(geodatabase:"Geodatabase", gdb_desc):
     walk_datasets(geodatabase, root_descs)
 
 
-def parse_feature_dataset(geodatabase:"Geodatabase", feat_dts_desc):
+def parse_feature_dataset(geodatabase: "Geodatabase", feat_dts_desc):
     """Read a feature dataset's info and add it to the geodatabase structure.
 
     Args:
@@ -182,7 +182,7 @@ def parse_feature_dataset(geodatabase:"Geodatabase", feat_dts_desc):
     walk_datasets(geodatabase, feat_dts_desc.children, feature_dataset)
 
 
-def walk_datasets(geodatabase:"Geodatabase", dts_descs, feature_dataset:"FeatureDataset"=None):
+def walk_datasets(geodatabase: "Geodatabase", dts_descs, feature_dataset: "FeatureDataset" = None):
     """Walk through the datasets, adding each to the geodatabase structure.
 
     Args:
@@ -205,12 +205,11 @@ def walk_datasets(geodatabase:"Geodatabase", dts_descs, feature_dataset:"Feature
         else:
             warnings.warn(f"Encountered a {dts_desc.dataType} dataset which are not supported.")
 
-
     for rel_cl_desc in relationships:
         parse_relationship_class(geodatabase, rel_cl_desc, feature_dataset)
 
 
-def parse_table(geodatabase:"Geodatabase", table_desc, feature_dataset:"FeatureDataset"=None):
+def parse_table(geodatabase: "Geodatabase", table_desc, feature_dataset: "FeatureDataset" = None):
     """Read a table from a geodatabase adding it to a geodatabase structure.
 
     Args:
@@ -231,24 +230,26 @@ def parse_table(geodatabase:"Geodatabase", table_desc, feature_dataset:"FeatureD
             oid_is_64=getattr(table_desc, "hasOID64", None),
             dsid=table_desc.DSID,
             meta_summary=gdb_metadata.get_dataset_summary(table_desc),
+            meta_description=gdb_metadata.get_dataset_description(table_desc),
+            meta_tags=gdb_metadata.get_dataset_tags(table_desc),
             feature_dataset=feature_dataset,
         )
         parse_dataset_fields(table, table_desc)
         parse_dataset_subtypes(table, table_desc)
 
     except Exception as exc:
-        #pylint: disable-next=broad-exception-raised
+        # pylint: disable-next=broad-exception-raised
         raise Exception(f"Failure while reading table {name}.") from exc
 
 
-def parse_feature_class(geodatabase:"Geodatabase", fc_desc, feature_dataset:"FeatureDataset"=None):
+def parse_feature_class(geodatabase: "Geodatabase", fc_desc, feature_dataset: "FeatureDataset" = None):
     """Read a feature class from arcpy and add it to a geodatabase structure.
 
     Args:
         geodatabase (Geodatabase): Geodatabase structure in which datasets will be added.
         fc_desc (arcpy describe): Feature class to be parsed.
         feature_dataset (arcpy describe, optional): Feature dataset to which the feature class belongs. Defaults to None.
-    """ #pylint: disable=line-too-long
+    """  # pylint: disable=line-too-long
 
     name, schema = _split_dataset_name(geodatabase, fc_desc)
 
@@ -266,22 +267,25 @@ def parse_feature_class(geodatabase:"Geodatabase", fc_desc, feature_dataset:"Fea
             oid_is_64=getattr(fc_desc, "hasOID64", None),
             dsid=fc_desc.DSID,
             meta_summary=gdb_metadata.get_dataset_summary(fc_desc),
+            meta_description=gdb_metadata.get_dataset_description(fc_desc),
+            meta_tags=gdb_metadata.get_dataset_tags(fc_desc),
             feature_dataset=feature_dataset,
         )
         parse_dataset_fields(feature_class, fc_desc)
         parse_dataset_subtypes(feature_class, fc_desc)
     except Exception as exc:
-        #pylint: disable-next=broad-exception-raised
+        # pylint: disable-next=broad-exception-raised
         raise Exception(f"Failure while reading featureclass {name}.") from exc
 
-def parse_relationship_class(geodatabase:"Geodatabase", rel_cl_desc, feature_dataset:"FeatureDataset"=None):
+
+def parse_relationship_class(geodatabase: "Geodatabase", rel_cl_desc, feature_dataset: "FeatureDataset" = None):
     """Read a relationship class and add it to a geodatabase structure. Must be done after the related tables and feature classes have been added.
 
     Args:
         geodatabase (Geodatabase): Geodatabase structure in which datasets will be added.
         table_desc (arcpy describe): Table to be parsed.
         feature_dataset (arcpy describe, optional): Feature dataset to which the table belongs. Defaults to None.
-    """ #pylint: disable=line-too-long
+    """  # pylint: disable=line-too-long
 
     name, schema = _split_dataset_name(geodatabase, rel_cl_desc)
 
@@ -313,16 +317,19 @@ def parse_relationship_class(geodatabase:"Geodatabase", rel_cl_desc, feature_dat
             oid_is_64=getattr(rel_cl_desc, "hasOID64", False),
             dsid=None if rel_cl_desc.DSID == -1 else rel_cl_desc.DSID,
             meta_summary=gdb_metadata.get_dataset_summary(rel_cl_desc),
+            meta_description=gdb_metadata.get_dataset_description(rel_cl_desc),
+            meta_tags=gdb_metadata.get_dataset_tags(rel_cl_desc),
             feature_dataset=feature_dataset,
         )
 
         parse_dataset_fields(relationship, rel_cl_desc)
         parse_dataset_subtypes(relationship, rel_cl_desc)
     except Exception as exc:
-        #pylint: disable-next=broad-exception-raised
+        # pylint: disable-next=broad-exception-raised
         raise Exception(f"Failure while reading relationship {name}.") from exc
 
-def parse_dataset_fields(dataset:"Datasets", dataset_desc):
+
+def parse_dataset_fields(dataset: "Datasets", dataset_desc):
     """Read the fields and add them to a dataset structure.
 
     Args:
@@ -373,10 +380,11 @@ def parse_dataset_fields(dataset:"Datasets", dataset_desc):
             if domain and domain.domain_type == "CODED":
                 parse_domain_metadata(domain, dataset_desc, field_desc.name)
         except Exception as exc:
-            #pylint: disable-next=broad-exception-raised
+            # pylint: disable-next=broad-exception-raised
             raise Exception(f"Failure while reading {dataset.name}.{field_desc.name} field.") from exc
 
-def parse_domain_metadata(domain:"Domains", dataset_desc, field_name:str):
+
+def parse_domain_metadata(domain: "Domains", dataset_desc, field_name: str):
     """Update the coded value domain summary with the definitions pulled from the field metadata.
 
     Args:
@@ -391,11 +399,11 @@ def parse_domain_metadata(domain:"Domains", dataset_desc, field_name:str):
             if domain.test_value(converted_code):
                 domain.codes[converted_code].meta_summary = summary
     except Exception as exc:
-            #pylint: disable-next=broad-exception-raised
+        # pylint: disable-next=broad-exception-raised
         raise Exception(f"Failure while reading {dataset_desc.name}.{field_name} coded domains.") from exc
 
 
-def parse_dataset_subtypes(dataset:"Datasets", dataset_desc):
+def parse_dataset_subtypes(dataset: "Datasets", dataset_desc):
     """Read the subtypes and add them to a dataset structure.
 
     Args:
@@ -408,9 +416,9 @@ def parse_dataset_subtypes(dataset:"Datasets", dataset_desc):
         subtypes_desc = arcpy.da.ListSubtypes(dataset_desc.catalogPath)
     except SystemError as exc:
         if dataset.dataset_type == "RelationshipClass":
-            return # happens on some non-attributed rel-classes
+            return  # happens on some non-attributed rel-classes
         raise exc
-    subtypes_field_name = next(iter(subtypes_desc.values()))['SubtypeField']
+    subtypes_field_name = next(iter(subtypes_desc.values()))["SubtypeField"]
 
     if len(subtypes_field_name) > 0:
         subtypes = dataset.set_subtype(dataset.fields[subtypes_field_name])
@@ -428,5 +436,5 @@ def parse_dataset_subtypes(dataset:"Datasets", dataset_desc):
                         if domain_desc is not None:
                             subfield_props.domain = dataset.geodatabase.domains[domain_desc.name]
         except Exception as exc:
-            #pylint: disable-next=broad-exception-raised
+            # pylint: disable-next=broad-exception-raised
             raise Exception(f"Failure while reading {dataset_desc.name}.{code} subtype.") from exc

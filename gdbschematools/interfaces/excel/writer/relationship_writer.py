@@ -23,12 +23,11 @@ class RelationshipsWriter(GDBWriterWithFields):
     """
 
     element_type = "relationship class"
-    _dropdown_relationship_type:cellar.CellDropdown = None
-    _dropdown_notifications:cellar.CellDropdown = None
-    _dropdown_cardinality:cellar.CellDropdown = None
-    _dropdown_boolean:cellar.CellDropdown = None
-    _column_widths:list[int] = [25,15,80,25,22,15,12,11,11,11,10]
-
+    _dropdown_relationship_type: cellar.CellDropdown = None
+    _dropdown_notifications: cellar.CellDropdown = None
+    _dropdown_cardinality: cellar.CellDropdown = None
+    _dropdown_boolean: cellar.CellDropdown = None
+    _column_widths: list[int] = [25, 15, 80, 25, 22, 15, 12, 11, 11, 11, 10]
 
     def _prepare_dropdowns(self):
         """Create the dropdowns for re-use throughout the workbook."""
@@ -53,8 +52,7 @@ class RelationshipsWriter(GDBWriterWithFields):
 
         self._dropdown_boolean = cellar.get_dropdown_boolean(self.workbook)
 
-
-    def _create_template(self, visible:bool=False):
+    def _create_template(self, visible: bool = False):
         super()._create_template(visible)
 
         # Populate with empty data
@@ -66,22 +64,40 @@ class RelationshipsWriter(GDBWriterWithFields):
                 del idx
                 field_writer.add_entry(None)
 
-        subtype_writer = self.subtype_adder(self.TEMPLATE_TITLE, None,
-                                            fields_table_coordinates=field_writer.coordinates)
+        subtype_writer = self.subtype_adder(
+            self.TEMPLATE_TITLE, None, fields_table_coordinates=field_writer.coordinates
+        )
         with subtype_writer:
             for idx in range(5):
                 del idx
                 subtype_writer.add_entry(None, None)
 
-
-    #pylint: disable=too-many-arguments,too-many-locals
-    def populate_core_info(self, relationship_name:str, schema:str=None, feature_dataset_name:str=None,
-                           summary:str=None, relationship_type:str=None, origin_table_name:str=None,
-                           destination_table_name:str=None, forward_label:str=None, backward_label:str=None,
-                           origin_primary_key:str=None, origin_foreign_key:str=None, destination_primary_key:str=None,
-                           destination_foreign_key:str=None, notifications:str=None, cardinality:str=None,
-                           attributed:str=None, oid_is_64:str=None, is_archived:str=None, is_versioned:str=None,
-                           dsid:int=None):
+    # pylint: disable=too-many-arguments,too-many-locals
+    def populate_core_info(
+        self,
+        relationship_name: str,
+        schema: str = None,
+        feature_dataset_name: str = None,
+        summary: str = None,
+        description: str = None,
+        tags: str = None,
+        relationship_type: str = None,
+        origin_table_name: str = None,
+        destination_table_name: str = None,
+        forward_label: str = None,
+        backward_label: str = None,
+        origin_primary_key: str = None,
+        origin_foreign_key: str = None,
+        destination_primary_key: str = None,
+        destination_foreign_key: str = None,
+        notifications: str = None,
+        cardinality: str = None,
+        attributed: str = None,
+        oid_is_64: str = None,
+        is_archived: str = None,
+        is_versioned: str = None,
+        dsid: int = None,
+    ):
         """Populate the core information about the relationship.
 
         Args:
@@ -89,6 +105,8 @@ class RelationshipsWriter(GDBWriterWithFields):
             schema (str, optional): Schema to which the relationship class belongs. Defaults to None.
             feature_dataset_name (str, optional): Name of the feature dataset in which the relationship is contained. Defaults to None.
             summary (str, optional): Metadata summary describing the relationship class. Defaults to None.
+            description (str, optional): Metadata description for the relationship class. Defaults to None.
+            tags (str, optional): Metadata tags for the relationship class. Defaults to None.
             relationship_type (str, optional): Whether simple or composite. Defaults to None.
             origin_table_name (str, optional): Name of the origin table. Defaults to None.
             destination_table_name (str, optional): Name of the destination table. Defaults to None.
@@ -105,7 +123,7 @@ class RelationshipsWriter(GDBWriterWithFields):
             is_archived (str, optional): Whether archiving is enabled. Defaults to None.
             is_versioned (str, optional): Whether versioning is enabled. Defaults to None.
             dsid (int, optional): Dataset's unique ID. Defaults to None.
-        """ #pylint: disable=line-too-long
+        """  # pylint: disable=line-too-long
 
         cw = self.cw_lookup[relationship_name]
 
@@ -114,33 +132,53 @@ class RelationshipsWriter(GDBWriterWithFields):
             relationship_name = None
             skip_links = True
 
-        coordinates = cw.write_block(value_block=[
-            [
-                # empty row
-            ], [
-                "Name",
-                (relationship_name, cellar.CELL_RULE_TEXT_MIN_3),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Schema",
-                schema,
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Feature Dataset",
-                feature_dataset_name,
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Summary",
-                (summary, cellar.CELL_OPTS_WRAP),
-                cellar.MERGE_CELL_WITH_LEFT,
+        coordinates = cw.write_block(
+            value_block=[
+                [
+                    # empty row
+                ],
+                [
+                    "Name",
+                    (relationship_name, cellar.CELL_RULE_TEXT_MIN_3),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Schema",
+                    schema,
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Feature Dataset",
+                    feature_dataset_name,
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Summary",
+                    (summary, cellar.CELL_OPTS_WRAP),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Description",
+                    (description, cellar.CELL_OPTS_WRAP),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Tags",
+                    (tags, cellar.CELL_OPTS_WRAP),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
             ],
-        ], default_cell_options=[
-            cellar.CELL_OPTS_KEY,
-            cellar.CELL_OPTS_TEXT,
-        ])
+            default_cell_options=[
+                cellar.CELL_OPTS_KEY,
+                cellar.CELL_OPTS_TEXT,
+            ],
+        )
 
-        row_with_summary = coordinates[1][0]
+        base_row = coordinates[0][0]
+        row_with_summary = base_row + 4
+        row_with_description = base_row + 5
         cw.increase_basic_height(row_with_summary, factor=2)
+        cw.increase_basic_height(row_with_description, factor=2)
 
         origin_table_options = None
         destination_table_options = None
@@ -166,73 +204,92 @@ class RelationshipsWriter(GDBWriterWithFields):
             formula=f'AND(ISBLANK(<coordinate>) = FALSE, B{row_with_cardinality} <> "Many to Many", B{row_with_attributed} <> "yes")'
         )
 
-        cw.write_block(start_col=1, value_block=[
-            [
-                "Relationship Type",
-                (relationship_type, cellar.CELL_RULE_NOT_BLANK, self._dropdown_relationship_type),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Origin Table",
-                (origin_table_name, origin_table_options, cellar.CELL_RULE_NOT_BLANK),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Destination Table",
-                (destination_table_name, destination_table_options, cellar.CELL_RULE_NOT_BLANK),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Forward Label",
-                (forward_label, cellar.CELL_RULE_NOT_BLANK),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Backward Label",
-                (backward_label, cellar.CELL_RULE_NOT_BLANK),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Origin Primary Key",
-                (origin_primary_key, cellar.CELL_RULE_NOT_BLANK),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Origin Foreign Key",
-                (origin_foreign_key, cellar.CELL_RULE_NOT_BLANK),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Destination Primary Key",
-                (destination_primary_key, rule_empty_if_attributed_or_many, rule_filled_if_not_attributed_or_many),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Destination Foreign Key",
-                (destination_foreign_key, rule_empty_if_attributed_or_many, rule_filled_if_not_attributed_or_many),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Notifications",
-                (notifications, self._dropdown_notifications),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Cardinality",
-                (cardinality, self._dropdown_cardinality),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Is Attributed",
-                (attributed, self._dropdown_boolean),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "64-bit OID",
-                (oid_is_64, self._dropdown_boolean),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Is Archived",
-                (is_archived, self._dropdown_boolean),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "Is Versioned",
-                (is_versioned, self._dropdown_boolean),
-                cellar.MERGE_CELL_WITH_LEFT,
-            ], [
-                "DSID",
-                (dsid, cellar.CELL_OPTS_INTEGER_LEFT),
-                cellar.MERGE_CELL_WITH_LEFT,
+        cw.write_block(
+            start_col=1,
+            value_block=[
+                [
+                    "Relationship Type",
+                    (relationship_type, cellar.CELL_RULE_NOT_BLANK, self._dropdown_relationship_type),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Origin Table",
+                    (origin_table_name, origin_table_options, cellar.CELL_RULE_NOT_BLANK),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Destination Table",
+                    (destination_table_name, destination_table_options, cellar.CELL_RULE_NOT_BLANK),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Forward Label",
+                    (forward_label, cellar.CELL_RULE_NOT_BLANK),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Backward Label",
+                    (backward_label, cellar.CELL_RULE_NOT_BLANK),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Origin Primary Key",
+                    (origin_primary_key, cellar.CELL_RULE_NOT_BLANK),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Origin Foreign Key",
+                    (origin_foreign_key, cellar.CELL_RULE_NOT_BLANK),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Destination Primary Key",
+                    (destination_primary_key, rule_empty_if_attributed_or_many, rule_filled_if_not_attributed_or_many),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Destination Foreign Key",
+                    (destination_foreign_key, rule_empty_if_attributed_or_many, rule_filled_if_not_attributed_or_many),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Notifications",
+                    (notifications, self._dropdown_notifications),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Cardinality",
+                    (cardinality, self._dropdown_cardinality),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Is Attributed",
+                    (attributed, self._dropdown_boolean),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "64-bit OID",
+                    (oid_is_64, self._dropdown_boolean),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Is Archived",
+                    (is_archived, self._dropdown_boolean),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "Is Versioned",
+                    (is_versioned, self._dropdown_boolean),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
+                [
+                    "DSID",
+                    (dsid, cellar.CELL_OPTS_INTEGER_LEFT),
+                    cellar.MERGE_CELL_WITH_LEFT,
+                ],
             ],
-        ], default_cell_options=[
-            cellar.CELL_OPTS_KEY,
-            cellar.CELL_OPTS_TEXT,
-        ])
+            default_cell_options=[
+                cellar.CELL_OPTS_KEY,
+                cellar.CELL_OPTS_TEXT,
+            ],
+        )

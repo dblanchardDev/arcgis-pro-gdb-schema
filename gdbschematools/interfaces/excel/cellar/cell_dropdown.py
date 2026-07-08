@@ -124,6 +124,7 @@ class CellDropdown:
             type="list",
             formula1=f"={self._range_name}",
             showInputMessage=False,
+            showErrorMessage=True,
             allow_blank=True,
             errorTitle=error_title,
             error=message,

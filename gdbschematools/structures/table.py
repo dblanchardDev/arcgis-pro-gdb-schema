@@ -28,45 +28,64 @@ class Table(Dataset):
         dsid (int, optional): Dataset's identifier in enterprise geodatabases. Defaults to None.
         meta_summary (str, optional): Metadata summary for the geodatabase. Defaults to None.
         feature_dataset (FeatureDataset, optional): Feature dataset that contains this table. Defaults to None.
+        meta_tags (str, optional): Comma-separated list of tags to assign to the dataset. Defaults to None.
+        meta_description (str, optional): Description of the dataset. Defaults to None.
     """
 
-    _relationship_classes:Accessor = None
-    _subtype_field_name:str = None
-    _subtype_default_code:str = None
+    _relationship_classes: Accessor = None
+    _subtype_field_name: str = None
+    _subtype_default_code: str = None
 
-
-    #pylint: disable=too-many-arguments
-    def __init__(self, name:str, alias:str=None, schema:Union[str, None]=None, is_archived:bool=False,
-                 is_versioned:bool=False, oid_is_64:bool=None, dsid:int=None, meta_summary:str=None,
-                 feature_dataset:"FeatureDataset"=None) -> None:
+    # pylint: disable=too-many-arguments
+    def __init__(
+        self,
+        name: str,
+        alias: str = None,
+        schema: Union[str, None] = None,
+        is_archived: bool = False,
+        is_versioned: bool = False,
+        oid_is_64: bool = None,
+        dsid: int = None,
+        meta_summary: str = None,
+        meta_description: str = None,
+        meta_tags: str = None,
+        feature_dataset: "FeatureDataset" = None,
+    ) -> None:
 
         if self.dataset_type is None:
             self.dataset_type = "Table"
 
-        super().__init__(name, schema, is_archived, is_versioned, oid_is_64, dsid, meta_summary, feature_dataset)
+        super().__init__(
+            name,
+            schema,
+            is_archived,
+            is_versioned,
+            oid_is_64,
+            dsid,
+            meta_summary,
+            meta_description,
+            meta_tags,
+            feature_dataset,
+        )
 
         self.alias = alias if alias is not None else name
         self._relationship_classes = Accessor()
-
 
     @property
     def alias(self) -> str:
         """Alternative name for the dataset used for labelling."""
         return self._alias
 
-
     @alias.setter
-    def alias(self, value:str):
+    def alias(self, value: str):
         self._alias = validation.string(value, "dataset alias", min_len=3, max_len=100)
-
 
     @property
     def relationship_classes(self) -> Accessor:
         """Relationship classes in which this table participates."""
         return self._relationship_classes
 
-
-    def _register_relationship_classes(self, relationship_class:"Relationship"):
+    def _register_relationship_classes(self, relationship_class: "Relationship"):
         """Register a table as participating in a relationship class.
 
         Args:
@@ -74,9 +93,9 @@ class Table(Dataset):
         """
         if not validation.is_structure_instance(relationship_class, "Relationship"):
             raise TypeError("Table's relationship class must be an instance of Relationship class.")
-        self._relationship_classes._append(relationship_class) #pylint: disable=protected-access
+        self._relationship_classes._append(relationship_class)  # pylint: disable=protected-access
 
-    def diff(self, other_dataset:"Table") -> list:
+    def diff(self, other_dataset: "Table") -> list:
         """checks alias match between two tables and add the difference to a list.
 
         Args:
@@ -85,8 +104,10 @@ class Table(Dataset):
         Returns:
             list: a list of difference between two tables
         """
-        diff_results =super().diff(other_dataset)
+        diff_results = super().diff(other_dataset)
         if self.alias != other_dataset.alias:
-            diff_results.append(f"The alias of {self.name} table in the origin gdb is different than {other_dataset.name} table in the other gdb.")
+            diff_results.append(
+                f"The alias of {self.name} table in the origin gdb is different than {other_dataset.name} table in the other gdb."
+            )
 
         return diff_results

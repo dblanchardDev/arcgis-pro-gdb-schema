@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from .writer.gdb_writer import GDBWriterWithFields
 
 
-def _generate_spatial_ref_label(spatial_ref:Union["SpatialReference", "SpatialReference.VCS"]) -> str:
+def _generate_spatial_ref_label(spatial_ref: Union["SpatialReference", "SpatialReference.VCS"]) -> str:
     """Produce a label from a spatial reference object.
 
     Args:
@@ -40,7 +40,7 @@ def _generate_spatial_ref_label(spatial_ref:Union["SpatialReference", "SpatialRe
     return label
 
 
-def _derive_workbook_paths(output_dir:str, gdb_name:str) -> tuple[str]:
+def _derive_workbook_paths(output_dir: str, gdb_name: str) -> tuple[str]:
     """Create file paths for all workbooks with the same timestamp and location.
 
     Args:
@@ -59,8 +59,9 @@ def _derive_workbook_paths(output_dir:str, gdb_name:str) -> tuple[str]:
     )
 
 
-def output_excel(gdb:"Geodatabase", output_dir:str, template_visible:bool=False,
-                 skip_unchanged_fields:bool=True) -> tuple[str]:
+def output_excel(
+    gdb: "Geodatabase", output_dir: str, template_visible: bool = False, skip_unchanged_fields: bool = True
+) -> tuple[str]:
     """Write all 3 spreadsheets (datasets, domains, relationships) from a geodatabase structure.
 
     Args:
@@ -77,7 +78,7 @@ def output_excel(gdb:"Geodatabase", output_dir:str, template_visible:bool=False,
     arcpy.SetProgressor("default", "Preparing spreadsheets.")
 
     # Get paths
-    (datasets_path, domains_path, relationships_path) = _derive_workbook_paths(output_dir, gdb.name)
+    datasets_path, domains_path, relationships_path = _derive_workbook_paths(output_dir, gdb.name)
 
     # Create all the workbooks
     database_name = gdb.name
@@ -85,21 +86,24 @@ def output_excel(gdb:"Geodatabase", output_dir:str, template_visible:bool=False,
     remote_server = gdb.server
     summary = gdb.meta_summary
 
-    datasets_writer = DatasetsWriter(datasets_path, database_name, workspace_type, remote_server, summary,
-                                     template_visible)
-    dataset:"Datasets" = None
+    datasets_writer = DatasetsWriter(
+        datasets_path, database_name, workspace_type, remote_server, summary, template_visible
+    )
+    dataset: "Datasets" = None
     for dataset in gdb.datasets.tables_and_feature_classes:
         datasets_writer.prepare_sheet(dataset.name, dataset.alias)
 
-    domains_writer = DomainsWriter(domains_path, database_name, workspace_type, remote_server, summary,
-                                   template_visible)
-    domain:"Domains" = None
+    domains_writer = DomainsWriter(
+        domains_path, database_name, workspace_type, remote_server, summary, template_visible
+    )
+    domain: "Domains" = None
     for domain in gdb.domains:
         domains_writer.prepare_sheet(domain.name)
 
-    relationships_writer = RelationshipsWriter(relationships_path, database_name, workspace_type, remote_server,
-                                                   summary, template_visible)
-    relationship:"Relationship" = None
+    relationships_writer = RelationshipsWriter(
+        relationships_path, database_name, workspace_type, remote_server, summary, template_visible
+    )
+    relationship: "Relationship" = None
     for relationship in gdb.datasets.relationship_classes:
         relationships_writer.prepare_sheet(relationship.name)
 
@@ -126,7 +130,7 @@ def output_excel(gdb:"Geodatabase", output_dir:str, template_visible:bool=False,
     return (datasets_path, domains_path, relationships_path)
 
 
-def _populate_datasets_workbook(writer:DatasetsWriter, gdb:"Geodatabase", skip_unchanged_fields:bool=True):
+def _populate_datasets_workbook(writer: DatasetsWriter, gdb: "Geodatabase", skip_unchanged_fields: bool = True):
     """Populate the datasets workbook with dataset base info, fields, subtypes, and relationship classes participation.
 
     Args:
@@ -149,6 +153,8 @@ def _populate_datasets_workbook(writer:DatasetsWriter, gdb:"Geodatabase", skip_u
                     alias=ds.alias,
                     feature_dataset_name=ds.feature_dataset.name if ds.feature_dataset else None,
                     summary=ds.meta_summary,
+                    description=ds.meta_description if ds.meta_description else None,
+                    tags=ds.meta_tags if ds.meta_tags else None,
                     dataset_type=st2xl.dataset_types[ds.dataset_type],
                     oid_is_64=st2xl.boolean[ds.oid_is_64],
                     is_archived=st2xl.boolean[ds.is_archived],
@@ -168,15 +174,15 @@ def _populate_datasets_workbook(writer:DatasetsWriter, gdb:"Geodatabase", skip_u
                 # Populate the list of relationship classes
                 if len(ds.relationship_classes) > 0:
                     with writer.in_relationships_adder(ds.name) as in_relationships_writer:
-                        rs:"Relationship" = None
+                        rs: "Relationship" = None
                         for rs in ds.relationship_classes:
                             in_relationships_writer.add_entry(rs.name)
             except Exception as exc:
-                #pylint: disable-next=broad-exception-raised
+                # pylint: disable-next=broad-exception-raised
                 raise Exception(f"Failure while writing dataset {ds.name} to excel spreadsheet.") from exc
 
 
-def _populate_domains_workbook(writer:DomainsWriter, gdb:"Geodatabase"):
+def _populate_domains_workbook(writer: DomainsWriter, gdb: "Geodatabase"):
     """Populate the domains workbook with domain base info, ranges, coded values, and users.
 
     Args:
@@ -186,7 +192,7 @@ def _populate_domains_workbook(writer:DomainsWriter, gdb:"Geodatabase"):
     arcpy.SetProgressorLabel("Writing domains spreadsheet.")
 
     with writer:
-        domain:"Domains" = None
+        domain: "Domains" = None
         for domain in gdb.domains:
             try:
                 # Populate the base info
@@ -210,9 +216,9 @@ def _populate_domains_workbook(writer:DomainsWriter, gdb:"Geodatabase"):
 
                 elif domain.domain_type == "CODED":
                     with writer.code_adder(domain.name) as code_writer:
-                        code:"CodesTypes" = None
+                        code: "CodesTypes" = None
                         for code in domain.codes:
-                            code_info:"Code" = domain.codes[code]
+                            code_info: "Code" = domain.codes[code]
 
                             code_writer.add_entry(
                                 code=value_to_cell(code, domain.field_type),
@@ -221,8 +227,8 @@ def _populate_domains_workbook(writer:DomainsWriter, gdb:"Geodatabase"):
                             )
 
                 # Populate list of domain users
-                all_datasets:list["Datasets"] = []
-                field:"Field" = None
+                all_datasets: list["Datasets"] = []
+                field: "Field" = None
                 for field in domain.fields:
                     if field.dataset not in all_datasets:
                         all_datasets.append(field.dataset)
@@ -232,11 +238,13 @@ def _populate_domains_workbook(writer:DomainsWriter, gdb:"Geodatabase"):
                     for dataset in all_datasets:
                         user_writer.add_entry(base_name=dataset.name)
             except Exception as exc:
-                #pylint: disable-next=broad-exception-raised
+                # pylint: disable-next=broad-exception-raised
                 raise Exception(f"Failure while writing domain {domain.name} to excel spreadsheet.") from exc
 
 
-def _populate_relationships_workbook(writer:RelationshipsWriter, gdb:"Geodatabase", skip_unchanged_fields:bool=True):
+def _populate_relationships_workbook(
+    writer: RelationshipsWriter, gdb: "Geodatabase", skip_unchanged_fields: bool = True
+):
     """Populate the relationships workbook with relationship classes base info, fields, and subtypes.
 
     Args:
@@ -248,7 +256,7 @@ def _populate_relationships_workbook(writer:RelationshipsWriter, gdb:"Geodatabas
     arcpy.SetProgressorLabel("Writing relationships spreadsheet.")
 
     with writer:
-        rel:"Relationship" = None
+        rel: "Relationship" = None
         for rel in gdb.datasets.relationship_classes:
             try:
                 # Populate the base info
@@ -257,6 +265,8 @@ def _populate_relationships_workbook(writer:RelationshipsWriter, gdb:"Geodatabas
                     schema=rel.schema,
                     feature_dataset_name=rel.feature_dataset.name if rel.feature_dataset else None,
                     summary=rel.meta_summary,
+                    description=rel.meta_description if rel.meta_description else None,
+                    tags=rel.meta_tags if rel.meta_tags else None,
                     relationship_type=st2xl.relationship_types[rel.relationship_type],
                     origin_table_name=rel.origin.table.name,
                     destination_table_name=rel.destination.table.name,
@@ -280,11 +290,11 @@ def _populate_relationships_workbook(writer:RelationshipsWriter, gdb:"Geodatabas
                     fields_table_coordinates = _populate_fields(writer, rel)
                     _populate_subtype(writer, rel, fields_table_coordinates, skip_unchanged_fields)
             except Exception as exc:
-                #pylint: disable-next=broad-exception-raised
+                # pylint: disable-next=broad-exception-raised
                 raise Exception(f"Failure while writing relationship {rel.name} to excel spreadsheet.") from exc
 
 
-def _populate_fields(writer:"GDBWriterWithFields", ds:"Datasets") -> list[list[int]]:
+def _populate_fields(writer: "GDBWriterWithFields", ds: "Datasets") -> list[list[int]]:
     """Populate the fields for a dataset.
 
     Args:
@@ -295,7 +305,7 @@ def _populate_fields(writer:"GDBWriterWithFields", ds:"Datasets") -> list[list[i
         list[list[int]]: Coordinates for the fields table.
     """
     with writer.field_adder(ds.name) as field_writer:
-        field:"Field" = None
+        field: "Field" = None
         for field in ds.fields:
             default_type = str
             try:
@@ -318,14 +328,18 @@ def _populate_fields(writer:"GDBWriterWithFields", ds:"Datasets") -> list[list[i
                     default_type=default_type,
                 )
             except Exception as exc:
-                #pylint: disable-next=broad-exception-raised
+                # pylint: disable-next=broad-exception-raised
                 raise Exception(f"Failure while writing {ds.name}.{field.name} field to excel spreadsheet.") from exc
 
     return field_writer.coordinates
 
 
-def _populate_subtype(writer:"GDBWriterWithFields", ds:"Datasets", fields_table_coordinate:list[list[int]]=None,
-                      skip_unchanged_fields:bool=True):
+def _populate_subtype(
+    writer: "GDBWriterWithFields",
+    ds: "Datasets",
+    fields_table_coordinate: list[list[int]] = None,
+    skip_unchanged_fields: bool = True,
+):
     """Populate the subtypes for a dataset.
 
     Args:
@@ -333,7 +347,7 @@ def _populate_subtype(writer:"GDBWriterWithFields", ds:"Datasets", fields_table_
         ds (Datasets): Structure for the feature class, table, or relationship class.
         fields_table_coordinate (list[list[int]], optional): Coordinates for the fields table allowing for cross-validation. If not provided, cross-validation will not be applied.
         skip_unchanged_fields (bool, optional): Whether to skip fields that don't have a domain or default value set for the subtype.
-    """ #pylint: disable=line-too-long
+    """  # pylint: disable=line-too-long
 
     if ds.subtype:
         with writer.subtype_adder(ds.name, ds.subtype.field.name, fields_table_coordinate) as subtype_writer:
@@ -342,10 +356,10 @@ def _populate_subtype(writer:"GDBWriterWithFields", ds:"Datasets", fields_table_
             for code in ds.subtype.codes:
                 try:
                     subtype_code_printed = False
-                    code_details:"SubtypeProperties" = ds.subtype.codes[code]
+                    code_details: "SubtypeProperties" = ds.subtype.codes[code]
 
                     # Loop through each field
-                    field_props:"SubtypeFieldProperties" = None
+                    field_props: "SubtypeFieldProperties" = None
                     for field_props in code_details.field_props:
 
                         # Skip fields with no changes
@@ -371,5 +385,5 @@ def _populate_subtype(writer:"GDBWriterWithFields", ds:"Datasets", fields_table_
                             summary=code_details.meta_summary,
                         )
                 except Exception as exc:
-                    #pylint: disable-next=broad-exception-raised
+                    # pylint: disable-next=broad-exception-raised
                     raise Exception(f"Failure while writing subtype {ds.name}.{code} to excel spreadsheet.") from exc

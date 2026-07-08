@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from .field import Field
 
 
-class Subtype():
+class Subtype:
     """Description of the subtypes applied to a dataset.
 
     Args:
@@ -25,12 +25,11 @@ class Subtype():
         field (Field): Field in which the subtype is stored.
     """
 
-    _dataset:"Dataset" = None
-    _codes:SubtypeCodeAccessor = None
-    _field:"Field" = None
+    _dataset: "Dataset" = None
+    _codes: SubtypeCodeAccessor = None
+    _field: "Field" = None
 
-
-    def __init__(self, dataset:"Dataset", field:"Field") -> None:
+    def __init__(self, dataset: "Dataset", field: "Field") -> None:
         self._dataset = dataset
         self._codes = SubtypeCodeAccessor(self._dataset.fields)
 
@@ -41,24 +40,20 @@ class Subtype():
         if field.field_type not in ["BIGINTEGER", "SHORT", "LONG"]:
             raise TypeError("Field for subtype must be an integer (big, short, or long).")
 
-
         if not field.dataset == dataset:
             raise ValueError("Field provided for subtype is not a member of the dataset.")
 
         self._field = field
-
 
     @property
     def dataset(self) -> "Dataset":
         """Dataset to which this subtype belongs."""
         return self._dataset
 
-
     @property
     def field(self) -> "Field":
         """Field in which the subtype value is stored."""
         return self._field
-
 
     @property
     def default(self) -> int:
@@ -67,13 +62,12 @@ class Subtype():
             raise ValueError("The default values for the subtype field is not a value in the subtype codes.")
         return self._field.default
 
-
     @property
     def codes(self) -> SubtypeCodeAccessor:
         """Dictionary like accessor for the subtype codes."""
         return self._codes
 
-    def diff(self, other_subtype:"Subtype") -> list:
+    def diff(self, other_subtype: "Subtype") -> list:
         """Compares the default value and codes of two subtypes
 
         Args:
@@ -85,27 +79,34 @@ class Subtype():
         diff_results = []
 
         if self.default != other_subtype.default:
-            diff_results.append(f"The default value of {self.field.name} subtype field is {self.default} in {self.dataset.name} dataset in the origin GDB and {other_subtype.default} in the other GDB.")
+            diff_results.append(
+                f"The default value of {self.field.name} subtype field is {self.default} in {self.dataset.name} dataset in the origin GDB and {other_subtype.default} in the other GDB."
+            )
 
         origin_codes = {code for code in self.codes.keys()}
         other_codes = {code for code in other_subtype.codes.keys()}
 
         codes_missing_in_origin = other_codes.difference(origin_codes)
         if codes_missing_in_origin:
-            diff_results.append(f"The following subtype codes are in {other_subtype.dataset.name} dataset in the other GDB but not in the origin GDB: {', '.join(codes_missing_in_origin)}.")
+            diff_results.append(
+                f"The following subtype codes are in {other_subtype.dataset.name} dataset in the other GDB but not in the origin GDB: {', '.join(codes_missing_in_origin)}."
+            )
 
         codes_missing_in_other = origin_codes.difference(other_codes)
         if codes_missing_in_other:
-            diff_results.append(f"The following subtype codes are in {self.dataset.name} dataset in the origin GDB but not in the other GDB: {', '.join(codes_missing_in_other)}.")
+            diff_results.append(
+                f"The following subtype codes are in {self.dataset.name} dataset in the origin GDB but not in the other GDB: {', '.join(codes_missing_in_other)}."
+            )
 
         for code in origin_codes.intersection(other_codes):
-            origin_subtype_prop:SubtypeProperties= self.codes[code]
+            origin_subtype_prop: SubtypeProperties = self.codes[code]
             code_diff_results = origin_subtype_prop.diff(other_subtype.codes[code])
             if code_diff_results:
                 diff_results.extend(code_diff_results)
         return diff_results
 
-#pylint: disable-next=too-many-instance-attributes
+
+# pylint: disable-next=too-many-instance-attributes
 class Dataset(GDBElementWithParent):
     """The base class for all Geodatabase datasets. You wouldn't normally use this class directly. Instead, use Table,
     FeatureClass, or RelationshipClass.
@@ -118,11 +119,13 @@ class Dataset(GDBElementWithParent):
         oid_is_64 (bool, optional): Whether the OBJECTID field is a 64-bit integer. Defaults to None.
         dsid (int, optional): Dataset's identifier in enterprise geodatabases. Defaults to None.
         meta_summary (str, optional): Metadata summary for the geodatabase. Defaults to None.
+        meta_description (str, optional): Description of the dataset. Defaults to None.
+        meta_tags (str, optional): Comma-separated list of tags to assign to the dataset. Defaults to None.
         feature_dataset (FeatureDataset, optional): Feature dataset that contains this dataset. Defaults to None.
 
     Attributes:
         DATASET_TYPES (tuples[str]): Dataset types that are supported by this class.
-    """ #pylint: disable=line-too-long
+    """  # pylint: disable=line-too-long
 
     # Regular expression which validate the name
     VALID_NAME_REGEX = "^(?:[A-Za-z]|[A-Za-z][A-Za-z0-9_]{0,97}[A-Za-z0-9])$"
@@ -134,32 +137,43 @@ class Dataset(GDBElementWithParent):
         "RelationshipClass",
     )
 
-
     # Field types that are excluded from being added to this dataset type
     FIELD_TYPE_EXCLUSIONS = []
 
-
     # Instance Properties
-    _feature_dataset:"FeatureDataset" = None
-    _schema:str = None
-    _dataset_type:str = None
-    _is_archived:bool = None
-    _is_versioned:bool = None
-    _dsid:int = None
-    _meta_summary:str = None
-    _fields:FieldAccessor = None
-    _oid_is_64:bool = None
-    _subtype:Subtype = None
+    _feature_dataset: "FeatureDataset" = None
+    _schema: str = None
+    _dataset_type: str = None
+    _is_archived: bool = None
+    _is_versioned: bool = None
+    _dsid: int = None
+    _meta_summary: str = None
+    _meta_description: str = None
+    _meta_tags: str = None
+    _fields: FieldAccessor = None
+    _oid_is_64: bool = None
+    _subtype: Subtype = None
 
-
-    #pylint: disable=too-many-arguments
-    def __init__(self, name:str, schema:Union[str, None]=None, is_archived:bool=False, is_versioned:bool=False,
-                 oid_is_64:bool=None, dsid:int=None, meta_summary:str=None,
-                 feature_dataset:"FeatureDataset"=None) -> None:
+    # pylint: disable=too-many-arguments
+    def __init__(
+        self,
+        name: str,
+        schema: Union[str, None] = None,
+        is_archived: bool = False,
+        is_versioned: bool = False,
+        oid_is_64: bool = None,
+        dsid: int = None,
+        meta_summary: str = None,
+        meta_description: str = None,
+        meta_tags: str = None,
+        feature_dataset: "FeatureDataset" = None,
+    ) -> None:
 
         if self.dataset_type is None:
-            #pylint: disable-next=line-too-long
-            warnings.warn("The Dataset class should not be instantiated directly. Use the Table, FeatureClass, or RelationshipClass classes instead.")
+            # pylint: disable-next=line-too-long
+            warnings.warn(
+                "The Dataset class should not be instantiated directly. Use the Table, FeatureClass, or RelationshipClass classes instead."
+            )
 
         super().__init__(name)
         self._fields = FieldAccessor(self, self.__class__.FIELD_TYPE_EXCLUSIONS)
@@ -169,6 +183,8 @@ class Dataset(GDBElementWithParent):
         self.oid_is_64 = oid_is_64
         self.dsid = dsid
         self.meta_summary = meta_summary
+        self.meta_description = meta_description
+        self.meta_tags = meta_tags
 
         if feature_dataset is not None:
             if not validation.is_structure_instance(feature_dataset, "FeatureDataset"):
@@ -177,107 +193,109 @@ class Dataset(GDBElementWithParent):
             self._feature_dataset = feature_dataset
             feature_dataset._register_dataset(self)
 
-
     @property
     def feature_dataset(self) -> Union["FeatureDataset", None]:
         """Feature dataset this dataset is a part of."""
         return self._feature_dataset
-
 
     @property
     def dataset_type(self) -> str:
         """Type of data contained within the dataset. Valid values in Dataset.DATASET_TYPE."""
         return self._dataset_type
 
-
     @dataset_type.setter
-    def dataset_type(self, value:str):
+    def dataset_type(self, value: str):
         if self._dataset_type is not None:
             raise AttributeError("Cannot change the dataset type once set.")
         self._dataset_type = validation.string(value, "dataset type", enum=Dataset.DATASET_TYPES)
-
 
     @property
     def schema(self) -> Union[str, None]:
         """Enterprise database schema."""
         return self._schema
 
-
     @schema.setter
-    def schema(self, value:Union[str, None]):
+    def schema(self, value: Union[str, None]):
         self._schema = validation.string_or_none(value, "dataset schema", min_len=1, max_len=100)
-
 
     @property
     def is_archived(self) -> bool:
         """Whether dataset has been archived. Only for Enterprise geodatabases."""
         return self._is_archived
 
-
     @is_archived.setter
-    def is_archived(self, value:bool):
+    def is_archived(self, value: bool):
         self._is_archived = validation.boolean(value, "dataset is archived")
-
 
     @property
     def is_versioned(self) -> bool:
         """Whether the dataset has versioning turned on."""
         return self._is_versioned
 
-
     @is_versioned.setter
-    def is_versioned(self, value:bool):
+    def is_versioned(self, value: bool):
         self._is_versioned = validation.boolean(value, "dataset is versioned")
-
 
     @property
     def dsid(self) -> Union[int, None]:
         """Dataset's unique identifier."""
         return self._dsid
 
-
     @dsid.setter
-    def dsid(self, value:Union[int, None]):
-        self._dsid = validation.integer_or_none(value, "dataset DSID")    #pylint: disable-next=too-many-arguments
-
+    def dsid(self, value: Union[int, None]):
+        self._dsid = validation.integer_or_none(value, "dataset DSID")  # pylint: disable-next=too-many-arguments
 
     @property
     def meta_summary(self) -> str:
         """Dataset's metadata summary."""
         return self._meta_summary
 
-
     @meta_summary.setter
-    def meta_summary(self, value:str):
+    def meta_summary(self, value: str):
         validation.string_or_none(value, label="dataset's metadata summary")
         self._meta_summary = value
 
+    @property
+    def meta_description(self) -> str:
+        """Dataset's metadata description."""
+        return self._meta_description
+
+    @meta_description.setter
+    def meta_description(self, value: str):
+        validation.string_or_none(value, label="dataset's metadata description")
+        self._meta_description = value
+
+    @property
+    def meta_tags(self) -> str:
+        """Comma-separated list of tags assigned to the dataset."""
+        return self._meta_tags
+
+    @meta_tags.setter
+    def meta_tags(self, value: str):
+        validation.string_or_none(value, "dataset's metadata tags")
+        self._meta_tags = value
 
     @property
     def fields(self) -> FieldAccessor:
         """Sequence like accessor for fields contained with the dataset."""
         return self._fields
 
-
     @property
     def oid_is_64(self) -> bool:
         """Whether the OBJECTID field is a 64-bit integer."""
         return self._oid_is_64
 
-
     @oid_is_64.setter
-    def oid_is_64(self, value:bool):
+    def oid_is_64(self, value: bool):
         validation.boolean_or_none(value, label="dataset's objectid is 64-bit")
         self._oid_is_64 = value
-
 
     @property
     def subtype(self) -> Subtype:
         """The subtype description (or None if no subtype is set)."""
         return self._subtype
 
-
-    def set_subtype(self, field:"Field") -> Subtype:
+    def set_subtype(self, field: "Field") -> Subtype:
         """Set the subtype for a dataset (to be done after defining fields)."""
         if self._subtype is not None:
             raise AttributeError("Cannot change the subtype field once it is set.")
@@ -299,42 +317,57 @@ class Dataset(GDBElementWithParent):
 
         if self.feature_dataset is not None and other_dataset.feature_dataset is not None:
             if self.feature_dataset.name != other_dataset.feature_dataset.name:
-                diff_results.append(f"feature_dataset.name of {self.name} dataset in origin gdb is different than the other gdb.")
+                diff_results.append(
+                    f"feature_dataset.name of {self.name} dataset in origin gdb is different than the other gdb."
+                )
             if self.feature_dataset.schema != other_dataset.feature_dataset.schema:
-                diff_results.append(f"feature_dataset.schema of {self.name} dataset in origin gdb is different than the other gdb.")
+                diff_results.append(
+                    f"feature_dataset.schema of {self.name} dataset in origin gdb is different than the other gdb."
+                )
         elif self.feature_dataset is None and other_dataset.feature_dataset is not None:
-            diff_results.append(f"{self.name} dataset has no feature_dataset in the origin gdb and has {other_dataset.feature_dataset.name} feature_dataset in the other gdb.")
+            diff_results.append(
+                f"{self.name} dataset has no feature_dataset in the origin gdb and has {other_dataset.feature_dataset.name} feature_dataset in the other gdb."
+            )
         elif self.feature_dataset is not None and other_dataset.feature_dataset is None:
-            diff_results.append(f"{self.name} dataset has no feature_dataset in the other gdb and has {self.feature_dataset.name} feature_dataset in the origin gdb.")
-
+            diff_results.append(
+                f"{self.name} dataset has no feature_dataset in the other gdb and has {self.feature_dataset.name} feature_dataset in the origin gdb."
+            )
 
         # Compare the fields and their properties
-        if self.dataset_type != "RelationshipClass" :
+        if self.dataset_type != "RelationshipClass":
             origin_field_names = {field.name for field in self.fields}
             other_field_names = {field.name for field in other_dataset.fields}
 
             field_missing_in_origin = other_field_names.difference(origin_field_names)
             if field_missing_in_origin:
-                diff_results.append(f"The following fields are in {other_dataset.name} dataset in the other GDB but not in the origin GDB: {', '.join(field_missing_in_origin)}.")
+                diff_results.append(
+                    f"The following fields are in {other_dataset.name} dataset in the other GDB but not in the origin GDB: {', '.join(field_missing_in_origin)}."
+                )
 
             field_missing_in_other = origin_field_names.difference(other_field_names)
             if field_missing_in_other:
-                diff_results.append(f"The following fields are in {self.name} dataset in the origin GDB but not in the other GDB: {', '.join(field_missing_in_other)}.")
+                diff_results.append(
+                    f"The following fields are in {self.name} dataset in the origin GDB but not in the other GDB: {', '.join(field_missing_in_other)}."
+                )
 
             for field_name in origin_field_names.intersection(other_field_names):
-                origin_field:"Field" = self.fields[field_name]
-                other_field:"Field" = other_dataset.fields[field_name]
+                origin_field: "Field" = self.fields[field_name]
+                other_field: "Field" = other_dataset.fields[field_name]
                 field_diff_results = origin_field.diff(other_field)
                 diff_results.extend(field_diff_results)
 
         if self.subtype and other_dataset.subtype:
-            origin_subtype:"Subtype" = self.subtype
-            other_subtype:"Subtype" = other_dataset.subtype
+            origin_subtype: "Subtype" = self.subtype
+            other_subtype: "Subtype" = other_dataset.subtype
             subtype_diff_results = origin_subtype.diff(other_subtype)
             diff_results.extend(subtype_diff_results)
         elif self.subtype is None and other_dataset.subtype is not None:
-            diff_results.append(f"{self.name} dataset has no subtype in the origin gdb, but has {other_dataset.subtype.field.name} subtype in the other gdb.")
+            diff_results.append(
+                f"{self.name} dataset has no subtype in the origin gdb, but has {other_dataset.subtype.field.name} subtype in the other gdb."
+            )
         elif self.subtype is not None and other_dataset.subtype is None:
-            diff_results.append(f"{self.name} dataset has no subtype in the other gdb, but has {other_dataset.subtype.field.name} subtype in the other gdb.")
+            diff_results.append(
+                f"{self.name} dataset has no subtype in the other gdb, but has {other_dataset.subtype.field.name} subtype in the other gdb."
+            )
 
         return diff_results

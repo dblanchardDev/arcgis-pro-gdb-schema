@@ -7,10 +7,10 @@ Author: David Blanchard
 import datetime
 import re
 from numbers import Number
-from typing import Union
+from typing import Any, Union
 
 
-def item_exists_by_name(name:str, lst:list) -> bool:
+def item_exists_by_name(name: str, lst: list) -> bool:
     """Check whether a item exists in a list by the item's name attribute.
 
     Args:
@@ -25,8 +25,15 @@ def item_exists_by_name(name:str, lst:list) -> bool:
     return len(matches) > 0
 
 
-def string(value:Union[str, Number], label:str, min_len:int=None, max_len:int=None, enum:list[str]=None,
-           regex:str=None, allow_numbers:bool=True) -> str:
+def string(
+    value: Union[str, Number],
+    label: str,
+    min_len: int = None,
+    max_len: int = None,
+    enum: list[str] = None,
+    regex: str = None,
+    allow_numbers: bool = True,
+) -> str:
     """Validate whether a string meets the requirements.
 
     Args:
@@ -72,8 +79,15 @@ def string(value:Union[str, Number], label:str, min_len:int=None, max_len:int=No
     return converted
 
 
-def string_or_none(value:Union[str, None], label:str, min_len:int=None, max_len:int=None, enum:list[str]=None,
-                   regex:str=None, allow_numbers:bool=True) -> Union[str, None]:
+def string_or_none(
+    value: Union[str, None],
+    label: str,
+    min_len: int = None,
+    max_len: int = None,
+    enum: list[str] = None,
+    regex: str = None,
+    allow_numbers: bool = True,
+) -> Union[str, None]:
     """Validate whether value is string or None. If a string check requirements.
 
     Args:
@@ -99,7 +113,7 @@ def string_or_none(value:Union[str, None], label:str, min_len:int=None, max_len:
     return value
 
 
-def integer(value:Union[Number, str], label:str, allow_str:bool=True) -> int:
+def integer(value: Union[Number, str], label: str, allow_str: bool = True) -> int:
     """Ensure the value is either an integer, or a float/complex that is a whole number.
 
     Args:
@@ -136,7 +150,7 @@ def integer(value:Union[Number, str], label:str, allow_str:bool=True) -> int:
     return converted
 
 
-def integer_or_none(value:Union[Number, str, None], label:str, allow_str:bool=True) -> Union[int, None]:
+def integer_or_none(value: Union[Number, str, None], label: str, allow_str: bool = True) -> Union[int, None]:
     """Ensure the value is either an integer, or a float/complex that is a whole number.
 
     Args:
@@ -158,7 +172,7 @@ def integer_or_none(value:Union[Number, str, None], label:str, allow_str:bool=Tr
     return integer(value, label, allow_str)
 
 
-def number(value:Union[Number, str], label:str, allow_complex:bool=False, allow_str:bool=True) -> Number:
+def number(value: Union[Number, str], label: str, allow_complex: bool = False, allow_str: bool = True) -> Number:
     """Ensure the value is a number type.
 
     Args:
@@ -193,8 +207,9 @@ def number(value:Union[Number, str], label:str, allow_complex:bool=False, allow_
     return converted
 
 
-def date(value:Union[datetime.date, str], label:str, allow_time:bool=True, allow_tz:bool=False
-         ) -> datetime.date:
+def date(
+    value: Union[datetime.date, str], label: str, allow_time: bool = True, allow_tz: bool = False
+) -> datetime.date:
     """Ensure the value is either a date or a string containing an ISO formatted date.
 
     Args:
@@ -227,8 +242,9 @@ def date(value:Union[datetime.date, str], label:str, allow_time:bool=True, allow
         raise TypeError(f"Value for {label} must be of type datetime.date or string.")
 
     # Check requirements
-    if not allow_time and (converted.hour != 0 or converted.minute != 0 or converted.second != 0 or
-                           converted.microsecond != 0):
+    if not allow_time and (
+        converted.hour != 0 or converted.minute != 0 or converted.second != 0 or converted.microsecond != 0
+    ):
         raise ValueError(f"Value for {label} will loose its time component when converted to date only.")
 
     if not allow_tz and converted.tzinfo is not None:
@@ -237,7 +253,7 @@ def date(value:Union[datetime.date, str], label:str, allow_time:bool=True, allow
     return converted
 
 
-def time(value:Union[datetime.time, str], label:str, allow_tz:bool=False) -> datetime.time:
+def time(value: Union[datetime.time, str], label: str, allow_tz: bool = False) -> datetime.time:
     """Ensure the value is either a time or a string containing an ISO formatted time.
 
     Args:
@@ -278,7 +294,7 @@ def time(value:Union[datetime.time, str], label:str, allow_tz:bool=False) -> dat
     return converted
 
 
-def boolean(value:any, label:str, coerce:bool=False) -> bool:
+def boolean(value: Any, label: str, coerce: bool = False) -> bool:
     """Checks whether a value is boolean and optionally coerce into a boolean.
 
     Args:
@@ -299,7 +315,7 @@ def boolean(value:any, label:str, coerce:bool=False) -> bool:
     return bool(value)
 
 
-def boolean_or_none(value:any, label:str, coerce:bool=False) -> Union[bool, None]:
+def boolean_or_none(value: Any, label: str, coerce: bool = False) -> Union[bool, None]:
     """Checks whether a value is boolean or None and optionally coerce not None values into a boolean.
 
     Args:
@@ -319,7 +335,7 @@ def boolean_or_none(value:any, label:str, coerce:bool=False) -> Union[bool, None
     return boolean(value, label, coerce)
 
 
-def by_field_type(value:any, field_type:str, label:str) -> any:
+def by_field_type(value: Any, field_type: str, label: str) -> Any:
     """Format and validate a value to work with a specific ArcGIS field type.
 
     Args:
@@ -351,7 +367,7 @@ def by_field_type(value:any, field_type:str, label:str) -> any:
     raise ValueError(f"Field type {field_type} is not handled by the format_for_field_type function.")
 
 
-def is_structure_instance(obj:object, class_name:str):
+def is_structure_instance(obj: object, class_name: str):
     """Check by name and module whether the object is an instance of the gdbschematools.structures module and whether its name matches the expected one.
 
     Args:
@@ -360,7 +376,7 @@ def is_structure_instance(obj:object, class_name:str):
 
     Returns:
         bool: Whether instance matches.
-    """ #pylint: disable=line-too-long
+    """  # pylint: disable=line-too-long
     cls = obj.__class__
 
     # Check that it is contained in same package
@@ -376,7 +392,7 @@ def is_structure_instance(obj:object, class_name:str):
     return _check_inheritance(cls.__bases__, class_name)
 
 
-def _check_inheritance(bases:tuple[object], class_name:str) -> bool:
+def _check_inheritance(bases: tuple[object], class_name: str) -> bool:
     for bs in bases:
         if bs.__name__ == "object":
             return False

@@ -14,9 +14,9 @@ import defusedxml
 import arcpy
 
 # Cache previously fetched items
-_METADATAS:dict[str, arcpy.metadata.Metadata] = {}
-_FGDC_XML:dict[str, ET.Element] = {}
-_RAW_XML:dict[str, ET.Element] = {}
+_METADATAS: dict[str, arcpy.metadata.Metadata] = {}
+_FGDC_XML: dict[str, ET.Element] = {}
+_RAW_XML: dict[str, ET.Element] = {}
 
 
 def clear_caches():
@@ -26,7 +26,7 @@ def clear_caches():
     _RAW_XML.clear()
 
 
-def get_geodatabase_summary(desc:object) -> Union[str, None]:
+def get_geodatabase_summary(desc: object) -> Union[str, None]:
     """Get a geodatabase's metadata summary.
 
     Args:
@@ -38,7 +38,7 @@ def get_geodatabase_summary(desc:object) -> Union[str, None]:
     return _get_summary(desc)
 
 
-def get_dataset_summary(desc:object) -> Union[str, None]:
+def get_dataset_summary(desc: object) -> Union[str, None]:
     """Get a dataset's metadata summary.
 
     Args:
@@ -50,7 +50,41 @@ def get_dataset_summary(desc:object) -> Union[str, None]:
     return _get_summary(desc)
 
 
-def _get_summary(desc:object) -> Union[str, None]:
+def get_dataset_description(desc: object) -> Union[str, None]:
+    """Get a dataset's metadata description.
+
+    Args:
+        desc (object): ArcPy Describe object for the dataset.
+
+    Returns:
+        Union[str, None]: Description or None if not found.
+    """
+    # Try using ArcPy's metadata object
+    ap_meta = _get_arcpy_metadata(desc)
+    if ap_meta.description:
+        return ap_meta.description
+
+    return None
+
+
+def get_dataset_tags(desc: object) -> Union[str, None]:
+    """Get a dataset's metadata tags.
+
+    Args:
+        desc (object): ArcPy Metadata object for the dataset.
+
+    Returns:
+        Union[str, None]: Comma-separated list of tags or None if not found.
+    """
+    # Try using ArcPy's metadata object
+    ap_meta = _get_arcpy_metadata(desc)
+    if not ap_meta.tags:
+        return None
+
+    return ap_meta.tags
+
+
+def _get_summary(desc: object) -> Union[str, None]:
     """Get a geodatabase element's summary.
 
     Args:
@@ -65,9 +99,6 @@ def _get_summary(desc:object) -> Union[str, None]:
 
     if ap_meta.summary:
         return ap_meta.summary
-
-    if ap_meta.description:
-        return _strip_html_tags(ap_meta.description)
 
     # Try the FGDC Metadata XML abstract
     fgdc_xml = _get_xml(desc, "FGDC")
@@ -86,7 +117,7 @@ def _get_summary(desc:object) -> Union[str, None]:
     return None
 
 
-def get_field_summary(dataset_desc:object, field_name:str) -> Union[str, None]:
+def get_field_summary(dataset_desc: object, field_name: str) -> Union[str, None]:
     """Get a field's metadata summary.
 
     Args:
@@ -110,13 +141,13 @@ def get_field_summary(dataset_desc:object, field_name:str) -> Union[str, None]:
                 if attrdef is not None:
                     return attrdef.text
         except Exception as exc:
-            #pylint: disable-next=broad-exception-raised
+            # pylint: disable-next=broad-exception-raised
             raise Exception(f"Failure while reading {field_name} metadata summary.") from exc
 
     return None
 
 
-def get_enumerated_domain_values(dataset_desc:object, field_name:str) -> dict[str, str]:
+def get_enumerated_domain_values(dataset_desc: object, field_name: str) -> dict[str, str]:
     """Get all enumerated domain values from the metadata for a particular field.
 
     Args:
@@ -144,11 +175,11 @@ def get_enumerated_domain_values(dataset_desc:object, field_name:str) -> dict[st
 
         return enum
     except Exception as exc:
-        #pylint: disable-next=broad-exception-raised
+        # pylint: disable-next=broad-exception-raised
         raise Exception(f"Failure while enumerated domain values from the {field_name} field metadata.") from exc
 
 
-def _get_arcpy_metadata(desc:object) -> arcpy.metadata.Metadata:
+def _get_arcpy_metadata(desc: object) -> arcpy.metadata.Metadata:
     """Get the arcpy Metadata object for the item.
 
     Args:
@@ -166,7 +197,7 @@ def _get_arcpy_metadata(desc:object) -> arcpy.metadata.Metadata:
     return _METADATAS[path]
 
 
-def _get_xml(desc:object, xml_format:str) -> ET.ElementTree:
+def _get_xml(desc: object, xml_format: str) -> ET.ElementTree:
     """Get the raw or FGDC-formatted XML metadata.
 
     Args:
@@ -196,7 +227,7 @@ def _get_xml(desc:object, xml_format:str) -> ET.ElementTree:
     return cache[path]
 
 
-def _strip_html_tags(source:str) -> str:
+def _strip_html_tags(source: str) -> str:
     """Strip the HTML tags out of a string.
 
     Args:
@@ -210,12 +241,13 @@ def _strip_html_tags(source:str) -> str:
     return re.sub(pattern, "", source)
 
 
-def update_metadata(path_to_element:str, meta_summary: str):
-    """Update the metadata summary of Geodatabase, Feature Dataset, Table/Feature Class/Relationship Class
+def update_metadata(path_to_element: str, meta_attribute: str, value: str | None = None):
+    """Update the metadata info of Geodatabase, Feature Dataset, Table/Feature Class/Relationship Class
 
     Args:
         path_to_element (str): The path of GDB or dataset in geodatabase.
-        meta_summary (str): Metadata summary of an element
+        meta_attribute (str): The metadata attribute to update (e.g., "summary", "description", "tags").
+        value (str, optional): The value to set for the specified metadata attribute. Defaults to None.
     Raises:
         PermissionError: Raised when trying to update metadata without the adequate access rights
     """
@@ -223,13 +255,15 @@ def update_metadata(path_to_element:str, meta_summary: str):
     md = arcpy.metadata.Metadata(path_to_element)
 
     if not md.isReadOnly:
-        md.summary = meta_summary
+        setattr(md, meta_attribute, value)
         md.save()
     else:
         raise PermissionError(f"Metadata of {path_to_element} is Read Only.")
 
 
-def update_field_metadata(path_to_dataset:str, field_name:str, field_meta_summary:str=None, field_alias:str=None):
+def update_field_metadata(
+    path_to_dataset: str, field_name: str, field_meta_summary: str = None, field_alias: str = None
+):
     """Update a field's metadata summary
 
     Args:
@@ -256,7 +290,7 @@ def update_field_metadata(path_to_dataset:str, field_name:str, field_meta_summar
     # Create eainfo/detailed/enttyp element
     attr = next((attr for attr in detailed.findall("attr") if attr.find("attrlabl").text == field_name), False)
     if not attr:
-        attr = ET.SubElement(detailed , "attr")
+        attr = ET.SubElement(detailed, "attr")
         attrlabl = ET.SubElement(attr, "attrlabl")
         attrlabl.text = field_name
 
@@ -272,8 +306,14 @@ def update_field_metadata(path_to_dataset:str, field_name:str, field_meta_summar
     write_metadata_xml(path_to_dataset, root)
 
 
-def update_edomain_metadata(path_to_dataset:str, field_name:str, edomain: any, code: any,
-                            field_meta_summary:str=None, field_alias:str=None):
+def update_edomain_metadata(
+    path_to_dataset: str,
+    field_name: str,
+    edomain: any,
+    code: any,
+    field_meta_summary: str = None,
+    field_alias: str = None,
+):
     """Add field enumerated domain into field's metadata
 
     Args:
@@ -297,22 +337,28 @@ def update_edomain_metadata(path_to_dataset:str, field_name:str, edomain: any, c
     if existing_attr:
         attrdomv = existing_attr.find("attrdomv")
         if attrdomv:
-            existing_edom=next((edom for edom in attrdomv.findall("edom") if edom.find("edomv").text==str(code)), False)
+            existing_edom = next(
+                (edom for edom in attrdomv.findall("edom") if edom.find("edomv").text == str(code)), False
+            )
             if existing_edom:
-                edomvd = existing_edom.find("edomvd") if existing_edom.find("edomvd") is not None \
+                edomvd = (
+                    existing_edom.find("edomvd")
+                    if existing_edom.find("edomvd") is not None
                     else ET.SubElement(existing_edom, "edomvd")
+                )
                 edomvd.text = edomain.codes[code].meta_summary
 
     else:
         # add an attribute element in metadata xml for the field and update dataset's metadata
-        update_field_metadata (path_to_dataset, field_name, field_meta_summary, field_alias)
+        update_field_metadata(path_to_dataset, field_name, field_meta_summary, field_alias)
         root = read_metadata_xml(path_to_dataset)
 
     if not existing_edom:
         for attr in root.findall(".//eainfo/detailed/attr"):
             if attr.find("attrlabl").text == field_name:
-                attrdomv = attr.find("attrdomv") if attr.find("attrdomv") is not None \
-                    else ET.SubElement(attr, "attrdomv")
+                attrdomv = (
+                    attr.find("attrdomv") if attr.find("attrdomv") is not None else ET.SubElement(attr, "attrdomv")
+                )
                 # add field enumerated domains (value and definition) under the corresponding attribute
                 edom = ET.SubElement(attrdomv, "edom")
                 edomv = ET.SubElement(edom, "edomv")
@@ -325,7 +371,7 @@ def update_edomain_metadata(path_to_dataset:str, field_name:str, edomain: any, c
     write_metadata_xml(path_to_dataset, root)
 
 
-def read_metadata_xml(path_to_dataset:str) -> ET.Element:
+def read_metadata_xml(path_to_dataset: str) -> ET.Element:
     """create an xml ElementTree object from a dataset's metadata
 
     Args:
@@ -340,7 +386,8 @@ def read_metadata_xml(path_to_dataset:str) -> ET.Element:
     root = defusedxml.ElementTree.fromstring(xml)
     return root
 
-def write_metadata_xml(path_to_dataset:str, root:ET.Element):
+
+def write_metadata_xml(path_to_dataset: str, root: ET.Element):
     """Write an xml elementTree to a dataset's metadata
 
     Args:
